@@ -99,7 +99,15 @@ function loop(map, voorvoegsel = '') {
   return bestanden;
 }
 
-const gelijk = (a, b) => existsSync(a) && existsSync(b) && readFileSync(a).equals(readFileSync(b));
+// Tekstbestanden zijn gelijk als alleen de regeleinden verschillen (Windows en Mac of Linux gebruiken andere),
+// anders zou elke update tientallen bestanden onnodig als gewijzigd of zelf aangepast melden
+const isTekst = (inhoud) => !inhoud.includes(0);
+const zonderRegeleinden = (inhoud) => inhoud.toString('utf8').replace(/\r\n/g, '\n');
+function gelijk(a, b) {
+  if (!existsSync(a) || !existsSync(b)) return false;
+  const [x, y] = [readFileSync(a), readFileSync(b)];
+  return x.equals(y) || (isTekst(x) && isTekst(y) && zonderRegeleinden(x) === zonderRegeleinden(y));
+}
 
 function ruimLegeMappenOp(rel) {
   let map = path.dirname(path.join(WERKMAP, rel));
