@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import DelenTab from '@/components/beheer/DelenTab';
 import KnoppenTab from '@/components/beheer/KnoppenTab';
+import UpdatesTab from '@/components/beheer/UpdatesTab';
 import { INPUT, KNOP, KNOP_PRIMAIR, Veld, type Bericht } from '@/components/beheer/velden';
 import { BERICHT_CONFIG, BERICHT_KLAAR } from '@/components/KalenderPagina';
 import { dagenVoor, LETTERTYPES, leesConfig, MAX_DAGEN, THEMAS, themaVan, type AdventConfig, type AdventDag, type AdventKleuren, type Lettertype, type Onderkant, type ThemaNaam } from '@/lib/config';
@@ -14,7 +15,7 @@ import type { OpslagModus } from '@/lib/opslag';
 import { PROMPT_TEKSTEN } from '@/lib/promptTeksten';
 import type { VersieInfo } from '@/lib/versie';
 
-const TABS = ['Algemeen', 'Kleuren en logo', 'Deurtjes', 'Kennis Shop-links', 'Opties', 'Delen', 'Importeren en exporteren'] as const;
+const TABS = ['Algemeen', 'Kleuren en logo', 'Deurtjes', 'Kennis Shop-links', 'Opties', 'Delen', 'Updates', 'Importeren en exporteren'] as const;
 type Tab = (typeof TABS)[number];
 
 function KleurVeld({ label, waarde, onChange }: { label: string; waarde: string; onChange: (hex: string) => void }) {
@@ -339,13 +340,9 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
         <div role="status" className="mb-4 flex flex-wrap items-center gap-3 rounded-lg border border-sky-300 bg-sky-50 p-3 text-sm text-sky-900">
           <p className="flex-1">
             <strong>Er is een nieuwe versie van de adventkalender: {versie.nieuwste}.</strong> Jij hebt versie {versie.huidig}.
-            Je teksten, kleuren en logo blijven bewaard. Klik op <strong>Run workflow</strong> op de pagina waar de knop je naartoe brengt.
+            Je teksten, kleuren en logo blijven bewaard.
           </p>
-          {versie.updateUrl ? (
-            <a href={versie.updateUrl} target="_blank" rel="noopener noreferrer" className={KNOP}>Naar de update-knop</a>
-          ) : (
-            <span className="text-xs">Open je repo op GitHub, ga naar Actions en kies &quot;Update van de template&quot;.</span>
-          )}
+          <button type="button" onClick={() => setTab('Updates')} className={KNOP}>Hoe update ik?</button>
         </div>
       )}
 
@@ -649,6 +646,8 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
               naarTab={setTab}
             />
           )}
+
+          {tab === 'Updates' && <UpdatesTab versie={versie} />}
 
           {tab === 'Importeren en exporteren' && (
             <div className="space-y-4">

@@ -14,8 +14,14 @@ export const CONFIG_TAG = 'advent-config';
 const BLOB_PAD = 'advent/config.json';
 const LOKAAL_BESTAND = path.join(process.cwd(), '.advent-config.local.json');
 
+// Een gekoppelde Blob-opslag herken je aan een van twee omgevingsvariabelen. Oudere koppelingen en handmatig gemaakte opslag
+// geven een BLOB_READ_WRITE_TOKEN. Nieuwe koppelingen werken standaard via OIDC en geven een BLOB_STORE_ID (het pakket
+// @vercel/blob logt dan zelf in). Beide moeten werken, anders zie je 'geen opslag gekoppeld' terwijl hij er wel is.
+export const BLOB_OMGEVINGSVARIABELEN = ['BLOB_READ_WRITE_TOKEN', 'BLOB_STORE_ID'] as const;
+const blobGekoppeld = () => BLOB_OMGEVINGSVARIABELEN.some((naam) => Boolean(process.env[naam]));
+
 export function opslagModus(): OpslagModus {
-  if (process.env.BLOB_READ_WRITE_TOKEN) return 'blob';
+  if (blobGekoppeld()) return 'blob';
   if (process.env.NODE_ENV === 'development') return 'bestand';
   return 'geen';
 }

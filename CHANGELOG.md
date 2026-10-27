@@ -2,6 +2,13 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.0.3
+
+- Opslaan werkt nu ook als Vercel je Blob-opslag koppelt via de nieuwe manier (BLOB_STORE_ID in plaats van BLOB_READ_WRITE_TOKEN). Daarvoor zag je ten onrechte "er is geen Blob-opslag gekoppeld".
+- Nieuw tabblad Updates met uitleg en een link om de update-knop met één klik in je GitHub-repo te zetten. Vercel kopieert die knop niet mee als je met de Deploy-knop begint.
+- De melding over een nieuwe versie verschijnt sneller (elk half uur gecontroleerd) en verwijst naar het tabblad Updates.
+- Bij een mislukte opslag staat er nu een technische melding bij, zodat de oorzaak makkelijker te vinden is.
+
 ## v1.0.2
 
 - De ingebedde kalender (`?embed=true`) toont nu gewoon je kalender zelf, met de deurtjes 4 naast elkaar, in plaats van een compacte variant. De achtergrond is doorzichtig, zodat hij past op je eigen pagina.
