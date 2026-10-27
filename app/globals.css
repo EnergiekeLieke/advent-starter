@@ -1,0 +1,204 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: system-ui, 'Segoe UI', Roboto, Arial, sans-serif;
+}
+
+h1, h2, h3 {
+  font-family: var(--adv-font-kop, Georgia, serif);
+}
+
+:focus-visible {
+  outline: 2px solid rgb(var(--adv-goud, 201 162 75));
+  outline-offset: 3px;
+}
+
+/* ─── Adventkalender ───────────────────────────────────────────
+   Alle kleuren komen uit CSS-variabelen (zie lib/kleur.ts), zodat ze via /beheer aan te passen zijn. */
+.adv-scene {
+  perspective: 900px;
+}
+
+.adv-deur {
+  transform-origin: left center;
+  transition: transform 0.7s cubic-bezier(0.22, 0.8, 0.36, 1);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.adv-deur.is-open {
+  transform: rotateY(-112deg);
+}
+
+/* Warme, glanzende binnenkant: een open deurtje lijkt nooit op een dicht deurtje */
+.adv-binnen {
+  /* --adv-binnen-1 tot 3 komen uit lib/kleur.ts: op een lichte achtergrond is de binnenkant zachter */
+  background: radial-gradient(circle at 50% 35%, var(--adv-binnen-1) 0%, var(--adv-binnen-2) 55%, var(--adv-binnen-3) 100%);
+  box-shadow: inset 0 3px 10px rgba(90, 60, 0, 0.4), 0 0 10px rgb(var(--adv-goud) / 0.35);
+}
+
+.adv-puls {
+  animation: adv-puls 2s ease-in-out infinite;
+}
+
+/* Sneak preview: deurtje staat op een kier, wipt open tot ~40 graden en valt weer terug */
+.adv-deur.is-kier {
+  transform: rotateY(-18deg);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .adv-deur.is-kier {
+    animation: adv-kier 3.6s ease-in-out infinite;
+  }
+}
+
+.adv-kier-licht {
+  box-shadow: 0 0 14px 2px rgb(var(--adv-goud) / 0.45);
+}
+
+.adv-raamlicht {
+  animation: adv-raamlicht 3.5s ease-in-out infinite;
+}
+
+.adv-glans {
+  position: relative;
+  overflow: hidden;
+}
+
+.adv-glans::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.5) 50%, transparent 65%);
+  transform: translateX(-120%);
+  animation: adv-glans 3.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.adv-wiebel {
+  animation: adv-wiebel 0.5s ease-in-out;
+}
+
+.adv-twinkel {
+  animation: adv-twinkel 3s ease-in-out infinite;
+}
+
+.adv-goudtekst {
+  /* --adv-goud-donker en --adv-goud-licht komen uit lib/kleur.ts: op een lichte achtergrond wordt de glans donkerder in plaats van lichter */
+  background: linear-gradient(
+    100deg,
+    var(--adv-goud-donker) 0%,
+    var(--adv-goud-licht) 30%,
+    rgb(var(--adv-goud)) 50%,
+    var(--adv-goud-licht) 70%,
+    var(--adv-goud-donker) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: adv-goudtekst 6s linear infinite;
+}
+
+.adv-medaillon {
+  background: radial-gradient(circle at 50% 35%, var(--adv-binnen-1) 0%, var(--adv-binnen-2) 60%, var(--adv-binnen-3) 100%);
+}
+
+.adv-popup {
+  animation: adv-popup 0.45s cubic-bezier(0.22, 0.8, 0.36, 1);
+}
+
+.adv-bol {
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(0);
+  opacity: 0;
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+}
+
+.adv-bol.is-aan {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.adv-ster-aan {
+  animation: adv-ster 2.4s ease-in-out infinite;
+}
+
+.adv-tekst {
+  animation: adv-tekst 0.55s 0.15s cubic-bezier(0.22, 0.8, 0.36, 1) both;
+}
+
+.adv-spat {
+  opacity: 0;
+  animation: adv-spat 1.5s ease-out forwards;
+}
+
+@keyframes adv-kier {
+  0%, 100% { transform: rotateY(-6deg); }
+  35%, 55% { transform: rotateY(-40deg); }
+  80%      { transform: rotateY(-10deg); }
+}
+
+@keyframes adv-raamlicht {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.75; }
+}
+
+@keyframes adv-ster {
+  0%, 100% { filter: drop-shadow(0 0 3px rgb(var(--adv-goud) / 0.7)); }
+  50%      { filter: drop-shadow(0 0 10px rgb(var(--adv-goud) / 1)); }
+}
+
+@keyframes adv-tekst {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes adv-spat {
+  0%   { opacity: 0; transform: scale(0.2) translateY(6px); }
+  30%  { opacity: 1; transform: scale(1.2) translateY(0); }
+  100% { opacity: 0; transform: scale(0.8) translateY(-22px); }
+}
+
+@keyframes adv-puls {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(var(--adv-goud) / 0.7), 0 0 14px 2px rgb(var(--adv-goud) / 0.6); }
+  50%      { box-shadow: 0 0 0 7px rgb(var(--adv-goud) / 0), 0 0 26px 6px rgb(var(--adv-goud) / 0.85); }
+}
+
+@keyframes adv-glans {
+  0%, 55% { transform: translateX(-120%); }
+  100%    { transform: translateX(120%); }
+}
+
+@keyframes adv-wiebel {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  20%      { transform: translateX(-5px) rotate(-3deg); }
+  40%      { transform: translateX(5px) rotate(3deg); }
+  60%      { transform: translateX(-4px) rotate(-2deg); }
+  80%      { transform: translateX(4px) rotate(2deg); }
+}
+
+@keyframes adv-twinkel {
+  0%, 100% { opacity: 0.25; transform: scale(0.8); }
+  50%      { opacity: 1; transform: scale(1.15); }
+}
+
+@keyframes adv-goudtekst {
+  to { background-position: 200% center; }
+}
+
+@keyframes adv-popup {
+  from { opacity: 0; transform: translateY(16px) scale(0.94); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .adv-deur, .adv-bol { transition: none; }
+  .adv-raamlicht { animation: none; }
+  .adv-puls, .adv-glans::after, .adv-wiebel, .adv-twinkel, .adv-goudtekst, .adv-popup, .adv-ster-aan, .adv-tekst { animation: none; }
+  .adv-spat { display: none; }
+}

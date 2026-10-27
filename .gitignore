@@ -1,0 +1,12 @@
+node_modules
+.next
+out
+.env
+.env.local
+.env*.local
+.vercel
+*.tsbuildinfo
+.advent-config.local.json
+
+# Cursusmateriaal: blijft lokaal en gaat niet mee naar GitHub
+cursus/

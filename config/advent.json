@@ -1,0 +1,158 @@
+{
+  "titel": "Mijn adventkalender",
+  "ondertitel": "Open elke dag een vakje",
+  "footer": "Achter elk deurtje schuilt een klein moment van verwondering",
+  "afsluiting": "Fijne feestdagen en tot in het nieuwe jaar!",
+  "logoUrl": "",
+  "lettertype": "serif",
+  "startDatum": "2026-12-01",
+  "aantalDagen": 24,
+  "kleuren": {
+    "achtergrond": "#1f3320",
+    "accent": "#c9a24b",
+    "licht": "#fcebdc",
+    "primair": "#3b5633",
+    "secundair": "#9e3816",
+    "tekst": "#2a3a3c",
+    "tegels": [
+      "#3b5633",
+      "#9e3816",
+      "#758d69",
+      "#fcebdc"
+    ]
+  },
+  "opties": {
+    "sneeuw": true,
+    "confetti": true,
+    "sterren": true,
+    "landschap": "winter",
+    "herinnering": true,
+    "embedKolommen": 6
+  },
+  "knoppen": {
+    "standaardLabel": "Open de les",
+    "openen": "nieuw"
+  },
+  "dagen": [
+    {
+      "titel": "Welkom",
+      "soort": "tekst",
+      "tekst": "Fijn dat je er bent. Elke dag opent er een deurtje met iets kleins voor jou. Neem even de tijd om dit eerste deurtje te openen."
+    },
+    {
+      "titel": "Een minuut pauze",
+      "soort": "opdracht",
+      "tekst": "Zet een timer op één minuut. Adem rustig in en uit en kijk wat je opmerkt."
+    },
+    {
+      "titel": "Kleine lichtjes",
+      "soort": "tekst",
+      "tekst": "In de donkere maanden maakt een kaarsje het meteen gezellig. Steek er vandaag eentje aan."
+    },
+    {
+      "titel": "Een goed woord",
+      "soort": "opdracht",
+      "tekst": "Stuur iemand een kort berichtje om te zeggen wat je waardeert."
+    },
+    {
+      "titel": "Warm drankje",
+      "soort": "tekst",
+      "tekst": "Maak vandaag een warm drankje en drink het op zonder telefoon in je hand."
+    },
+    {
+      "titel": "Terugblik",
+      "soort": "opdracht",
+      "tekst": "Waar ben je dit jaar trots op? Schrijf er drie dingen van op."
+    },
+    {
+      "titel": "Frisse lucht",
+      "soort": "tekst",
+      "tekst": "Ga vandaag even naar buiten, ook als het regent. Je hoofd is je dankbaar."
+    },
+    {
+      "titel": "Dankbaarheid",
+      "soort": "opdracht",
+      "tekst": "Noem drie dingen waar je vandaag dankbaar voor bent."
+    },
+    {
+      "titel": "Rust is brandstof",
+      "soort": "tekst",
+      "tekst": "Rust is geen luiheid. Het is brandstof voor wat je straks wilt doen."
+    },
+    {
+      "titel": "Opruimmomentje",
+      "soort": "opdracht",
+      "tekst": "Ruim één lade of hoekje op. Klein beginnen telt ook."
+    },
+    {
+      "titel": "Muziek",
+      "soort": "tekst",
+      "tekst": "Zet een lied aan dat je blij maakt en luister het helemaal uit."
+    },
+    {
+      "titel": "Een compliment",
+      "soort": "opdracht",
+      "tekst": "Geef vandaag iemand een oprecht compliment, ook als het een beetje spannend voelt."
+    },
+    {
+      "titel": "Kleine stappen",
+      "soort": "tekst",
+      "tekst": "Grote veranderingen beginnen met een klein begin. Wat is jouw eerste stap?"
+    },
+    {
+      "titel": "Schrijf het van je af",
+      "soort": "opdracht",
+      "tekst": "Schrijf vijf minuten alles op wat in je hoofd zit. Niet nadenken, gewoon schrijven."
+    },
+    {
+      "titel": "Gezelligheid",
+      "soort": "tekst",
+      "tekst": "Plan iets leuks met iemand die je graag mag, of het nu een kop koffie is of een wandeling."
+    },
+    {
+      "titel": "Eén ding minder",
+      "soort": "opdracht",
+      "tekst": "Welke verplichting mag je deze maand loslaten? Schrap hem gerust."
+    },
+    {
+      "titel": "Nieuwsgierig",
+      "soort": "tekst",
+      "tekst": "Leer vandaag één nieuw ding, hoe klein ook."
+    },
+    {
+      "titel": "Lekker eten",
+      "soort": "opdracht",
+      "tekst": "Eet iets wat je echt lekker vindt en proef elke hap."
+    },
+    {
+      "titel": "Licht",
+      "soort": "tekst",
+      "tekst": "Ook het donkerste moment van het jaar is het begin van meer licht."
+    },
+    {
+      "titel": "Brief aan jezelf",
+      "soort": "opdracht",
+      "tekst": "Schrijf een korte brief aan jezelf voor volgend jaar en bewaar hem ergens veilig."
+    },
+    {
+      "titel": "Gewoon zijn",
+      "soort": "tekst",
+      "tekst": "Je hoeft vandaag niets te bewijzen. Zijn is genoeg."
+    },
+    {
+      "titel": "Stil moment",
+      "soort": "opdracht",
+      "tekst": "Ga vijf minuten zitten zonder iets te doen en kijk wat er in je opkomt."
+    },
+    {
+      "titel": "Bijna daar",
+      "soort": "tekst",
+      "tekst": "Nog één deurtje te gaan. Wat neem je mee van deze dagen?"
+    },
+    {
+      "titel": "Fijne feestdagen",
+      "soort": "tekst",
+      "tekst": "Bedankt dat je elke dag meedeed. Geniet van de feestdagen en tot in het nieuwe jaar!"
+    }
+  ]
+}
