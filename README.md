@@ -12,9 +12,7 @@ Wil je de kalender helemaal afmaken voor je eigen klanten, inclusief teksten sch
 
 Klik op de knop hieronder. Vercel maakt dan in je eigen GitHub-account een kopie en zet die online, inclusief de opslag voor je instellingen.
 
-[![Deploy met Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FJOUW-GITHUB-NAAM%2Fadvent-starter&project-name=mijn-adventkalender&repository-name=mijn-adventkalender&env=BEHEER_WACHTWOORD&envDescription=Kies%20zelf%20een%20wachtwoord%20voor%20je%20beheerpagina&stores=%5B%7B%22type%22%3A%22blob%22%2C%22access%22%3A%22public%22%7D%5D)
-
-> Let op, voor Lieke: vervang `JOUW-GITHUB-NAAM` in de link hierboven door de naam van het GitHub-account waar deze repo staat, en zet de repo op publiek.
+[![Deploy met Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FEnergiekeLieke%2Fadvent-starter&project-name=mijn-adventkalender&repository-name=mijn-adventkalender&env=BEHEER_WACHTWOORD&envDescription=Kies%20zelf%20een%20wachtwoord%20voor%20je%20beheerpagina&stores=%5B%7B%22type%22%3A%22blob%22%2C%22access%22%3A%22public%22%7D%5D)
 
 Tijdens het importeren vraagt Vercel om:
 
