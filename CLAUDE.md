@@ -54,6 +54,18 @@ Kleuren komen uit `config.kleuren` en worden in `lib/kleur.ts` omgezet naar CSS-
 
 `/?embed=true` is de compacte variant voor in een iframe (bijvoorbeeld Kennis Shop). `config.opties.embedKolommen` (4 of 6, standaard 6) bepaalt hoeveel deurtjes naast elkaar staan. Bij 6 gebruikt `Adventkalender` kleinere iconen en letters (`compact`), bij 4 de maten van de volledige pagina. Hoe breder het iframe, hoe groter de deurtjes: de hoogte-adviezen in `lib/embed.ts` zijn gemeten bij ongeveer 470 tot 580 px breed. `next.config.ts` laat de kalender overal insluiten (`frame-ancestors *`), `/beheer` alleen binnen deze site.
 
+## Versies en updates
+
+Cursisten hebben een losse kopie van deze repo. Hun inhoud (teksten, kleuren, logo) staat in Blob en niet in de code, dus nieuwe code overschrijft die nooit.
+
+- **Versie:** `version` in `package.json`, en per release een tag `v1.2.3` op GitHub. `lib/versie.ts` leest de nieuwste tag via de GitHub-API en de editor toont een blauwe balk als die nieuwer is.
+- **Updaten:** `scripts/update-van-template.mjs` haalt de nieuwste tag op en vervangt de bestanden uit de template. Het raakt nooit aan `config/advent.json`, `.env*`, `.git`, `.github`, `node_modules`, `.next`, `.vercel` en bestanden die niet in de template zitten. Bestanden die in de oude versie zaten en in de nieuwe niet meer, worden verwijderd. Bestanden die de cursist zelf had aangepast, worden vervangen en in de samenvatting genoemd. De GitHub-workflow `.github/workflows/update-van-template.yml` roept alleen dit script aan en slaat het resultaat op. Hij draait niet in de template zelf.
+- **Uitbrengen:** zet bovenaan `CHANGELOG.md` een kop `## v1.2.3` met wat er nieuw is, commit alles en draai `npm run release -- 1.2.3` (met `--droog` om alleen te controleren). Het script bouwt, verhoogt de versie, commit en tagt, maar pusht niets.
+- **Spelregels voor wijzigingen:**
+  - Instellingen moeten altijd terug te lezen zijn. Een nieuw veld krijgt een standaardwaarde in het schema (`lib/config.ts`). Verandert een bestaand veld, zet dan een `preprocess` of `transform` in het schema, zoals bij `landschap` en `knop.aan`.
+  - Het workflow-bestand kan niet via een update worden vervangen (de token mag geen workflows schrijven). Houd het klein en laat de logica in het script.
+  - `next-env.d.ts` staat bewust in `.gitignore`: Next genereert hem en herschrijft hem bij elke build.
+
 ## Afspraken
 
 - Teksten in de interface zijn Nederlands, in de jij-vorm.

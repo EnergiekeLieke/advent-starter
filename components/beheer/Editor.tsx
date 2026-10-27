@@ -13,6 +13,7 @@ import { adviesIframeHoogte } from '@/lib/embed';
 import { contrast, landschapPalet } from '@/lib/kleur';
 import type { OpslagModus } from '@/lib/opslag';
 import { PROMPT_TEKSTEN } from '@/lib/promptTeksten';
+import type { VersieInfo } from '@/lib/versie';
 
 const TABS = ['Algemeen', 'Kleuren en logo', 'Deurtjes', 'Kennis Shop-links', 'Opties', 'Delen', 'Importeren en exporteren'] as const;
 type Tab = (typeof TABS)[number];
@@ -150,7 +151,7 @@ const PREVIEW_DATA = [
   { sleutel: 'na', label: 'Na afloop' },
 ] as const;
 
-export default function Editor({ beginConfig, modus }: { beginConfig: AdventConfig; modus: OpslagModus }) {
+export default function Editor({ beginConfig, modus, versie }: { beginConfig: AdventConfig; modus: OpslagModus; versie: VersieInfo }) {
   const router = useRouter();
   const [config, setConfig] = useState(beginConfig);
   const [opgeslagen, setOpgeslagen] = useState(() => JSON.stringify(beginConfig));
@@ -347,6 +348,20 @@ export default function Editor({ beginConfig, modus }: { beginConfig: AdventConf
           {bezig ? 'Opslaan...' : gewijzigd ? 'Opslaan' : 'Opgeslagen'}
         </button>
       </header>
+
+      {versie.nieuwste && (
+        <div role="status" className="mb-4 flex flex-wrap items-center gap-3 rounded-lg border border-sky-300 bg-sky-50 p-3 text-sm text-sky-900">
+          <p className="flex-1">
+            <strong>Er is een nieuwe versie van de adventkalender: {versie.nieuwste}.</strong> Jij hebt versie {versie.huidig}.
+            Je teksten, kleuren en logo blijven bewaard. Klik op <strong>Run workflow</strong> op de pagina waar de knop je naartoe brengt.
+          </p>
+          {versie.updateUrl ? (
+            <a href={versie.updateUrl} target="_blank" rel="noopener noreferrer" className={KNOP}>Naar de update-knop</a>
+          ) : (
+            <span className="text-xs">Open je repo op GitHub, ga naar Actions en kies &quot;Update van de template&quot;.</span>
+          )}
+        </div>
+      )}
 
       {(config.testmodus || opgeslagenTestmodus) && (
         <div role="status" className="mb-4 flex flex-wrap items-center gap-3 rounded-lg border-2 border-amber-400 bg-amber-100 p-3 text-sm text-amber-950">
@@ -756,6 +771,8 @@ export default function Editor({ beginConfig, modus }: { beginConfig: AdventConf
           />
         </aside>
       </div>
+
+      <p className="mt-8 text-center text-xs text-slate-400">Adventkalender-starter, versie {versie.huidig}</p>
     </div>
   );
 }

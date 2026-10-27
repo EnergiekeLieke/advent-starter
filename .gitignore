@@ -10,3 +10,6 @@ out
 
 # Cursusmateriaal: blijft lokaal en gaat niet mee naar GitHub
 cursus/
+
+# Door Next gegenereerd, hoort niet in de repo
+next-env.d.ts

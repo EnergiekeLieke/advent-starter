@@ -1,0 +1,58 @@
+# Haalt de nieuwste versie van de adventkalender-starter op en zet die in deze repo.
+# Je teksten, kleuren en logo blijven bewaard, die staan in je Blob-opslag.
+#
+# Zo start je de update: ga op GitHub naar Actions, kies "Update van de template" en klik op "Run workflow".
+# Vercel zet de nieuwe versie daarna vanzelf online (dat duurt ongeveer 1 tot 2 minuten).
+#
+# De eigenlijke logica staat in scripts/update-van-template.mjs. Dit bestand blijft dus klein en hoeft zelden te veranderen.
+
+name: Update van de template
+
+on:
+  workflow_dispatch:
+    inputs:
+      versie:
+        description: 'Versie om te installeren, bijvoorbeeld 1.2.0. Laat leeg voor de nieuwste.'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-van-template
+  cancel-in-progress: false
+
+jobs:
+  update:
+    # In de template zelf is er niets om naar te updaten
+    if: github.repository != 'EnergiekeLieke/advent-starter'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Haal je repo op
+        uses: actions/checkout@v4
+
+      - name: Zet Node klaar
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Haal de nieuwste versie van de template op
+        id: update
+        env:
+          VERSIE: ${{ inputs.versie }}
+        run: node scripts/update-van-template.mjs
+
+      # De update wordt op jouw naam opgeslagen (degene die de workflow start). Vercel zet een wijziging namelijk
+      # alleen online als de auteur bij het project hoort, en dat geldt niet voor de GitHub-bot.
+      - name: Sla de update op in je repo
+        if: steps.update.outputs.gewijzigd == 'true'
+        env:
+          GEBRUIKER: ${{ github.actor }}
+          GEBRUIKER_ID: ${{ github.actor_id }}
+        run: |
+          git config user.name "$GEBRUIKER"
+          git config user.email "$GEBRUIKER_ID+$GEBRUIKER@users.noreply.github.com"
+          git add -A
+          git commit -m "Update adventkalender naar versie ${{ steps.update.outputs.doel }}"
+          git push

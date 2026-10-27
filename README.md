@@ -101,6 +101,35 @@ Je hoeft niet tot 1 december te wachten om te zien hoe je kalender eruitziet. Er
 
 Zet bij **Algemeen** het aantal deurtjes lager en kies een andere eerste dag. Zo maak je ook een kalender van 7 of 12 dagen, of een versie voor januari of Valentijn.
 
+## Updaten naar een nieuwe versie
+
+Komt er een nieuwe versie van de adventkalender-starter uit? Dan zie je in je beheerpagina een blauwe balk met "Er is een nieuwe versie van de adventkalender". Wat er nieuw is, staat in [CHANGELOG.md](CHANGELOG.md).
+
+**Je teksten, kleuren en logo blijven bewaard.** Die staan in je eigen opslag (Blob) en niet in de bestanden van je kalender. Een update vervangt alleen de code.
+
+### Zo update je
+
+1. Klik in de blauwe balk op **Naar de update-knop**. Of ga op GitHub naar je eigen repo, kies **Actions** en dan **Update van de template**.
+2. Klik rechts op **Run workflow** en daarna op de groene knop **Run workflow**. Laat het vak "Versie" leeg om de nieuwste te krijgen.
+3. Wacht tot de run een groen vinkje heeft (ongeveer een halve minuut). Open de run om te zien wat er is veranderd.
+4. Vercel zet de nieuwe versie daarna vanzelf online. Dat duurt ongeveer 1 tot 2 minuten. Ververs je beheerpagina met Ctrl+F5, de blauwe balk is dan weg.
+5. Controleer je kalender in het voorbeeld en op de pagina zelf.
+
+Zie je bij **Actions** een melding dat workflows uit staan? Klik dan op de groene knop om ze aan te zetten ("I understand my workflows, go ahead and enable them").
+
+### Wat blijft en wat verandert?
+
+- **Blijft:** je teksten, kleuren en logo, `config/advent.json`, je `.env`-bestanden en alle bestanden die je zelf hebt toegevoegd.
+- **Wordt vervangen:** de code van de kalender en de beheerpagina. Heb je zelf code aangepast? Dan staat in het resultaat van de update welke bestanden dat waren. Je haalt je eigen versie terug via **History** van dat bestand op GitHub.
+
+### Een bepaalde versie kiezen
+
+Vul bij **Run workflow** in het vak "Versie" een nummer in, bijvoorbeeld `1.0.0`, om terug te gaan naar een oudere versie.
+
+### Met Claude Code of de terminal
+
+Heb je een kopie van je repo op je computer? Dan kan het ook met `npm run update`. Daarna sla je de wijzigingen zelf op met git (`git add -A`, `git commit` en `git push`).
+
 ## Lokaal draaien (voor wie wil sleutelen)
 
 ```bash
