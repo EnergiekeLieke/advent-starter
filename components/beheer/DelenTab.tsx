@@ -21,12 +21,13 @@ interface Props {
 export default function DelenTab({ config, gewijzigd, opgeslagenTestmodus, voorbeeldDagen, voorbeeldTitel, naarTab }: Props) {
   const [origin, setOrigin] = useState('');
   const [hoogteInvoer, setHoogteInvoer] = useState<number | null>(null);
+  // In Kennis Shop is het iframe meestal 450 tot 600 px breed (op een telefoon smaller)
+  const [breedte, setBreedte] = useState(600);
   const [bericht, setBericht] = useState<Bericht>(null);
   useEffect(() => setOrigin(window.location.origin), []);
 
-  // Meer deurtjes betekent meer rijen en dus meer hoogte nodig voor deurtjes van volle grootte
-  const kolommen = config.opties.embedKolommen;
-  const advies = adviesIframeHoogte(config.aantalDagen, kolommen);
+  // De kalender is hoger naarmate er meer deurtjes zijn en naarmate het iframe breder is (de deurtjes worden dan groter)
+  const advies = adviesIframeHoogte(config.aantalDagen, breedte, config.opties.landschap !== 'geen');
   const hoogte = hoogteInvoer ?? advies;
   const link = `${origin}/`;
   const titel = config.titel.replace(/"/g, '&quot;');
@@ -93,22 +94,33 @@ export default function DelenTab({ config, gewijzigd, opgeslagenTestmodus, voorb
 
       <section className="space-y-3 rounded-lg border border-slate-200 bg-white p-3">
         <h2 className="text-sm font-semibold">Embedcode voor Kennis Shop of je website</h2>
+        <p className="text-xs text-slate-600">
+          Je kalender staat in het iframe zoals hij op je eigen pagina staat: de deurtjes staan 4 naast elkaar. Is het iframe te laag, dan moet je klant in het iframe scrollen.
+          Is het te hoog, dan blijft er lege ruimte onder de kalender. Vul hieronder in hoe breed je iframe ongeveer is, dan reken ik de hoogte uit.
+        </p>
+        <Veld label="Breedte van je iframe in pixels" hint="Meestal 450 tot 600. Is de kolom waarin je kalender staat breder, vul dan die breedte in. Op een smallere telefoon blijft er onderaan wat ruimte over.">
+          <input
+            type="number"
+            min={300}
+            max={1400}
+            step={10}
+            className={INPUT}
+            value={breedte}
+            onChange={(e) => setBreedte(Math.max(300, Math.min(1400, Math.round(Number(e.target.value)) || 600)))}
+          />
+        </Veld>
         <Veld
           label="Hoogte in pixels"
-          hint={
-            kolommen === 6
-              ? `Advies voor jouw ${config.aantalDagen} deurtjes met 6 per rij: ${advies} px, bij een iframe van ongeveer 450 tot 600 px breed. Te laag maken geeft kleinere deurtjes, te hoog geeft lege ruimte. Is je iframe breder dan 700 px, kies dan iets hoger.`
-              : `Advies voor jouw ${config.aantalDagen} deurtjes met 4 per rij: ${advies} px, bij een iframe van ongeveer 450 tot 500 px breed (telefoon). In een breder iframe worden de deurtjes groter, en dan mag het iframe ook hoger. Te laag maken geeft kleinere deurtjes, te hoog geeft lege ruimte.`
-          }
+          hint={`Advies voor jouw ${config.aantalDagen} deurtjes bij een iframe van ${breedte} px breed: ${advies} px.`}
         >
           <input
             type="number"
             min={400}
-            max={1600}
+            max={2400}
             step={50}
             className={INPUT}
             value={hoogte}
-            onChange={(e) => setHoogteInvoer(Math.max(400, Math.min(1600, Math.round(Number(e.target.value)) || advies)))}
+            onChange={(e) => setHoogteInvoer(Math.max(400, Math.min(2400, Math.round(Number(e.target.value)) || advies)))}
           />
         </Veld>
         {hoogteInvoer !== null && hoogteInvoer !== advies && (

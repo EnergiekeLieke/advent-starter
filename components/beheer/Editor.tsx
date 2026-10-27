@@ -9,7 +9,6 @@ import { BERICHT_CONFIG, BERICHT_KLAAR } from '@/components/KalenderPagina';
 import { dagenVoor, LETTERTYPES, leesConfig, MAX_DAGEN, THEMAS, themaVan, type AdventConfig, type AdventDag, type AdventKleuren, type Lettertype, type Onderkant, type ThemaNaam } from '@/lib/config';
 import standaardConfig from '@/config/advent.json';
 import { labelKort, parseIso, plusDagen } from '@/lib/datum';
-import { adviesIframeHoogte } from '@/lib/embed';
 import { contrast, landschapPalet } from '@/lib/kleur';
 import type { OpslagModus } from '@/lib/opslag';
 import { PROMPT_TEKSTEN } from '@/lib/promptTeksten';
@@ -86,19 +85,6 @@ const ONDERKANT_KEUZES: { waarde: Onderkant; naam: string; uitleg: string }[] = 
   { waarde: 'golven', naam: 'Golvende heuvels', uitleg: 'Alleen heuvels in de kleuren van je thema, zonder kerstboom. Ook mooi buiten de feestdagen.' },
   { waarde: 'geen', naam: 'Geen onderkant', uitleg: 'Alleen de deurtjes, zonder landschap.' },
 ];
-
-// Kleine tekening van het raster met 6 of 4 deurtjes per rij, in de kleuren van het gekozen thema
-function KolommenMini({ kolommen, kleuren }: { kolommen: 4 | 6; kleuren: AdventKleuren }) {
-  return (
-    <span
-      aria-hidden
-      className="grid h-12 gap-1 rounded-lg p-1.5"
-      style={{ background: kleuren.achtergrond, gridTemplateColumns: `repeat(${kolommen}, minmax(0, 1fr))`, gridTemplateRows: `repeat(${12 / kolommen}, minmax(0, 1fr))` }}
-    >
-      {Array.from({ length: 12 }, (_, i) => <span key={i} className="rounded-sm" style={{ background: kleuren.tegels[i % 4] }} />)}
-    </span>
-  );
-}
 
 // Kleine tekening van een onderkant, in de kleuren van het gekozen thema
 function OnderkantMini({ waarde, kleuren }: { waarde: Onderkant; kleuren: AdventKleuren }) {
@@ -610,7 +596,7 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
                   ['sneeuw', 'Vallende sneeuw op de achtergrond'],
                   ['sterren', 'Twinkelende sterretjes'],
                   ['confetti', 'Confetti bij het openen van het deurtje van vandaag'],
-                  ['herinnering', 'Knop voor een dagelijkse herinnering in de agenda (alleen op de volledige pagina)'],
+                  ['herinnering', 'Knop voor een dagelijkse herinnering in de agenda'],
                 ] as const).map(([naam, uitleg]) => (
                   <label key={naam} className="flex items-start gap-3 text-sm">
                     <input type="checkbox" checked={config.opties[naam]} onChange={(e) => zetOptie(naam, e.target.checked)} className="mt-0.5 h-4 w-4" />
@@ -618,41 +604,6 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
                   </label>
                 ))}
               </div>
-
-              <fieldset>
-                <legend className="mb-1 text-sm font-medium">Deurtjes per rij in de ingebedde kalender</legend>
-                <p className="mb-3 text-xs text-slate-500">
-                  Dit geldt voor de kalender in Kennis Shop of op je website (de embedcode). De volledige pagina heeft altijd 4 deurtjes per rij.
-                  Kies je grotere deurtjes, dan moet het iframe hoger zijn. Het tabblad Delen rekent de hoogte voor je uit.
-                </p>
-                <div className="grid gap-2 sm:grid-cols-2">
-                  {([6, 4] as const).map((k) => (
-                    <label
-                      key={k}
-                      className="flex cursor-pointer flex-col gap-2 rounded-xl border-2 border-slate-200 bg-white p-2 hover:border-slate-400 has-[:checked]:border-emerald-700 has-[:checked]:ring-2 has-[:checked]:ring-emerald-200"
-                    >
-                      <KolommenMini kolommen={k} kleuren={config.kleuren} />
-                      <span className="flex items-start gap-2 text-sm">
-                        <input
-                          type="radio"
-                          name="embedKolommen"
-                          value={k}
-                          checked={config.opties.embedKolommen === k}
-                          onChange={() => zetOptie('embedKolommen', k)}
-                          className="mt-1 h-4 w-4"
-                        />
-                        <span>
-                          <span className="block font-semibold">{k === 6 ? '6 naast elkaar (compact)' : '4 naast elkaar (groter)'}</span>
-                          <span className="block text-xs text-slate-500">
-                            {k === 6 ? 'Past in een lager iframe, de deurtjes zijn kleiner.' : 'Grotere deurtjes, makkelijker te tikken op een telefoon.'}{' '}
-                            Advies voor jouw {config.aantalDagen} deurtjes: {adviesIframeHoogte(config.aantalDagen, k)} px hoog.
-                          </span>
-                        </span>
-                      </span>
-                    </label>
-                  ))}
-                </div>
-              </fieldset>
 
               <fieldset>
                 <legend className="mb-1 text-sm font-medium">Onderkant van de kalender</legend>

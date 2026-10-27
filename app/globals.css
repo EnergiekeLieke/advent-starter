@@ -44,21 +44,6 @@ h1, h2, h3 {
   animation: adv-puls 2s ease-in-out infinite;
 }
 
-/* Sneak preview: deurtje staat op een kier, wipt open tot ~40 graden en valt weer terug */
-.adv-deur.is-kier {
-  transform: rotateY(-18deg);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .adv-deur.is-kier {
-    animation: adv-kier 3.6s ease-in-out infinite;
-  }
-}
-
-.adv-kier-licht {
-  box-shadow: 0 0 14px 2px rgb(var(--adv-goud) / 0.45);
-}
-
 .adv-raamlicht {
   animation: adv-raamlicht 3.5s ease-in-out infinite;
 }
@@ -135,12 +120,6 @@ h1, h2, h3 {
 .adv-spat {
   opacity: 0;
   animation: adv-spat 1.5s ease-out forwards;
-}
-
-@keyframes adv-kier {
-  0%, 100% { transform: rotateY(-6deg); }
-  35%, 55% { transform: rotateY(-40deg); }
-  80%      { transform: rotateY(-10deg); }
 }
 
 @keyframes adv-raamlicht {

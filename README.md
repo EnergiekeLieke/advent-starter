@@ -51,32 +51,27 @@ Je kleuren en logo blijven staan, alleen de teksten worden vervangen. De prompt 
 
 ### Stap 5: zet hem in je Kennis Shop of website
 
-Open in je beheerpagina het tabblad **Delen** en klik op **Kopieer embedcode**. Je krijgt dan code zoals hieronder, al met jouw link erin:
+Open in je beheerpagina het tabblad **Delen** en klik op **Kopieer embedcode**. Je krijgt dan code zoals hieronder, al met jouw link en de juiste hoogte erin:
 
 ```html
-<iframe src="https://mijn-adventkalender.vercel.app/?embed=true" width="100%" height="750" frameborder="0" title="Adventkalender"></iframe>
+<iframe src="https://mijn-adventkalender.vercel.app/?embed=true" width="100%" height="1350" frameborder="0" title="Adventkalender"></iframe>
 ```
 
-Let op: zet de maat als losse onderdelen (`width` en `height`) in de code en niet in een `style`. Kennis Shop haalt `style` er namelijk vaak uit, en dan krijg je een piepklein vakje. Gebruik je de link zonder `?embed=true`, dan krijg je de volledige pagina met meer ruimte en een agenda-herinnering.
+Let op: zet de maat als losse onderdelen (`width` en `height`) in de code en niet in een `style`. Kennis Shop haalt `style` er namelijk vaak uit, en dan krijg je een piepklein vakje.
 
-**Hoeveel deurtjes naast elkaar?** In de ingebedde kalender staan standaard 6 deurtjes naast elkaar. Dat is compact en past in een laag iframe, maar op een smalle telefoon zijn de deurtjes dan klein (ongeveer 67 px bij 470 px breed en 49 px bij 360 px). Kies je bij **Opties** voor **4 naast elkaar**, dan worden ze ongeveer 104 px, wat makkelijker te tikken is. Het iframe moet dan wel hoger zijn. De volledige pagina heeft altijd 4 deurtjes per rij.
+**Wat zie je ingebed?** Gewoon je kalender zelf, precies zoals op de losse pagina: de deurtjes staan 4 naast elkaar en alles werkt hetzelfde. Het enige verschil is dat de achtergrond doorzichtig is, zodat de kalender past op de kleur van je eigen pagina. Klikt je klant op een deurtje, dan verschijnt de popup in het stuk van het iframe dat hij op dat moment ziet, ook als het iframe hoger is dan zijn scherm. Het deurtje van vandaag opent alleen vanzelf als je klant het iframe ook echt in beeld heeft.
 
-**Hoe hoog moet het iframe zijn?** De kalender vult de hoogte van het iframe. Is die te laag, dan worden de deurtjes kleiner. Is die te hoog, dan krijg je alleen lege ruimte onder de kalender. Het tabblad **Delen** rekent het advies voor je uit op basis van je aantal deurtjes en je keuze voor 6 of 4 per rij.
+**Hoe hoog moet het iframe zijn?** De kalender toont alle rijen met deurtjes en is daardoor vrij hoog. Is het iframe te laag, dan moet je klant in het iframe scrollen. Is het te hoog, dan blijft er lege ruimte onder de kalender. Het tabblad **Delen** rekent de hoogte voor je uit. Vul daar in hoe breed je iframe ongeveer is (in Kennis Shop meestal 450 tot 600 px), want hoe breder het iframe, hoe groter de deurtjes en hoe hoger de kalender. Dit zijn voorbeelden voor een kalender met landschap onderaan:
 
-| Aantal deurtjes | 6 per rij (iframe 450 tot 600 px breed) | 4 per rij (iframe ongeveer 470 px breed) |
-|---|---|---|
-| 1 tot en met 4 | 450 px | 450 px |
-| 5 tot en met 6 | 450 px | 550 px |
-| 7 tot en met 8 | 550 px | 550 px |
-| 9 tot en met 12 | 550 px | 650 px |
-| 13 tot en met 16 | 650 px | 800 px |
-| 17 tot en met 18 | 650 px | 900 px |
-| 19 tot en met 20 | 750 px | 900 px |
-| 21 tot en met 24 | 750 px | 1000 px |
-| 25 tot en met 28 | 850 px | 1150 px |
-| 29 tot en met 31 | 850 tot 950 px | 1250 px |
+| Aantal deurtjes | iframe 450 px breed | iframe 600 px breed | iframe 768 px breed |
+|---|---|---|---|
+| 6 | 750 px | 800 px | 900 px |
+| 12 | 850 px | 950 px | 1050 px |
+| 18 | 1050 px | 1250 px | 1400 px |
+| 24 | 1150 px | 1350 px | 1550 px |
+| 31 | 1350 px | 1650 px | 1900 px |
 
-Met 4 per rij hangt de grootte van de deurtjes sterker af van de breedte van het iframe. In een iframe van 580 px breed worden ze groter (ongeveer 130 px) en mag het iframe iets hoger. Is je iframe breder dan 700 px bij 6 per rij, kies dan ook iets hoger.
+Is je iframe smaller dan je invult, bijvoorbeeld op een telefoon, dan blijft er onderaan wat lege ruimte. Kies je bij **Opties** voor geen onderkant, dan is de kalender ongeveer 110 px lager.
 
 Staat de kalender in Kennis Shop en wijzen je deurtjes naar lessen? Kies dan bij **Kennis Shop-links** hoe de link opent:
 

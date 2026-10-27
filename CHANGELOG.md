@@ -2,6 +2,13 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.0.2
+
+- De ingebedde kalender (`?embed=true`) toont nu gewoon je kalender zelf, met de deurtjes 4 naast elkaar, in plaats van een compacte variant. De achtergrond is doorzichtig, zodat hij past op je eigen pagina.
+- De keuze voor 6 of 4 deurtjes per rij is vervallen, want die is niet meer nodig.
+- Het tabblad Delen vraagt hoe breed je iframe ongeveer is en rekent daar de hoogte bij uit. De ingebedde kalender is hoger dan voorheen: heb je de embedcode al gebruikt, haal hem dan opnieuw op in het tabblad Delen.
+- In een hoog iframe verschijnt de popup in het stuk dat je klant op dat moment ziet, en niet in het midden van het hele iframe. Het deurtje van vandaag opent alleen vanzelf als het iframe in beeld is.
+
 ## v1.0.1
 
 - De update vergelijkt bestanden nu zonder naar regeleinden te kijken (Windows en Mac of Linux gebruiken andere). Daardoor meldt de update geen bestanden meer als "zelf aangepast" terwijl je er niets aan hebt veranderd.

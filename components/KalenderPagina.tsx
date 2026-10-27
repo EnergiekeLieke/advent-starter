@@ -19,12 +19,13 @@ interface Props {
   datum: Datum;
   /** Klopt de datum met vandaag? Dan verversen we de pagina zodra er een nieuwe dag begint. */
   live: boolean;
-  widget: boolean;
+  /** Ingebed in een iframe: doorzichtige achtergrond en weinig marge */
+  embed: boolean;
   /** Voorbeeldmodus: ontvangt live instellingen van de editor in plaats van de opgeslagen versie */
   preview: boolean;
 }
 
-export default function KalenderPagina({ config, datum, live, widget, preview }: Props) {
+export default function KalenderPagina({ config, datum, live, embed, preview }: Props) {
   const router = useRouter();
   const [actueel, setActueel] = useState(config);
 
@@ -60,5 +61,5 @@ export default function KalenderPagina({ config, datum, live, widget, preview }:
     };
   }, [live, preview, datum, router]);
 
-  return <Adventkalender config={actueel} datum={datum} widget={widget} preview={preview} />;
+  return <Adventkalender config={actueel} datum={datum} embed={embed} preview={preview} />;
 }

@@ -27,7 +27,7 @@ De ondernemer past alles aan via `/beheer`. Meestal is er dus geen code nodig. W
 - `components/AdventDecor.tsx`: sneeuw, sterren, strik en de onderkant (heuvels, huisje, dennen en de kerstboom met de bollen). `Landschap` krijgt een `stijl` en een `palet`.
 - `components/beheer/Editor.tsx`: de beheerpagina met live voorbeeld.
 - `components/beheer/KnoppenTab.tsx`: tabblad "Kennis Shop-links": per deurtje een knop aan of uit met link en eigen tekst, een plak-veld voor veel links tegelijk en de instellingen voor alle knoppen (`config.knoppen`: standaard knoptekst en `openen`, `nieuw` of `zelfde` venster).
-- `components/beheer/DelenTab.tsx`: tabblad "Delen": link, embedcode (hoogte uit `adviesIframeHoogte(aantal, kolommen)` in `lib/embed.ts`: bij 6 per rij 350 px plus 100 px per rij, dus 750 px voor 24 deurtjes, bij 4 per rij 300 px plus 120 px per rij, dus 1000 px) en een controle op niet-opgeslagen wijzigingen, testmodus en voorbeeldteksten.
+- `components/beheer/DelenTab.tsx`: tabblad "Delen": link, embedcode (de hoogte komt uit `adviesIframeHoogte(aantal, breedte, metOnderkant)` in `lib/embed.ts`, op basis van de breedte van het iframe die de beheerder invult) en een controle op niet-opgeslagen wijzigingen, testmodus en voorbeeldteksten.
 - `components/beheer/velden.tsx`: gedeelde stijlen en `Veld` voor de beheerpagina.
 - `app/globals.css`: animaties van de kalender (`.adv-*`).
 
@@ -52,7 +52,7 @@ Kleuren komen uit `config.kleuren` en worden in `lib/kleur.ts` omgezet naar CSS-
 
 ### Embed
 
-`/?embed=true` is de compacte variant voor in een iframe (bijvoorbeeld Kennis Shop). `config.opties.embedKolommen` (4 of 6, standaard 6) bepaalt hoeveel deurtjes naast elkaar staan. Bij 6 gebruikt `Adventkalender` kleinere iconen en letters (`compact`), bij 4 de maten van de volledige pagina. Hoe breder het iframe, hoe groter de deurtjes: de hoogte-adviezen in `lib/embed.ts` zijn gemeten bij ongeveer 470 tot 580 px breed. `next.config.ts` laat de kalender overal insluiten (`frame-ancestors *`), `/beheer` alleen binnen deze site.
+`/?embed=true` toont dezelfde kalender als de gewone pagina (4 deurtjes naast elkaar, dezelfde kop, knoppen en voet), maar met een doorzichtige achtergrond en weinig marge (`embed`-prop van `Adventkalender`), voor in een iframe zoals Kennis Shop. Er is geen aparte compacte variant meer. Omdat een ingebedde kalender hoger kan zijn dan het scherm van de bezoeker, meet `Adventkalender` bij het openen van een popup (`meetZichtbaar()`, met een IntersectionObserver op een onzichtbaar element over de hele pagina) welk stuk van het iframe zichtbaar is, ook als de kalender op een ander domein staat dan de pagina eromheen. De popup staat dan in dat stuk (`absolute` in plaats van `fixed`). Kan dat niet gemeten worden, dan valt hij terug op het midden van het iframe. Het deurtje van vandaag opent ingebed alleen vanzelf als het iframe zichtbaar is. Omdat de kalender niet meer de hoogte van het iframe vult, schat `adviesIframeHoogte()` in `lib/embed.ts` hoe hoog hij is. De formule is gemeten in de echte kalender (kop en voet ongeveer 470 px, plus de rijen met deurtjes; de deurtjes worden groter tot een kaartbreedte van 768 px) en nooit te laag bevonden. `next.config.ts` laat de kalender overal insluiten (`frame-ancestors *`), `/beheer` alleen binnen deze site.
 
 ## Versies en updates
 

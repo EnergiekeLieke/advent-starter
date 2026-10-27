@@ -116,8 +116,6 @@ const optiesSchema = z.object({
   // Oudere instellingen hadden hier true of false: true werd het winterlandschap, false werd geen onderkant
   landschap:   z.preprocess((v) => (v === true ? 'winter' : v === false ? 'geen' : v), z.enum(ONDERKANTEN, { error: 'Kies een van de beschikbare opties' })).default('winter'),
   herinnering: z.boolean().default(true),
-  // Aantal deurtjes naast elkaar in de ingebedde kalender (?embed=true): 6 is compact, 4 geeft grotere deurtjes maar vraagt een hoger iframe
-  embedKolommen: z.union([z.literal(4), z.literal(6)], { error: 'Kies 4 of 6 deurtjes per rij' }).default(6),
 });
 
 const knoppenSchema = z.object({
@@ -172,7 +170,7 @@ const VELDNAMEN: Record<string, string> = {
   label: 'knoptekst', url: 'link', afbeelding: 'afbeelding', kleuren: 'kleuren', tegels: 'tegelkleuren',
   achtergrond: 'achtergrondkleur', accent: 'accentkleur', licht: 'lichte kleur', primair: 'primaire kleur',
   secundair: 'secundaire kleur', lettertype: 'lettertype', dagen: 'deurtjes', opties: 'opties',
-  knoppen: 'knoppen', testmodus: 'testmodus', embedKolommen: 'deurtjes per rij (ingebed)', standaardLabel: 'standaard knoptekst', openen: 'openen', aan: 'knop aan',
+  knoppen: 'knoppen', testmodus: 'testmodus', standaardLabel: 'standaard knoptekst', openen: 'openen', aan: 'knop aan',
 };
 
 function padNaarTekst(pad: PropertyKey[]): string {

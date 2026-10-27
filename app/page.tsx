@@ -28,8 +28,8 @@ export default async function Page({ searchParams }: { searchParams: Promise<Par
       datum={datum}
       // Bij een gesimuleerde datum hoort de pagina niet vanzelf te verversen
       live={!gesimuleerd}
-      // ?embed=true: compacte variant voor in een iframe (bijv. in Kennis Shop)
-      widget={embed === 'true' || embed === '1'}
+      // ?embed=true: dezelfde kalender voor in een iframe (bijv. in Kennis Shop), met een doorzichtige achtergrond
+      embed={embed === 'true' || embed === '1'}
       // ?preview=1: voorbeeld binnen de editor
       preview={preview}
     />
