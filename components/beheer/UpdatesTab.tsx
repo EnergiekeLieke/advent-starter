@@ -55,53 +55,7 @@ export default function UpdatesTab({ versie }: { versie: VersieInfo }) {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold">Stap 1: zet de update-knop in je GitHub-repo (eenmalig)</h2>
-        <p className="text-sm text-slate-700">
-          Ben je gestart met de Deploy-knop van Vercel? Dan heeft Vercel de update-knop niet voor je meegekopieerd. Je zet hem één keer zelf neer, en dat gaat met één klik.
-          Staat de update-knop er al (je ziet hem op GitHub bij <strong>Actions</strong>)? Dan kun je deze stap overslaan.
-        </p>
-        {installeerUrl ? (
-          <>
-            <a href={installeerUrl} target="_blank" rel="noopener noreferrer" className={`${KNOP_PRIMAIR} inline-block`}>
-              Installeer de update-knop op GitHub
-            </a>
-            <ol className="ml-5 list-decimal space-y-1 text-sm text-slate-700">
-              <li>GitHub opent een nieuw bestand. De naam en de inhoud zijn al ingevuld, daar hoef je niets aan te veranderen.</li>
-              <li>Klik rechtsboven op <strong>Commit changes...</strong> en daarna in het venster op de groene knop <strong>Commit changes</strong>.</li>
-              <li>Klaar. Ga terug naar deze pagina voor stap 2.</li>
-            </ol>
-          </>
-        ) : laden ? (
-          <p className="text-sm text-slate-500">Even kijken...</p>
-        ) : (
-          <div className="space-y-2 text-sm text-slate-700">
-            <p>
-              {repoUrl
-                ? 'Ik kan de tekst van de update-knop nu niet ophalen. Je kunt hem ook zelf neerzetten:'
-                : 'Ik weet niet in welke GitHub-repo je kalender staat. Je kunt de update-knop zelf neerzetten:'}
-            </p>
-            <ol className="ml-5 list-decimal space-y-1">
-              <li>Open je repo op GitHub, klik op <strong>Add file</strong> en dan op <strong>Create new file</strong>.</li>
-              <li>Typ als naam <code className="font-mono text-xs">{WORKFLOW_PAD}</code>. Typ de schuine strepen gewoon mee, GitHub maakt de mappen vanzelf.</li>
-              <li>Plak de tekst van <a className="underline" href={versie.workflowUrl} target="_blank" rel="noopener noreferrer">dit bestand</a> in het grote vak en klik op <strong>Commit changes</strong>.</li>
-            </ol>
-          </div>
-        )}
-        {workflow && (
-          <button type="button" onClick={kopieer} className={KNOP}>Kopieer de tekst van de update-knop</button>
-        )}
-        {bericht && (
-          <div
-            role={bericht.soort === 'fout' ? 'alert' : 'status'}
-            className={`rounded-lg border p-3 text-sm ${bericht.soort === 'ok' ? 'border-emerald-300 bg-emerald-50 text-emerald-900' : 'border-red-300 bg-red-50 text-red-900'}`}
-          >
-            {bericht.regels.map((r) => <p key={r}>{r}</p>)}
-          </div>
-        )}
-      </section>
-
-      <section className="space-y-3">
-        <h2 className="text-sm font-semibold">Stap 2: start de update</h2>
+        <h2 className="text-sm font-semibold">Start de update</h2>
         <ol className="ml-5 list-decimal space-y-1 text-sm text-slate-700">
           <li>Klik op de knop hieronder. Je komt op GitHub bij <strong>Update van de template</strong>.</li>
           <li>Klik rechts op <strong>Run workflow</strong> en daarna op de groene knop <strong>Run workflow</strong>. Laat het vak &quot;Versie&quot; leeg om de nieuwste te krijgen.</li>
@@ -109,7 +63,7 @@ export default function UpdatesTab({ versie }: { versie: VersieInfo }) {
           <li>Vercel zet de nieuwe versie daarna vanzelf online, dat duurt ongeveer 1 tot 2 minuten. Ververs deze pagina met Ctrl+F5.</li>
         </ol>
         {startUrl ? (
-          <a href={startUrl} target="_blank" rel="noopener noreferrer" className={`${KNOP} inline-block`}>Naar de update-knop op GitHub</a>
+          <a href={startUrl} target="_blank" rel="noopener noreferrer" className={`${KNOP_PRIMAIR} inline-block`}>Naar de update-knop op GitHub</a>
         ) : (
           <p className="text-xs text-slate-500">Open je repo op GitHub, ga naar <strong>Actions</strong> en kies <strong>Update van de template</strong>.</p>
         )}
@@ -118,6 +72,57 @@ export default function UpdatesTab({ versie }: { versie: VersieInfo }) {
           Heb je zelf code in je repo aangepast? De update vervangt die bestanden en laat in het resultaat zien welke dat waren.
         </p>
       </section>
+
+      <details className="rounded-lg border border-slate-200 bg-white p-3">
+        <summary className="cursor-pointer text-sm font-semibold">Heb je de update-knop nog niet? Zet hem hier neer (eenmalig)</summary>
+        <div className="mt-3 space-y-3">
+          <p className="text-sm text-slate-700">
+            Zie je op GitHub geen <strong>Update van de template</strong> bij Actions, of krijg je een pagina die niet bestaat (404)? Dan staat de update-knop nog niet in je repo.
+            Dat gebeurt als je bent gestart met de Deploy-knop van Vercel, want die kopieert hem niet mee. Je zet hem één keer zelf neer, en dat gaat met één klik.
+          </p>
+          <p className="rounded-lg border border-amber-300 bg-amber-50 p-2 text-sm text-amber-900">
+            Krijg je op GitHub de melding <em>&quot;A file with the same name already exists&quot;</em>? Dan staat de update-knop er al. Je kunt deze stap overslaan en de update hierboven starten.
+          </p>
+          {installeerUrl ? (
+            <>
+              <a href={installeerUrl} target="_blank" rel="noopener noreferrer" className={`${KNOP} inline-block`}>
+                Installeer de update-knop op GitHub
+              </a>
+              <ol className="ml-5 list-decimal space-y-1 text-sm text-slate-700">
+                <li>GitHub opent een nieuw bestand. De naam en de inhoud zijn al ingevuld, daar hoef je niets aan te veranderen.</li>
+                <li>Klik rechtsboven op <strong>Commit changes...</strong> en daarna in het venster op de groene knop <strong>Commit changes</strong>.</li>
+                <li>Klaar. Start nu de update hierboven.</li>
+              </ol>
+            </>
+          ) : laden ? (
+            <p className="text-sm text-slate-500">Even kijken...</p>
+          ) : (
+            <div className="space-y-2 text-sm text-slate-700">
+              <p>
+                {repoUrl
+                  ? 'Ik kan de tekst van de update-knop nu niet ophalen. Je kunt hem ook zelf neerzetten:'
+                  : 'Ik weet niet in welke GitHub-repo je kalender staat. Je kunt de update-knop zelf neerzetten:'}
+              </p>
+              <ol className="ml-5 list-decimal space-y-1">
+                <li>Open je repo op GitHub, klik op <strong>Add file</strong> en dan op <strong>Create new file</strong>.</li>
+                <li>Typ als naam <code className="font-mono text-xs">{WORKFLOW_PAD}</code>. Typ de schuine strepen gewoon mee, GitHub maakt de mappen vanzelf.</li>
+                <li>Plak de tekst van <a className="underline" href={versie.workflowUrl} target="_blank" rel="noopener noreferrer">dit bestand</a> in het grote vak en klik op <strong>Commit changes</strong>.</li>
+              </ol>
+            </div>
+          )}
+          {workflow && (
+            <button type="button" onClick={kopieer} className={KNOP}>Kopieer de tekst van de update-knop</button>
+          )}
+          {bericht && (
+            <div
+              role={bericht.soort === 'fout' ? 'alert' : 'status'}
+              className={`rounded-lg border p-3 text-sm ${bericht.soort === 'ok' ? 'border-emerald-300 bg-emerald-50 text-emerald-900' : 'border-red-300 bg-red-50 text-red-900'}`}
+            >
+              {bericht.regels.map((r) => <p key={r}>{r}</p>)}
+            </div>
+          )}
+        </div>
+      </details>
 
       <section className="space-y-1 text-sm text-slate-700">
         <h2 className="text-sm font-semibold">Liever met Claude Code of de terminal?</h2>

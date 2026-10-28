@@ -104,7 +104,7 @@ Komt er een nieuwe versie van de adventkalender-starter uit? Dan zie je in je be
 
 ### Zo update je
 
-0. **Eenmalig, alleen als je met de Deploy-knop van Vercel bent gestart:** Vercel kopieert de update-knop (de map `.github`) niet mee. Open in je beheerpagina het tabblad **Updates** en klik op **Installeer de update-knop op GitHub**. GitHub opent een nieuw bestand met alles al ingevuld, jij klikt op **Commit changes**.
+0. **Eenmalig, alleen als je met de Deploy-knop van Vercel bent gestart:** Vercel kopieert de update-knop (de map `.github`) niet mee. Open in je beheerpagina het tabblad **Updates** en klik op **Installeer de update-knop op GitHub**. GitHub opent een nieuw bestand met alles al ingevuld, jij klikt op **Commit changes**. Zegt GitHub "A file with the same name already exists"? Dan staat de update-knop er al en kun je dit overslaan.
 1. Klik in de blauwe balk op **Hoe update ik?**, of open het tabblad **Updates**, en kies **Naar de update-knop op GitHub**. Of ga op GitHub naar je eigen repo, kies **Actions** en dan **Update van de template**.
 2. Klik rechts op **Run workflow** en daarna op de groene knop **Run workflow**. Laat het vak "Versie" leeg om de nieuwste te krijgen.
 3. Wacht tot de run een groen vinkje heeft (ongeveer een halve minuut). Open de run om te zien wat er is veranderd.

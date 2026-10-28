@@ -2,6 +2,10 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.0.5
+
+- Het tabblad Updates begint nu met het starten van de update. Het neerzetten van de update-knop staat daaronder, in een uitklapkopje, met de uitleg wat "A file with the same name already exists" betekent.
+
 ## v1.0.4
 
 - Je instellingen staan nu onder een bestandsnaam die niet te raden is. Daarvoor stond er een vast, openbaar adres, waardoor iemand die het adres van je opslag kende de teksten en links van deurtjes die nog dicht zijn alvast kon lezen. De eerste keer dat je kalender na de update wordt bezocht, verhuist hij vanzelf. Je hoeft niets te doen.
