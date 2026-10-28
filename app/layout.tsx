@@ -5,8 +5,13 @@ import './globals.css';
 export const viewport: Viewport = { width: 'device-width', initialScale: 1 };
 
 export async function generateMetadata(): Promise<Metadata> {
-  const config = await laadConfig();
-  return { title: config.titel, description: config.ondertitel || undefined };
+  try {
+    const config = await laadConfig();
+    return { title: config.titel, description: config.ondertitel || undefined };
+  } catch {
+    // Een fout hier mag de pagina niet blokkeren, de foutpagina legt het uit
+    return { title: 'Adventkalender' };
+  }
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

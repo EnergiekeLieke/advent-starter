@@ -2,6 +2,13 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.0.4
+
+- Je instellingen staan nu onder een bestandsnaam die niet te raden is. Daarvoor stond er een vast, openbaar adres, waardoor iemand die het adres van je opslag kende de teksten en links van deurtjes die nog dicht zijn alvast kon lezen. De eerste keer dat je kalender na de update wordt bezocht, verhuist hij vanzelf. Je hoeft niets te doen.
+- Haperde de opslag even, dan zag je kalender er soms uit als de voorbeeldkalender. Nu blijft de laatste goede versie staan. Is die er niet, dan krijgt de bezoeker een nette melding met een knop om opnieuw te proberen.
+- In de beheerpagina worden de voorbeeldteksten niet meer geladen als het ophalen mislukt. Daardoor kun je ze niet per ongeluk over je eigen teksten heen opslaan.
+- Is de opslag niet bereikbaar, dan blijft een pagina niet meer minutenlang hangen maar geeft hij binnen enkele seconden een melding.
+
 ## v1.0.3
 
 - Opslaan werkt nu ook als Vercel je Blob-opslag koppelt via de nieuwe manier (BLOB_STORE_ID in plaats van BLOB_READ_WRITE_TOKEN). Daarvoor zag je ten onrechte "er is geen Blob-opslag gekoppeld".

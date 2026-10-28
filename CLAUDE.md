@@ -21,7 +21,8 @@ De ondernemer past alles aan via `/beheer`. Meestal is er dus geen code nodig. W
 
 - `config/advent.json`: standaardinstellingen (titel, kleuren, 24 voorbeeldteksten). Geldt zolang er niets is opgeslagen.
 - `lib/config.ts`: het zod-schema voor alle instellingen, de thema's en de lettertypes. Een nieuwe instelling begint hier.
-- `lib/opslag.ts`: bewaren en lezen. Blob in productie, een lokaal bestand tijdens `npm run dev`.
+- `lib/opslag.ts`: bewaren en lezen. Blob in productie, een lokaal bestand tijdens `npm run dev`. De instellingen staan in Blob onder een naam met willekeurig stuk (`advent/config-xxxx.json`, zie `lib/blobKeuze.ts`), nooit onder een vast adres: dat zou te raden zijn en dan lekken de dichte deurtjes. Blob-aanroepen hebben een tijdslimiet.
+- `lib/configLaden.ts`: geeft bij een storing de laatste goede instellingen, en gooit anders een fout. Val nooit stilzwijgend terug op de voorbeeldtekst als er Blob is gekoppeld, want de editor kan die dan over de echte teksten heen opslaan.
 - `lib/configLaden.ts`: `laadConfig()` geeft de opgeslagen instellingen, anders `config/advent.json`.
 - `components/Adventkalender.tsx`: de kalender zelf (deurtjes, popup, datumlogica).
 - `components/AdventDecor.tsx`: sneeuw, sterren, strik en de onderkant (heuvels, huisje, dennen en de kerstboom met de bollen). `Landschap` krijgt een `stijl` en een `palet`.
