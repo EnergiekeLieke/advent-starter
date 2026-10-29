@@ -27,13 +27,13 @@ jobs:
   update:
     # In de template zelf is er niets om naar te updaten
     if: github.repository != 'EnergiekeLieke/advent-starter'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Haal je repo op
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Zet Node klaar
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 22
 
