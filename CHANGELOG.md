@@ -2,6 +2,12 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.1.0
+
+- Nieuw: je kiest hoe een deurtje opengaat. Naast de zwaaideur (de standaard) kun je kiezen voor een cadeautje met lint (het pakje vliegt weg), een omdraaikaartje of een schuifdeur. Je vindt het bij **Opties**, met bij elke keuze een mini-deurtje dat opengaat als je eroverheen beweegt.
+- Je huidige kalender verandert niet: die blijft een zwaaideur tot je zelf een andere stijl kiest.
+- Bezoekers die op hun apparaat minder beweging hebben ingesteld, zien de deurtjes direct open zonder animatie.
+
 ## v1.0.5
 
 - Het tabblad Updates begint nu met het starten van de update. Het neerzetten van de update-knop staat daaronder, in een uitklapkopje, met de uitleg wat "A file with the same name already exists" betekent.

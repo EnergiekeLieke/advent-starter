@@ -66,6 +66,11 @@ interface Props {
   preview?: boolean;
 }
 
+// Bij de schuifdeur blijft de deur binnen zijn vakje terwijl hij wegschuift. Bij de andere stijlen is er geen omhulsel nodig.
+export function Omhulsel({ actief, children }: { actief: boolean; children: React.ReactNode }) {
+  return actief ? <span className="absolute inset-0 block overflow-hidden rounded-xl">{children}</span> : <>{children}</>;
+}
+
 export default function Adventkalender({ config, datum, embed = false, preview = false }: Props) {
   const [beweging, setBeweging] = useState(true);
   const [verledenOpen, setVerledenOpen] = useState(false);
@@ -354,7 +359,7 @@ export default function Adventkalender({ config, datum, embed = false, preview =
         </header>
 
         <ol
-          className="relative grid list-none p-0 m-0 gap-2 sm:gap-4"
+          className={`relative grid list-none p-0 m-0 gap-2 sm:gap-4 adv-stijl-${opties.deurStijl}`}
           style={{ gridTemplateColumns: `repeat(${kolommen}, minmax(0, 1fr))` }}
         >
           {dagen.map(({ dag }) => {
@@ -374,6 +379,7 @@ export default function Adventkalender({ config, datum, embed = false, preview =
                     aria-disabled={dicht}
                     className={`absolute inset-0 block w-full rounded-xl focus-visible:outline-goud ${isVandaag ? 'adv-puls' : ''} ${dicht ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                   >
+                    <Omhulsel actief={opties.deurStijl === 'schuif'}>
                     {/* Binnenkant: warm goudglanzend, zodat open nooit op een dichte deur lijkt */}
                     <span className="adv-binnen absolute inset-0 rounded-xl border-2 border-goud flex flex-col items-center justify-center text-primair">
                       <AdventIcoon nr={dag - 1} className={`${dicht ? 'invisible ' : ''}w-9 h-9 sm:w-12 sm:h-12`} />
@@ -390,15 +396,23 @@ export default function Adventkalender({ config, datum, embed = false, preview =
                       }}
                     >
                       <span className="absolute inset-1 sm:inset-1.5 rounded-lg border border-goud/40 pointer-events-none" />
+                      {opties.deurStijl === 'cadeau' && <span aria-hidden className="adv-lint" />}
                       <span className="absolute inset-0 flex flex-col items-center justify-center">
-                        <span className="font-kop font-bold leading-none text-2xl sm:text-4xl">{dag}</span>
-                        <AdventIcoon nr={dag - 1} className="mt-1 w-5 h-5 sm:w-6 sm:h-6" />
+                        {/* Bij het cadeautje staat het nummer op een vlak in de kleur van de deur, als cadeaulabel boven het lint */}
+                        <span
+                          className={opties.deurStijl === 'cadeau' ? 'relative flex flex-col items-center rounded-lg px-1.5 py-1 sm:px-2.5 sm:py-1.5' : 'contents'}
+                          style={opties.deurStijl === 'cadeau' ? { backgroundColor: t.bg } : undefined}
+                        >
+                          <span className="font-kop font-bold leading-none text-2xl sm:text-4xl">{dag}</span>
+                          <AdventIcoon nr={dag - 1} className="mt-1 w-5 h-5 sm:w-6 sm:h-6" />
+                        </span>
                       </span>
                       {isVandaag && <Strik accent={config.kleuren.accent} />}
                       {dicht && (
                         <span className="absolute bottom-1 right-1.5 sm:bottom-1.5 sm:right-2 opacity-70 scale-75 sm:scale-100 origin-bottom-right"><Slot /></span>
                       )}
                     </span>
+                    </Omhulsel>
                   </button>
                 </div>
               </li>

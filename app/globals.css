@@ -33,6 +33,46 @@ h1, h2, h3 {
   transform: rotateY(-112deg);
 }
 
+/* Andere manieren om een deurtje te openen, te kiezen bij Opties (config.opties.deurStijl). Zwaaideur is hierboven. */
+
+/* Omdraaikaartje: draait om zijn middelpunt, de achterkant is onzichtbaar en laat de binnenkant zien */
+.adv-stijl-draai .adv-deur {
+  transform-origin: center;
+}
+
+.adv-stijl-draai .adv-deur.is-open {
+  transform: rotateY(180deg);
+}
+
+/* Schuifdeur: schuift opzij weg, binnen het vakje (zie Omhulsel in Adventkalender.tsx) */
+.adv-stijl-schuif .adv-deur.is-open {
+  transform: translateX(-105%);
+}
+
+/* Cadeautje: een lint over de deur, bij openen vliegt het pakje omhoog en weg */
+.adv-stijl-cadeau .adv-deur {
+  transform-origin: 50% 100%;
+  transition: transform 0.7s cubic-bezier(0.22, 0.8, 0.36, 1), opacity 0.5s ease 0.15s;
+}
+
+.adv-stijl-cadeau .adv-deur.is-open {
+  transform: translateY(-75%) rotate(-12deg) scale(0.9);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.adv-lint {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    linear-gradient(rgb(var(--adv-goud)), rgb(var(--adv-goud))) center / 13% 100% no-repeat,
+    linear-gradient(rgb(var(--adv-goud)), rgb(var(--adv-goud))) center / 100% 13% no-repeat;
+  /* Een dun randje, zodat het lint ook zichtbaar blijft op een deur die bijna dezelfde kleur heeft */
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.45));
+}
+
 /* Warme, glanzende binnenkant: een open deurtje lijkt nooit op een dicht deurtje */
 .adv-binnen {
   /* --adv-binnen-1 tot 3 komen uit lib/kleur.ts: op een lichte achtergrond is de binnenkant zachter */
@@ -176,7 +216,7 @@ h1, h2, h3 {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .adv-deur, .adv-bol { transition: none; }
+  .adv-deur, .adv-bol, .adv-stijl-cadeau .adv-deur { transition: none; }
   .adv-raamlicht { animation: none; }
   .adv-puls, .adv-glans::after, .adv-wiebel, .adv-twinkel, .adv-goudtekst, .adv-popup, .adv-ster-aan, .adv-tekst { animation: none; }
   .adv-spat { display: none; }

@@ -38,6 +38,10 @@ Een knop (`dag.knop`) heeft `aan`, `label` en `url`. De knop verschijnt alleen b
 
 Kleuren komen uit `config.kleuren` en worden in `lib/kleur.ts` omgezet naar CSS-variabelen (`--adv-nacht`, `--adv-goud` en meer, als rgb-triplet). `tailwind.config.ts` koppelt daar Tailwind-kleuren aan (`bg-nacht`, `text-goud`, `bg-licht`, `text-primair`, enzovoort). Gebruik in de kalender dus deze namen en geen vaste hex-codes. Tekstkleuren op een gekleurde achtergrond worden automatisch leesbaar gekozen (`leesbaar()`).
 
+### Hoe een deurtje opengaat
+
+`config.opties.deurStijl` is `zwaai` (standaard), `cadeau`, `draai` of `schuif`. De logica van het openen verandert niet (`isOpen`, klasse `is-open` op `.adv-deur`). De stijl zit alleen in CSS: de `<ol>` krijgt `adv-stijl-<naam>` en `app/globals.css` bepaalt de beweging. Twee uitzonderingen in `components/Adventkalender.tsx`: bij `schuif` zitten de lagen in `Omhulsel` (overflow hidden, zodat de deur binnen zijn vakje blijft en de gloed van vandaag niet wordt afgesneden) en bij `cadeau` staat er een `.adv-lint` en staat het nummer op een vlak in tegelkleur. De keuze met mini-deurtjes (`DeurMini`) staat in het tabblad Opties van `Editor.tsx`.
+
 ### Onderkant van de kalender
 
 `config.opties.landschap` is `winter`, `heuvels`, `golven` of `geen` (oude instellingen met `true` of `false` worden omgezet naar `winter` en `geen`). `winter` heeft sneeuw en past bij een donkere achtergrond. `heuvels` is dezelfde opzet in de kleuren van het thema en past bij lichte achtergronden. `golven` is alleen heuvels, zonder kerstboom. De kleuren staan in `landschapPalet()` in `lib/kleur.ts`. Elk thema in `THEMAS` heeft een standaard `landschap`, die bij het kiezen van het thema in de editor mee wordt gezet.

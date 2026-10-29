@@ -18,6 +18,10 @@ export const ONDERKANTEN = ['winter', 'heuvels', 'golven', 'geen'] as const;
 export type Onderkant = (typeof ONDERKANTEN)[number];
 export type LandschapStijl = Exclude<Onderkant, 'geen'>;
 
+// Hoe een deurtje opengaat: als zwaaideur, als ingepakt cadeautje, als omdraaikaartje of als schuifdeur
+export const DEURSTIJLEN = ['zwaai', 'cadeau', 'draai', 'schuif'] as const;
+export type DeurStijl = (typeof DEURSTIJLEN)[number];
+
 // ─── Thema's (kleurensets) ────────────────────────────────────
 // Elk thema is gecontroleerd op leesbaarheid: titel op de achtergrond, tekst in de popup en tekst op de deurtjes.
 // `landschap` is de onderkant die bij het thema past: sneeuw valt weg op een lichte achtergrond, dus daar komen zachte heuvels.
@@ -116,6 +120,7 @@ const optiesSchema = z.object({
   // Oudere instellingen hadden hier true of false: true werd het winterlandschap, false werd geen onderkant
   landschap:   z.preprocess((v) => (v === true ? 'winter' : v === false ? 'geen' : v), z.enum(ONDERKANTEN, { error: 'Kies een van de beschikbare opties' })).default('winter'),
   herinnering: z.boolean().default(true),
+  deurStijl:   z.enum(DEURSTIJLEN, { error: 'Kies een van de beschikbare opties' }).default('zwaai'),
 });
 
 const knoppenSchema = z.object({
@@ -170,7 +175,7 @@ const VELDNAMEN: Record<string, string> = {
   label: 'knoptekst', url: 'link', afbeelding: 'afbeelding', kleuren: 'kleuren', tegels: 'tegelkleuren',
   achtergrond: 'achtergrondkleur', accent: 'accentkleur', licht: 'lichte kleur', primair: 'primaire kleur',
   secundair: 'secundaire kleur', lettertype: 'lettertype', dagen: 'deurtjes', opties: 'opties',
-  knoppen: 'knoppen', testmodus: 'testmodus', standaardLabel: 'standaard knoptekst', openen: 'openen', aan: 'knop aan',
+  knoppen: 'knoppen', testmodus: 'testmodus', standaardLabel: 'standaard knoptekst', openen: 'openen', aan: 'knop aan', deurStijl: 'deurstijl',
 };
 
 function padNaarTekst(pad: PropertyKey[]): string {

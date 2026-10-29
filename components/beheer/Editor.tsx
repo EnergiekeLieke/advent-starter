@@ -6,11 +6,13 @@ import DelenTab from '@/components/beheer/DelenTab';
 import KnoppenTab from '@/components/beheer/KnoppenTab';
 import UpdatesTab from '@/components/beheer/UpdatesTab';
 import { INPUT, KNOP, KNOP_PRIMAIR, Veld, type Bericht } from '@/components/beheer/velden';
+import AdventIcoon from '@/components/AdventIcoon';
+import { Omhulsel } from '@/components/Adventkalender';
 import { BERICHT_CONFIG, BERICHT_KLAAR } from '@/components/KalenderPagina';
-import { dagenVoor, LETTERTYPES, leesConfig, MAX_DAGEN, THEMAS, themaVan, type AdventConfig, type AdventDag, type AdventKleuren, type Lettertype, type Onderkant, type ThemaNaam } from '@/lib/config';
+import { dagenVoor, LETTERTYPES, leesConfig, MAX_DAGEN, THEMAS, themaVan, type AdventConfig, type AdventDag, type AdventKleuren, type DeurStijl, type Lettertype, type Onderkant, type ThemaNaam } from '@/lib/config';
 import standaardConfig from '@/config/advent.json';
 import { labelKort, parseIso, plusDagen } from '@/lib/datum';
-import { contrast, landschapPalet } from '@/lib/kleur';
+import { contrast, cssVariabelen, landschapPalet, tegelKleuren } from '@/lib/kleur';
 import type { OpslagModus } from '@/lib/opslag';
 import { PROMPT_TEKSTEN } from '@/lib/promptTeksten';
 import type { VersieInfo } from '@/lib/versie';
@@ -114,6 +116,49 @@ function OnderkantMini({ waarde, kleuren }: { waarde: Onderkant; kleuren: Advent
   );
 }
 
+const DEURSTIJL_KEUZES: { waarde: DeurStijl; naam: string; uitleg: string }[] = [
+  { waarde: 'zwaai', naam: 'Zwaaideur', uitleg: 'Het deurtje zwaait open, zoals een echte deur. Dit is de standaard.' },
+  { waarde: 'cadeau', naam: 'Cadeautje', uitleg: 'Elk deurtje is een ingepakt cadeautje met een lint. Bij het openen vliegt het pakje weg.' },
+  { waarde: 'draai', naam: 'Omdraaikaartje', uitleg: 'Het deurtje draait om, als een kaartje uit een memoryspel.' },
+  { waarde: 'schuif', naam: 'Schuifdeur', uitleg: 'Het deurtje schuift opzij weg.' },
+];
+
+// Een mini-deurtje in de kleuren van je kalender. Beweeg eroverheen om te zien hoe het opengaat.
+function DeurMini({ waarde, config, open }: { waarde: DeurStijl; config: AdventConfig; open: boolean }) {
+  const tegel = tegelKleuren(config.kleuren)[0];
+  return (
+    <span
+      aria-hidden
+      className={`adv-stijl-${waarde} flex h-24 items-center justify-center rounded-lg`}
+      style={{ ...(cssVariabelen(config) as React.CSSProperties), background: config.kleuren.achtergrond }}
+    >
+      <span className="adv-scene relative block h-16 w-16">
+        <span className="absolute inset-0 block">
+          <Omhulsel actief={waarde === 'schuif'}>
+            <span className="adv-binnen absolute inset-0 flex items-center justify-center rounded-xl border-2 border-goud text-primair">
+              <AdventIcoon nr={0} className="h-8 w-8" />
+            </span>
+            <span
+              className={`adv-deur ${open ? 'is-open' : ''} absolute inset-0 block rounded-xl border border-goud/80 shadow-md`}
+              style={{ backgroundColor: tegel.bg, color: tegel.tekst }}
+            >
+              {waarde === 'cadeau' && <span className="adv-lint" />}
+              <span className="absolute inset-0 flex items-center justify-center">
+                <span
+                  className={waarde === 'cadeau' ? 'rounded-lg px-2 py-1' : 'contents'}
+                  style={waarde === 'cadeau' ? { backgroundColor: tegel.bg } : undefined}
+                >
+                  <span className="font-kop text-2xl font-bold leading-none">7</span>
+                </span>
+              </span>
+            </span>
+          </Omhulsel>
+        </span>
+      </span>
+    </span>
+  );
+}
+
 function isObject(x: unknown): x is Record<string, unknown> {
   return typeof x === 'object' && x !== null && !Array.isArray(x);
 }
@@ -143,6 +188,8 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
   const [config, setConfig] = useState(beginConfig);
   const [opgeslagen, setOpgeslagen] = useState(() => JSON.stringify(beginConfig));
   const [tab, setTab] = useState<Tab>('Algemeen');
+  // Welk mini-deurtje bij Opties open staat, omdat je eroverheen beweegt of het gekozen hebt
+  const [miniOpen, setMiniOpen] = useState<DeurStijl | null>(null);
   const [bezig, setBezig] = useState(false);
   const [bericht, setBericht] = useState<Bericht>(null);
   const [previewDatum, setPreviewDatum] = useState<(typeof PREVIEW_DATA)[number]['sleutel']>('halverwege');
@@ -601,6 +648,41 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
                   </label>
                 ))}
               </div>
+
+              <fieldset>
+                <legend className="mb-1 text-sm font-medium">Hoe gaat een deurtje open?</legend>
+                <p className="mb-3 text-xs text-slate-500">
+                  Dit geldt voor alle deurtjes. Beweeg met je muis over een keuze (of tik erop) om te zien hoe het eruitziet.
+                </p>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {DEURSTIJL_KEUZES.map((o) => (
+                    <label
+                      key={o.waarde}
+                      onMouseEnter={() => setMiniOpen(o.waarde)}
+                      onMouseLeave={() => setMiniOpen((h) => (h === o.waarde ? null : h))}
+                      className="flex cursor-pointer flex-col gap-2 rounded-xl border-2 border-slate-200 bg-white p-2 hover:border-slate-400 has-[:checked]:border-emerald-700 has-[:checked]:ring-2 has-[:checked]:ring-emerald-200"
+                    >
+                      <DeurMini waarde={o.waarde} config={config} open={miniOpen === o.waarde} />
+                      <span className="flex items-start gap-2 text-sm">
+                        <input
+                          type="radio"
+                          name="deurstijl"
+                          value={o.waarde}
+                          checked={config.opties.deurStijl === o.waarde}
+                          onChange={() => zetOptie('deurStijl', o.waarde)}
+                          onFocus={() => setMiniOpen(o.waarde)}
+                          onBlur={() => setMiniOpen((h) => (h === o.waarde ? null : h))}
+                          className="mt-1 h-4 w-4"
+                        />
+                        <span>
+                          <span className="block font-semibold">{o.naam}</span>
+                          <span className="block text-xs text-slate-500">{o.uitleg}</span>
+                        </span>
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
 
               <fieldset>
                 <legend className="mb-1 text-sm font-medium">Onderkant van de kalender</legend>
