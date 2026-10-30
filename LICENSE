@@ -1,0 +1,55 @@
+BouwClub-licentie voor de Adventkalender-starter
+Versie 1.0, 2026
+
+Copyright (c) 2026 Energieke Lieke. Alle rechten voorbehouden, behalve de rechten die hieronder
+uitdrukkelijk worden gegeven.
+
+Dit is geen open-sourcelicentie. De code is openbaar leesbaar, zodat de Deploy-knop werkt, maar het
+gebruik ervan is beperkt tot wat hieronder staat.
+
+1. Wie deze licentie krijgt
+   Deze licentie geldt voor deelnemers aan de BouwClub van Energieke Lieke ("jij"), zolang jij toegang
+   hebt tot de cursus waarin deze starter hoort. Ben je geen deelnemer? Dan mag je de code bekijken en
+   ervan leren, maar niet gebruiken. Neem contact op via lieke@energiekelieke.nl als je de starter wilt gebruiken.
+
+2. Wat je mag
+   a. De starter kopiëren, installeren en draaien voor jezelf.
+   b. De starter aanpassen: teksten, kleuren, afbeeldingen, de code zelf.
+   c. Een adventkalender bouwen voor je klanten en die online zetten, ook als je daar geld voor vraagt
+      (bijvoorbeeld als onderdeel van een opdracht of abonnement).
+   d. De kalender van een klant laten draaien op de Vercel- en GitHub-accounts van jezelf of van die klant.
+   e. Updates van de starter ophalen en gebruiken.
+
+3. Wat je niet mag
+   a. De starter zelf, of een bewerking ervan, verkopen, verhuren, weggeven of op een andere manier
+      verspreiden als product. Dat geldt ook voor een template, een Deploy-knop, een cursus, een
+      downloadpakket of een repo die anderen kunnen kopiëren.
+   b. De starter openbaar delen op een plek waar anderen hem kunnen overnemen, buiten de
+      repo's van jezelf en van je klanten.
+   c. De cursusmaterialen van de BouwClub delen of verkopen.
+   d. Deze licentie, de copyrightregel of mijn naam uit de code halen.
+   e. Doen alsof jij de maker van de starter bent.
+
+4. Klanten
+   Een klant krijgt een werkende kalender en mag die gebruiken en laten aanpassen. Wil een klant de
+   code zelf doorgeven of verkopen? Dan geldt hiervoor hetzelfde als voor jou: dat mag niet.
+
+5. Onderdelen van anderen
+   De starter gebruikt pakketten van anderen (zoals Next.js en React). Daarvoor gelden hun eigen
+   licenties. Die staan in de map node_modules en in het bestand package-lock.json.
+
+6. Geen garantie
+   De starter wordt geleverd zoals hij is, zonder enige garantie, ook niet dat hij foutloos werkt of
+   geschikt is voor jouw doel. Ik ben niet aansprakelijk voor schade die voortkomt uit het gebruik ervan,
+   voor zover de wet dat toestaat. Jij bent zelf verantwoordelijk voor de kalender die je voor een klant
+   neemt in gebruik, waaronder de teksten, de afbeeldingen en de privacy van bezoekers.
+
+7. Einde van de licentie
+   Hou je je niet aan deze voorwaarden, dan eindigt je recht op gebruik meteen. Dan verwijder je de
+   starter en alle kopieën ervan. Kalenders die je al aan een klant hebt geleverd blijven bij die klant
+   draaien, tenzij de overtreding daarmee te maken heeft.
+
+8. Toepasselijk recht
+   Op deze licentie is Nederlands recht van toepassing.
+
+Vragen of toestemming voor iets dat hier niet staat? Neem contact op via lieke@energiekelieke.nl.

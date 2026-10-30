@@ -148,3 +148,7 @@ Gebruik je Claude Code? Er staat een `CLAUDE.md` in deze map met uitleg over hoe
 **Kunnen klanten in de beheerpagina?** Nee, daarvoor is het wachtwoord. Deel dat alleen met jezelf.
 
 **Welke gegevens verzamelt de kalender?** Geen. Er wordt niets van je bezoekers opgeslagen en er zijn geen cookies voor bezoekers.
+
+## Licentie
+
+Deze starter hoort bij de BouwClub en valt onder de [BouwClub-licentie](LICENSE). Kort gezegd: als BouwClub-deelnemer mag je hem gebruiken en aanpassen voor jezelf en voor je klanten, ook tegen betaling. Je mag de starter zelf niet doorverkopen, weggeven of als eigen template of cursus verspreiden. Lees de volledige tekst in `LICENSE` voor de details.

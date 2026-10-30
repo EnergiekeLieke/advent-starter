@@ -2,6 +2,11 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.1.1
+
+- Nieuw: de starter heeft nu een licentie, de BouwClub-licentie (zie het bestand `LICENSE`). Als BouwClub-deelnemer mag je de starter gebruiken en aanpassen voor jezelf en voor je klanten, ook tegen betaling. Je mag hem zelf niet doorverkopen of als eigen template verspreiden.
+- Aan je kalender verandert niets.
+
 ## v1.1.0
 
 - Nieuw: je kiest hoe een deurtje opengaat. Naast de zwaaideur (de standaard) kun je kiezen voor een cadeautje met lint (het pakje vliegt weg), een omdraaikaartje of een schuifdeur. Je vindt het bij **Opties**, met bij elke keuze een mini-deurtje dat opengaat als je eroverheen beweegt.
