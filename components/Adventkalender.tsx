@@ -15,9 +15,34 @@ const SPATTERS = [
   { x: 84, y: 58, s: 12, d: 0.1 }, { x: 40, y: 8, s: 12, d: 0.4 }, { x: 62, y: 70, s: 10, d: 0.25 },
 ];
 
-// Agenda-herinnering: elke ochtend om 8:00 een afspraak met de link naar de kalender
-function downloadHerinnering(titel: string, start: Datum, aantal: number, vanafDag: number) {
-  const link = `${window.location.origin}${window.location.pathname}`;
+// In een tekstveld van een .ics hebben deze tekens een betekenis en moeten ze met een backslash worden gemarkeerd
+function icsTekst(tekst: string) {
+  return tekst.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');
+}
+
+// Regels in een .ics zijn maximaal 75 bytes lang. Langere regels worden gevouwen: een regeleinde en een spatie.
+function icsVouw(regel: string) {
+  const delen: string[] = [];
+  let huidig = '';
+  let bytes = 0;
+  for (const teken of regel) {
+    const lengte = new TextEncoder().encode(teken).length;
+    if (bytes + lengte > (delen.length === 0 ? 75 : 74)) {
+      delen.push(huidig);
+      huidig = '';
+      bytes = 0;
+    }
+    huidig += teken;
+    bytes += lengte;
+  }
+  delen.push(huidig);
+  return delen.join('\r\n ');
+}
+
+// Agenda-herinnering: elke ochtend om 8:00 een afspraak met de link naar de kalender.
+// Heeft de beheerder een eigen link ingesteld (bijvoorbeeld de pagina waar de kalender is ingesloten), dan staat die erin.
+function downloadHerinnering(titel: string, start: Datum, aantal: number, vanafDag: number, eigenLink: string) {
+  const link = eigenLink || `${window.location.origin}${window.location.pathname}`;
   const stempel = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
   const events: string[] = [];
   for (let dag = vanafDag; dag <= aantal; dag++) {
@@ -28,11 +53,11 @@ function downloadHerinnering(titel: string, start: Datum, aantal: number, vanafD
       `DTSTAMP:${stempel}`,
       `DTSTART:${iso}T080000`,
       `DTEND:${iso}T081500`,
-      `SUMMARY:${titel}: open vandaag deurtje ${dag}`,
-      `DESCRIPTION:Tijd voor je deurtje van vandaag! ${link}`,
+      `SUMMARY:${icsTekst(`${titel}: open vandaag deurtje ${dag}`)}`,
+      `DESCRIPTION:${icsTekst(`Tijd voor je deurtje van vandaag! ${link}`)}`,
       `URL:${link}`,
       'END:VEVENT',
-    ].join('\r\n'));
+    ].map(icsVouw).join('\r\n'));
   }
   const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//AdventStarter//Adventkalender//NL', ...events, 'END:VCALENDAR'].join('\r\n');
   const url = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }));
@@ -350,7 +375,7 @@ export default function Adventkalender({ config, datum, embed = false, preview =
                 <button type="button" onClick={naarVandaag} className={KNOP_PILL}>Spring naar vandaag</button>
               )}
               {opties.herinnering && (
-                <button type="button" onClick={() => downloadHerinnering(config.titel, start, aantal, fase === 'bezig' ? vandaag : 1)} className={KNOP_PILL}>
+                <button type="button" onClick={() => downloadHerinnering(config.titel, start, aantal, fase === 'bezig' ? vandaag : 1, opties.herinneringUrl)} className={KNOP_PILL}>
                   Dagelijkse herinnering in je agenda
                 </button>
               )}

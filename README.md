@@ -108,7 +108,7 @@ Komt er een nieuwe versie van de adventkalender-starter uit? Dan zie je in je be
 1. Klik in de blauwe balk op **Hoe update ik?**, of open het tabblad **Updates**, en kies **Naar de update-knop op GitHub**. Of ga op GitHub naar je eigen repo, kies **Actions** en dan **Update van de template**.
 2. Klik rechts op **Run workflow** en daarna op de groene knop **Run workflow**. Laat het vak "Versie" leeg om de nieuwste te krijgen.
 3. Wacht tot de run een groen vinkje heeft (ongeveer een halve minuut). Open de run om te zien wat er is veranderd.
-4. Vercel zet de nieuwe versie daarna vanzelf online. Dat duurt ongeveer 1 tot 2 minuten. Ververs je beheerpagina met Ctrl+F5, de blauwe balk is dan weg.
+4. Vercel zet de nieuwe versie daarna vanzelf online. Dat duurt ongeveer 1 tot 2 minuten. Ververs daarna je beheerpagina in je browser, de blauwe balk is dan weg.
 5. Controleer je kalender in het voorbeeld en op de pagina zelf.
 
 Zie je bij **Actions** een melding dat workflows uit staan? Klik dan op de groene knop om ze aan te zetten ("I understand my workflows, go ahead and enable them").
@@ -143,7 +143,7 @@ Gebruik je Claude Code? Er staat een `CLAUDE.md` in deze map met uitleg over hoe
 
 **Ik ben mijn wachtwoord vergeten.** Ga in Vercel naar je project, **Settings**, **Environment Variables**, pas `BEHEER_WACHTWOORD` aan en deploy opnieuw.
 
-**Mijn aanpassingen zijn niet meteen zichtbaar.** Na opslaan is de kalender direct bijgewerkt. Soms houdt je browser nog even de oude versie vast. Ververs de pagina met Ctrl+F5.
+**Mijn aanpassingen zijn niet meteen zichtbaar.** Na opslaan is de kalender direct bijgewerkt. Soms houdt je browser nog even de oude versie vast. Ververs de pagina in je browser.
 
 **Kunnen klanten in de beheerpagina?** Nee, daarvoor is het wachtwoord. Deel dat alleen met jezelf.
 

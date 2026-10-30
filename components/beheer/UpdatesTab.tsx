@@ -60,7 +60,7 @@ export default function UpdatesTab({ versie }: { versie: VersieInfo }) {
           <li>Klik op de knop hieronder. Je komt op GitHub bij <strong>Update van de template</strong>.</li>
           <li>Klik rechts op <strong>Run workflow</strong> en daarna op de groene knop <strong>Run workflow</strong>. Laat het vak &quot;Versie&quot; leeg om de nieuwste te krijgen.</li>
           <li>Wacht tot de run een groen vinkje heeft (ongeveer een halve minuut). Open de run om te zien wat er is veranderd.</li>
-          <li>Vercel zet de nieuwe versie daarna vanzelf online, dat duurt ongeveer 1 tot 2 minuten. Ververs deze pagina met Ctrl+F5.</li>
+          <li>Vercel zet de nieuwe versie daarna vanzelf online, dat duurt ongeveer 1 tot 2 minuten. Ververs daarna deze pagina in je browser.</li>
         </ol>
         {startUrl ? (
           <a href={startUrl} target="_blank" rel="noopener noreferrer" className={`${KNOP_PRIMAIR} inline-block`}>Naar de update-knop op GitHub</a>

@@ -649,6 +649,15 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
                 ))}
               </div>
 
+              {config.opties.herinnering && (
+                <Veld
+                  label="Link in de agenda-herinnering"
+                  hint="Laat leeg om te linken naar de pagina waar de bezoeker de kalender opent. Staat de kalender ingesloten op een andere pagina, bijvoorbeeld in Kennis Shop? Vul dan het adres van die pagina in."
+                >
+                  <input className={INPUT} value={config.opties.herinneringUrl} onChange={(e) => zetOptie('herinneringUrl', e.target.value.trim())} placeholder="https://" />
+                </Veld>
+              )}
+
               <fieldset>
                 <legend className="mb-1 text-sm font-medium">Hoe gaat een deurtje open?</legend>
                 <p className="mb-3 text-xs text-slate-500">

@@ -2,6 +2,12 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.1.2
+
+- Nieuw: je kunt zelf kiezen naar welke pagina de agenda-herinnering linkt. Handig als je kalender is ingesloten op een andere pagina, bijvoorbeeld in Kennis Shop. Je vindt het bij **Opties**. Laat je het leeg, dan werkt het zoals altijd.
+- Opgelost: een komma of puntkomma in de titel van je kalender kon de agenda-herinnering laten haperen in sommige agenda-apps. Dat is nu veilig, ook voor lange links.
+- In het tabblad Updates en in de uitleg staat nu "ververs de pagina in je browser" in plaats van een toetsencombinatie.
+
 ## v1.1.1
 
 - Nieuw: de starter heeft nu een licentie, de BouwClub-licentie (zie het bestand `LICENSE`). Als BouwClub-deelnemer mag je de starter gebruiken en aanpassen voor jezelf en voor je klanten, ook tegen betaling. Je mag hem zelf niet doorverkopen of als eigen template verspreiden.

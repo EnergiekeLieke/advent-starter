@@ -120,6 +120,8 @@ const optiesSchema = z.object({
   // Oudere instellingen hadden hier true of false: true werd het winterlandschap, false werd geen onderkant
   landschap:   z.preprocess((v) => (v === true ? 'winter' : v === false ? 'geen' : v), z.enum(ONDERKANTEN, { error: 'Kies een van de beschikbare opties' })).default('winter'),
   herinnering: z.boolean().default(true),
+  // Link die in de agenda-herinnering staat. Leeg betekent: de pagina waar de bezoeker de kalender opent.
+  herinneringUrl: knopUrl.default(''),
   deurStijl:   z.enum(DEURSTIJLEN, { error: 'Kies een van de beschikbare opties' }).default('zwaai'),
 });
 
@@ -176,6 +178,7 @@ const VELDNAMEN: Record<string, string> = {
   achtergrond: 'achtergrondkleur', accent: 'accentkleur', licht: 'lichte kleur', primair: 'primaire kleur',
   secundair: 'secundaire kleur', lettertype: 'lettertype', dagen: 'deurtjes', opties: 'opties',
   knoppen: 'knoppen', testmodus: 'testmodus', standaardLabel: 'standaard knoptekst', openen: 'openen', aan: 'knop aan', deurStijl: 'deurstijl',
+  herinneringUrl: 'link in de herinnering',
 };
 
 function padNaarTekst(pad: PropertyKey[]): string {
