@@ -127,7 +127,7 @@ export default function DelenTab({ config, gewijzigd, opgeslagenTestmodus, voorb
           <button type="button" onClick={() => setHoogteInvoer(null)} className={KNOP}>Terug naar het advies ({advies} px)</button>
         )}
         <textarea className={`${INPUT} font-mono`} readOnly rows={4} value={embedcode} onFocus={(e) => e.currentTarget.select()} aria-label="Embedcode" />
-        <button type="button" onClick={() => kopieer(embedcode, 'De embedcode staat op je klembord. Plak hem in een HTML-blok in Kennis Shop.')} className={KNOP}>
+        <button type="button" onClick={() => kopieer(embedcode, 'De embedcode staat op je klembord. Plak hem in een embed-blok in Kennis Shop.')} className={KNOP}>
           Kopieer embedcode
         </button>
         <p className="text-xs text-slate-500">

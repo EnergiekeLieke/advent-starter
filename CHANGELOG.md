@@ -2,6 +2,11 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.1.3
+
+- De uitleg bij het embedden in het tabblad **Delen** noemt nu een "embed-blok" in Kennis Shop, zodat het overeenkomt met de naam in Kennis Shop zelf.
+- Aan je kalender verandert niets.
+
 ## v1.1.2
 
 - Nieuw: je kunt zelf kiezen naar welke pagina de agenda-herinnering linkt. Handig als je kalender is ingesloten op een andere pagina, bijvoorbeeld op je Kennis Shop-pagina of op je website. Je vindt het bij **Opties**. Laat je het leeg, dan werkt het zoals altijd.
