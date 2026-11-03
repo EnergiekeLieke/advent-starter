@@ -38,8 +38,17 @@ export function schoonAudio(invoer: string): string {
   }
   if (!url || !SOUNDCLOUD_HOSTS.includes(url.hostname)) return tekst;
   // Een geheim deel van een privélink zit in het pad of in secret_token. Andere onderdelen (zoals ?si=) laten we weg.
-  const geheim = url.searchParams.get('secret_token');
-  return `https://soundcloud.com${url.pathname.replace(/\/+$/, '')}${geheim ? `?secret_token=${geheim}` : ''}`;
+  let delen = url.pathname.split('/').filter(Boolean);
+  let geheim = url.searchParams.get('secret_token');
+  // De deellink van een privé-geluidsbestand is soundcloud.com/naam/titel/s-abc123. De speler begrijpt die vorm niet en
+  // wil soundcloud.com/naam/titel?secret_token=s-abc123 zien. Een lijst heet soundcloud.com/naam/sets/titel, daar telt de laatste niet mee.
+  const laatste = delen[delen.length - 1] ?? '';
+  const isLijstnaam = delen[1] === 'sets' && delen.length === 3;
+  if (delen.length >= 3 && /^s-[A-Za-z0-9]+$/.test(laatste) && !isLijstnaam) {
+    geheim = geheim ?? laatste;
+    delen = delen.slice(0, -1);
+  }
+  return `https://soundcloud.com/${delen.join('/')}${geheim ? `?secret_token=${geheim}` : ''}`;
 }
 
 /** Een geldige link naar een geluidsbestand of lijst op soundcloud.com, of leeg. */
