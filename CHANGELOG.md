@@ -2,6 +2,10 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.2.2
+
+- Bij het audioveld staat nu dat een privé-nummer de volledige deellink nodig heeft (die eindigt op `/s-...`).
+
 ## v1.2.1
 
 - Opgelost: een privélink van SoundCloud (de deellink die eindigt op `/s-...`) gaf in de speler de melding dat de link niet geldig is. Die link wordt nu omgezet naar de vorm die de speler wel begrijpt, ook voor privélijsten. Eerder opgeslagen privélinks werken na de update vanzelf, je hoeft ze niet opnieuw in te vullen.

@@ -611,7 +611,7 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
                     </div>
                     <Veld
                       label="Audio van SoundCloud (optioneel)"
-                      hint="Plak de link van je geluidsbestand op soundcloud.com, of de insluitcode die SoundCloud geeft. De bezoeker ziet een speler in het deurtje. Het werkt ook met een privélink. Let op: SoundCloud kan zelf cookies plaatsen zodra een bezoeker dit deurtje opent. Noem dat in je privacyverklaring."
+                      hint="Plak de link van je geluidsbestand op soundcloud.com, of de insluitcode die SoundCloud geeft. De bezoeker ziet een speler in het deurtje. Het werkt ook met een privélink, maar gebruik dan de volledige deellink (die eindigt op /s-...). Let op: SoundCloud kan zelf cookies plaatsen zodra een bezoeker dit deurtje opent. Noem dat in je privacyverklaring."
                     >
                       <input
                         className={INPUT}
