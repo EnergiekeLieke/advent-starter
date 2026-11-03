@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Confetti from '@/components/Confetti';
 import AdventIcoon from '@/components/AdventIcoon';
 import { Landschap, Sneeuw, STERREN, Strik } from '@/components/AdventDecor';
+import { audioSpelerUrl } from '@/lib/audio';
 import { dagenVoor, type AdventConfig } from '@/lib/config';
 import { confettiKleuren, cssVariabelen, landschapPalet, tegelKleuren } from '@/lib/kleur';
 import { isoVan, labelKort, labelLang, parseIso, plusDagen, verschilInDagen, type Datum } from '@/lib/datum';
@@ -315,6 +316,7 @@ export default function Adventkalender({ config, datum, embed = false, preview =
   // Het raster heeft 4 kolommen (minder bij een kleine kalender)
   const kolommen = Math.min(4, aantal);
   const heeftKnop = Boolean(inhoud?.knop.aan && inhoud.knop.url);
+  const audioSpeler = inhoud ? audioSpelerUrl(inhoud.audio, config.kleuren.primair) : null;
   // Zelfde venster: in een iframe (Kennis Shop) navigeert dan de hele pagina naar de les
   const knopDoel = config.knoppen.openen === 'zelfde' ? '_top' : '_blank';
 
@@ -531,6 +533,19 @@ export default function Adventkalender({ config, datum, embed = false, preview =
                 {inhoud.afbeelding && (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={inhoud.afbeelding} alt="" className="mt-4 mx-auto max-h-56 w-auto max-w-full rounded-xl object-cover" />
+                )}
+                {audioSpeler && (
+                  // De speler van SoundCloud laadt pas als dit deurtje open is, dus bezoekers die het deurtje niet openen, maken geen contact met SoundCloud
+                  <iframe
+                    key={inhoud.dag}
+                    src={audioSpeler}
+                    title={`Audio bij ${inhoud.titel}`}
+                    width="100%"
+                    height="166"
+                    scrolling="no"
+                    loading="lazy"
+                    className="mt-4 block w-full rounded-xl border-0"
+                  />
                 )}
                 {heeftKnop && (
                   <a

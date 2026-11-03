@@ -31,7 +31,7 @@ Je ziet links de instellingen en rechts direct een voorbeeld.
 
 - **Algemeen**: titel, ondertitel, de eerste dag (standaard 1 december) en het aantal deurtjes (standaard 24, maximaal 31).
 - **Kleuren en logo**: kies een van de vijf thema's (Kerstgroen, Bessenrood, Winterblauw, Licht en warm of Zacht pastel) of vul zelf je huisstijlkleuren in (de kleurcodes die je al hebt, zoals `#3b5633`). Upload je logo of plak een link.
-- **Deurtjes**: pas per deurtje de titel en tekst aan. Kies of het een tekst of een opdracht is en voeg eventueel een afbeelding toe.
+- **Deurtjes**: pas per deurtje de titel en tekst aan. Kies of het een tekst of een opdracht is en voeg eventueel een afbeelding toe, of een geluidsbestand van SoundCloud (zie hieronder).
 - **Kennis Shop-links** (optioneel): laat een deurtje naar een les in je Kennis Shop wijzen, of naar een andere pagina zoals een weggever. Zet bij het juiste deurtje de knop aan en plak de link uit de adresbalk van je browser. Heb je veel links? Plak ze dan allemaal onder elkaar in het vak bovenaan: de eerste regel hoort bij deurtje 1, de tweede bij deurtje 2, enzovoort. Een lege regel betekent geen knop. Hier kies je ook de standaard knoptekst en of de link opent in een nieuw tabblad of in hetzelfde venster.
 - **Opties**: sneeuw, sterretjes en confetti aan of uit, hoe een deurtje opengaat (zwaaideur, cadeautje met lint, omdraaikaartje of schuifdeur, met een voorbeeld bij elke keuze), en de onderkant van de kalender: winterlandschap met sneeuw, zachte heuvels in de kleuren van je thema, alleen golvende heuvels of niets. Bij een licht thema (Licht en warm, Zacht pastel) staan automatisch de zachte heuvels aan, want witte sneeuw valt weg op een lichte achtergrond. Bovenaan vind je ook de **testmodus** (zie "Zo test je").
 - **Delen**: je link en een kant-en-klare embedcode om te kopiëren, plus een korte controle voordat je de kalender deelt (nog niet opgeslagen wijzigingen, testmodus die nog aanstaat of voorbeeldteksten die je nog niet hebt aangepast).
@@ -147,7 +147,9 @@ Gebruik je Claude Code? Er staat een `CLAUDE.md` in deze map met uitleg over hoe
 
 **Kunnen klanten in de beheerpagina?** Nee, daarvoor is het wachtwoord. Deel dat alleen met jezelf.
 
-**Welke gegevens verzamelt de kalender?** Geen. Er wordt niets van je bezoekers opgeslagen en er zijn geen cookies voor bezoekers.
+**Hoe zet ik audio in een deurtje?** Upload je geluidsbestand op soundcloud.com (een privélink werkt ook). Open het deurtje in de beheerpagina, plak bij **Audio van SoundCloud** het adres uit je adresbalk of de insluitcode die SoundCloud geeft (via Delen en dan Insluiten), en klik op **Opslaan**. De bezoeker ziet de speler van SoundCloud in het deurtje. Korte links zoals `on.soundcloud.com/...` werken niet: open die eerst in je browser en kopieer het adres uit de adresbalk.
+
+**Welke gegevens verzamelt de kalender?** Zelf geen. Er wordt niets van je bezoekers opgeslagen en er zijn geen cookies voor bezoekers. Eén uitzondering: heeft een deurtje audio van SoundCloud, dan laadt de speler van SoundCloud zodra een bezoeker dat deurtje opent. SoundCloud kan dan zelf cookies plaatsen. Noem dat in je privacyverklaring.
 
 ## Licentie
 

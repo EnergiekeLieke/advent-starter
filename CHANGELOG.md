@@ -2,6 +2,12 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.2.0
+
+- Nieuw: je kunt bij een deurtje audio van SoundCloud toevoegen. Plak bij het deurtje (tabblad **Deurtjes**) de link van je geluidsbestand of de insluitcode van SoundCloud. De bezoeker ziet de speler in het deurtje. Een privélink werkt ook.
+- De speler laadt pas als de bezoeker dat deurtje opent. SoundCloud kan dan zelf cookies plaatsen: noem dat in je privacyverklaring.
+- Je huidige kalender verandert niet.
+
 ## v1.1.3
 
 - De uitleg bij het embedden in het tabblad **Delen** noemt nu een "embed-blok" in Kennis Shop, zodat het overeenkomt met de naam in Kennis Shop zelf.

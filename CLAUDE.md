@@ -50,7 +50,7 @@ Kleuren komen uit `config.kleuren` en worden in `lib/kleur.ts` omgezet naar CSS-
 
 `startDatum` en `aantalDagen` bepalen wanneer deurtjes opengaan. De **server** bepaalt de datum (tijdzone Europe/Amsterdam, `bepaalNu()` in `lib/datum.ts`) in `app/page.tsx` en geeft die als prop `datum` aan `KalenderPagina` en `Adventkalender`. De client gebruikt zijn eigen klok niet voor de logica.
 
-- `lib/gating.ts` (`verbergToekomst`): de server stuurt alleen de inhoud (titel, tekst, knop, afbeelding) mee van deurtjes die op `datum` open mogen. Latere deurtjes en deurtjes voorbij `aantalDagen` zijn leeg. Teksten van latere dagen staan dus nooit in de paginabron.
+- `lib/gating.ts` (`verbergToekomst`): de server stuurt alleen de inhoud (titel, tekst, knop, afbeelding, audio) mee van deurtjes die op `datum` open mogen. Latere deurtjes en deurtjes voorbij `aantalDagen` zijn leeg. Teksten van latere dagen staan dus nooit in de paginabron.
 - `?datum=2026-12-10` en `?day=5` (`datumUitParams()`) werken alleen voor een ingelogde beheerder (`isIngelogd()`). Voor een bezoeker worden ze genegeerd. `?preview=1` (het voorbeeld in de editor) geldt ook alleen voor de beheerder en krijgt de volledige instellingen.
 - `config.testmodus` (standaard `false`): alle deurtjes zijn open en worden meegestuurd. De kalender gedraagt zich dan als in de fase "na afloop" en toont een badge. In de editor staat de schakelaar bij Opties, met een gele balk en een badge zolang hij aanstaat (ook als hij is uitgezet maar nog niet is opgeslagen).
 - `KalenderPagina` ververst de pagina (`router.refresh()`) als de klok van de bezoeker een nieuwe dag toont dan de `datum` van de server. Dat gebeurt niet bij een gesimuleerde datum of in het voorbeeld.

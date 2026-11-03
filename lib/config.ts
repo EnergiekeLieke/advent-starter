@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { AUDIO_FOUTMELDING, audioGeldig, schoonAudio } from '@/lib/audio';
 
 // ─── Lettertypes ──────────────────────────────────────────────
 export const LETTERTYPES = {
@@ -96,6 +97,13 @@ const afbeeldingUrl = z
   .max(500, 'Deze link is te lang')
   .refine((v) => v === '' || /^https:\/\//i.test(v) || v.startsWith('/'), 'Gebruik een link die met https:// begint');
 
+// Audio: een SoundCloud-link. Plakt iemand de hele insluitcode, dan halen we de link eruit.
+const audioUrl = z
+  .string()
+  .max(1000, 'Deze link is te lang')
+  .transform(schoonAudio)
+  .refine(audioGeldig, AUDIO_FOUTMELDING);
+
 const knopUrl = z
   .string()
   .max(500, 'Deze link is te lang')
@@ -147,6 +155,7 @@ export const dagSchema = z.object({
   soort: z.enum(['tekst', 'opdracht'], { error: 'Kies een van de beschikbare opties' }).default('tekst'),
   knop: knopSchema.default({ aan: false, label: '', url: '' }),
   afbeelding: afbeeldingUrl.default(''),
+  audio: audioUrl.default(''),
 });
 
 export const configSchema = z.object({
@@ -174,7 +183,7 @@ export type AdventKleuren = AdventConfig['kleuren'];
 const VELDNAMEN: Record<string, string> = {
   titel: 'titel', ondertitel: 'ondertitel', footer: 'voettekst', afsluiting: 'afsluiting', logoUrl: 'logo',
   startDatum: 'startdatum', aantalDagen: 'aantal dagen', tekst: 'tekst', soort: 'soort', knop: 'knop',
-  label: 'knoptekst', url: 'link', afbeelding: 'afbeelding', kleuren: 'kleuren', tegels: 'tegelkleuren',
+  label: 'knoptekst', url: 'link', afbeelding: 'afbeelding', audio: 'audio', kleuren: 'kleuren', tegels: 'tegelkleuren',
   achtergrond: 'achtergrondkleur', accent: 'accentkleur', licht: 'lichte kleur', primair: 'primaire kleur',
   secundair: 'secundaire kleur', lettertype: 'lettertype', dagen: 'deurtjes', opties: 'opties',
   knoppen: 'knoppen', testmodus: 'testmodus', standaardLabel: 'standaard knoptekst', openen: 'openen', aan: 'knop aan', deurStijl: 'deurstijl',
@@ -204,6 +213,6 @@ export function leesConfig(invoer: unknown): { ok: true; config: AdventConfig } 
 export function dagenVoor(config: AdventConfig): (AdventDag & { dag: number })[] {
   return Array.from({ length: config.aantalDagen }, (_, i) => ({
     dag: i + 1,
-    ...(config.dagen[i] ?? { titel: `Dag ${i + 1}`, tekst: '', soort: 'tekst' as const, knop: { aan: false, label: '', url: '' }, afbeelding: '' }),
+    ...(config.dagen[i] ?? { titel: `Dag ${i + 1}`, tekst: '', soort: 'tekst' as const, knop: { aan: false, label: '', url: '' }, afbeelding: '', audio: '' }),
   }));
 }

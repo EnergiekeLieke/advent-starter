@@ -1,9 +1,9 @@
 import type { AdventConfig, AdventDag } from '@/lib/config';
 import { parseIso, verschilInDagen, type Datum } from '@/lib/datum';
 
-// Wat een bezoeker (nog) niet mag zien. Alleen de server gebruikt dit, zodat teksten, links en
-// afbeeldingen van latere deurtjes nooit in de pagina terechtkomen voordat het deurtje open mag.
-const LEEG_DEURTJE: AdventDag = { titel: '', tekst: '', soort: 'tekst', knop: { aan: false, label: '', url: '' }, afbeelding: '' };
+// Wat een bezoeker (nog) niet mag zien. Alleen de server gebruikt dit, zodat teksten, links,
+// afbeeldingen en audio van latere deurtjes nooit in de pagina terechtkomen voordat het deurtje open mag.
+const LEEG_DEURTJE: AdventDag = { titel: '', tekst: '', soort: 'tekst', knop: { aan: false, label: '', url: '' }, afbeelding: '', audio: '' };
 
 /** Het aantal deurtjes dat op deze datum open mag. In testmodus zijn dat alle deurtjes. */
 export function aantalOpenDeurtjes(config: AdventConfig, vandaag: Datum): number {

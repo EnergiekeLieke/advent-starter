@@ -9,6 +9,7 @@ import { INPUT, KNOP, KNOP_PRIMAIR, Veld, type Bericht } from '@/components/behe
 import AdventIcoon from '@/components/AdventIcoon';
 import { Omhulsel } from '@/components/Adventkalender';
 import { BERICHT_CONFIG, BERICHT_KLAAR } from '@/components/KalenderPagina';
+import { AUDIO_FOUTMELDING, audioGeldig, schoonAudio } from '@/lib/audio';
 import { dagenVoor, LETTERTYPES, leesConfig, MAX_DAGEN, THEMAS, themaVan, type AdventConfig, type AdventDag, type AdventKleuren, type DeurStijl, type Lettertype, type Onderkant, type ThemaNaam } from '@/lib/config';
 import standaardConfig from '@/config/advent.json';
 import { labelKort, parseIso, plusDagen } from '@/lib/datum';
@@ -190,6 +191,8 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
   const [tab, setTab] = useState<Tab>('Algemeen');
   // Welk mini-deurtje bij Opties open staat, omdat je eroverheen beweegt of het gekozen hebt
   const [miniOpen, setMiniOpen] = useState<DeurStijl | null>(null);
+  // Het deurtje waarvan het audioveld nu wordt getypt: dan tonen we nog geen foutmelding over een half ingevulde link
+  const [audioActief, setAudioActief] = useState<number | null>(null);
   const [bezig, setBezig] = useState(false);
   const [bericht, setBericht] = useState<Bericht>(null);
   const [previewDatum, setPreviewDatum] = useState<(typeof PREVIEW_DATA)[number]['sleutel']>('halverwege');
@@ -586,6 +589,7 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
                     {voorbeeldDagen.includes(d.dag) && <span className="ml-2 rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-800">voorbeeldtekst</span>}
                     {d.soort === 'opdracht' && <span className="ml-2 rounded-full bg-emerald-100 px-2 py-0.5 text-xs text-emerald-800">opdracht</span>}
                     {d.knop.aan && d.knop.url && <span className="ml-2 rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-800">knop</span>}
+                    {d.audio && audioGeldig(schoonAudio(d.audio)) && <span className="ml-2 rounded-full bg-sky-100 px-2 py-0.5 text-xs text-sky-800">audio</span>}
                   </summary>
                   <div className="space-y-3 border-t border-slate-200 p-3">
                     <Veld label="Titel"><input className={INPUT} value={d.titel} maxLength={80} onChange={(e) => wijzigDag(i, { titel: e.target.value })} /></Veld>
@@ -605,6 +609,27 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
                       <UploadKnop onUrl={(url) => wijzigDag(i, { afbeelding: url })} />
                       {d.afbeelding && <button type="button" onClick={() => wijzigDag(i, { afbeelding: '' })} className={KNOP}>Afbeelding weghalen</button>}
                     </div>
+                    <Veld
+                      label="Audio van SoundCloud (optioneel)"
+                      hint="Plak de link van je geluidsbestand op soundcloud.com, of de insluitcode die SoundCloud geeft. De bezoeker ziet een speler in het deurtje. Het werkt ook met een privélink. Let op: SoundCloud kan zelf cookies plaatsen zodra een bezoeker dit deurtje opent. Noem dat in je privacyverklaring."
+                    >
+                      <input
+                        className={INPUT}
+                        value={d.audio}
+                        placeholder="https://soundcloud.com/jouwnaam/jouw-track"
+                        onChange={(e) => wijzigDag(i, { audio: e.target.value })}
+                        onFocus={() => setAudioActief(i)}
+                        onBlur={(e) => {
+                          setAudioActief(null);
+                          // Alleen opruimen als er iets verandert, anders lijkt een lege klik al een wijziging
+                          const schoon = schoonAudio(e.target.value);
+                          if (schoon !== d.audio) wijzigDag(i, { audio: schoon });
+                        }}
+                      />
+                    </Veld>
+                    {audioActief !== i && d.audio !== '' && !audioGeldig(schoonAudio(d.audio)) && (
+                      <p role="alert" className="rounded-lg border border-red-300 bg-red-50 p-2 text-xs text-red-900">{AUDIO_FOUTMELDING}</p>
+                    )}
                     <p className="border-t border-slate-100 pt-3 text-xs text-slate-600">
                       {d.knop.aan && d.knop.url ? 'Dit deurtje heeft een knop met een link. ' : 'Een knop naar een les of pagina toevoegen? '}
                       <button type="button" onClick={() => setTab('Kennis Shop-links')} className="font-medium text-emerald-800 underline">
