@@ -149,6 +149,8 @@ Gebruik je Claude Code? Er staat een `CLAUDE.md` in deze map met uitleg over hoe
 
 **Hoe zet ik audio in een deurtje?** Upload je geluidsbestand op soundcloud.com (een privélink werkt ook). Open het deurtje in de beheerpagina, plak bij **Audio van SoundCloud** het adres uit je adresbalk of de insluitcode die SoundCloud geeft (via Delen en dan Insluiten), en klik op **Opslaan**. De bezoeker ziet de speler van SoundCloud in het deurtje. Korte links zoals `on.soundcloud.com/...` werken niet: open die eerst in je browser en kopieer het adres uit de adresbalk.
 
+**Kan ik een eigen lettertype gebruiken?** Ja. Ga naar **Algemeen**, scrol naar **Lettertypes** en upload bij **Eigen lettertype** een bestand voor gewone tekst en eventueel een voor vette tekst (otf, ttf, woff of woff2, maximaal 2 MB per bestand). Het verschijnt daarna in de keuzelijstjes bij elk onderdeel. Je hebt hiervoor een gekoppelde Blob-opslag nodig, net als voor het uploaden van een logo. Let op de licentie: een lettertype op een website tonen is vaak een andere licentie dan een lettertype op je computer gebruiken. Het bestand laadt alleen vanaf je eigen kalender, ook als die is ingebed op een andere pagina, maar een bezoeker kan het met de ontwikkelaarstools van zijn browser nog steeds downloaden. Tip: zet een otf of ttf eerst om naar woff2, dat is veel kleiner.
+
 **Welke gegevens verzamelt de kalender?** Zelf geen. Er wordt niets van je bezoekers opgeslagen en er zijn geen cookies voor bezoekers. Eén uitzondering: heeft een deurtje audio van SoundCloud, dan laadt de speler van SoundCloud zodra een bezoeker dat deurtje opent. SoundCloud kan dan zelf cookies plaatsen. Noem dat in je privacyverklaring.
 
 ## Licentie

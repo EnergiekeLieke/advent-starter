@@ -13,3 +13,6 @@ cursus/
 
 # Door Next gegenereerd, hoort niet in de repo
 next-env.d.ts
+
+# Lokaal geuploade lettertypes (alleen tijdens npm run dev)
+.advent-uploads/

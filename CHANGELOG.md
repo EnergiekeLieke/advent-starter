@@ -2,6 +2,12 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.8.0
+
+- Nieuw: een eigen lettertype uploaden. Bij Algemeen, onder Lettertypes, upload je een bestand voor gewone tekst en eventueel een voor vette tekst (otf, ttf, woff of woff2, maximaal 2 MB per bestand). Daarna kies je het bij elk onderdeel, net als de andere lettertypes. Het werkt ook als de kalender is ingebed in een andere pagina.
+- Het lettertype laadt alleen vanaf de kalender zelf, zodat andere websites er niet naar kunnen linken. Het adres van het bestand komt nergens in de pagina te staan. Een bezoeker kan het bestand met de ontwikkelaarstools van zijn browser nog wel downloaden, dat kan bij elk lettertype op een website niet anders. Controleer dus of de licentie van je lettertype webgebruik toestaat.
+- Je hebt hiervoor een gekoppelde Blob-opslag nodig, net als voor het uploaden van een logo. Lettertypes die je niet meer gebruikt worden vanzelf opgeruimd.
+
 ## v1.7.2
 
 - Beter: het dorpje is groter en duidelijker. Er staan nu minder, maar grotere huisjes met meer ramen, en het brede dorp staat in het midden met bossen aan beide kanten. Het kerkje is minder hoog, zodat de ster op een breed scherm niet meer tegen de rand zit. Ook het voorbeeldplaatje bij de keuze in Opties is bijgewerkt.

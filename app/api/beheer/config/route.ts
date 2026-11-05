@@ -1,5 +1,6 @@
 import { isIngelogd } from '@/lib/beheerAuth';
 import { leesConfig } from '@/lib/config';
+import { ruimLettertypesOp } from '@/lib/lettertypeOpslag';
 import { bewaarConfig, GeenOpslagFout } from '@/lib/opslag';
 
 export async function PUT(req: Request) {
@@ -25,5 +26,7 @@ export async function PUT(req: Request) {
     const detail = fout instanceof Error ? (fout.message.split('\n')[0] ?? '').slice(0, 200) : '';
     return Response.json({ fouten: ['Opslaan is niet gelukt. Probeer het zo nog eens.', ...(detail ? [`Technische melding: ${detail}`] : [])] }, { status: 500 });
   }
+  const { normaal, vet } = uitkomst.config.eigenLettertype;
+  await ruimLettertypesOp([normaal, vet].filter(Boolean));
   return Response.json({ ok: true, config: uitkomst.config });
 }
