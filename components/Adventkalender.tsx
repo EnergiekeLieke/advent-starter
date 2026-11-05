@@ -5,7 +5,7 @@ import Confetti from '@/components/Confetti';
 import AdventIcoon from '@/components/AdventIcoon';
 import { Landschap, Sneeuw, STERREN, Strik } from '@/components/AdventDecor';
 import { audioSpelerUrl } from '@/lib/audio';
-import { dagenVoor, type AdventConfig } from '@/lib/config';
+import { dagenVoor, teltekstVul, type AdventConfig } from '@/lib/config';
 import { confettiKleuren, cssVariabelen, landschapPalet, tegelKleuren } from '@/lib/kleur';
 import { isoVan, labelKort, labelLang, parseIso, plusDagen, verschilInDagen, type Datum } from '@/lib/datum';
 
@@ -460,15 +460,19 @@ export default function Adventkalender({ config, datum, embed = false, preview =
           ) : null}
         </div>
 
-        <p className="relative mt-3 text-center text-xs sm:text-sm text-opach/80" aria-live="polite">
-          {!heeftBoom
-            ? `${aantalOpen} van de ${aantal} deurtjes zijn open.`
-            : aantalOpen === 0
-              ? 'De boom is nog kaal. Elke dag komt er een kerstbal bij.'
-              : aantalOpen === aantal
-                ? `Alle ${aantal} kerstballen hangen in de boom, de ster straalt!`
-                : `${aantalOpen} van de ${aantal} kerstballen hangen al in de boom.`}
-        </p>
+        {opties.teltekstAan && (
+          <p className="relative mt-3 text-center text-xs sm:text-sm text-opach/80" aria-live="polite">
+            {opties.teltekst
+              ? teltekstVul(opties.teltekst, aantalOpen, aantal)
+              : !heeftBoom
+                ? `${aantalOpen} van de ${aantal} deurtjes zijn open.`
+                : aantalOpen === 0
+                  ? 'De boom is nog kaal. Elke dag komt er een kerstbal bij.'
+                  : aantalOpen === aantal
+                    ? `Alle ${aantal} kerstballen hangen in de boom, de ster straalt!`
+                    : `${aantalOpen} van de ${aantal} kerstballen hangen al in de boom.`}
+          </p>
+        )}
 
         {onderkant !== 'geen' && (
           <>

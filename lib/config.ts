@@ -147,6 +147,9 @@ const optiesSchema = z.object({
   herinnering: z.boolean().default(true),
   // Link die in de agenda-herinnering staat. Leeg betekent: de pagina waar de bezoeker de kalender opent.
   herinneringUrl: knopUrl.default(''),
+  // De regel onder de kalender met het aantal geopende deurtjes. Leeg betekent: de standaardtekst. {open} en {totaal} worden ingevuld.
+  teltekstAan: z.boolean().default(true),
+  teltekst:    z.string().trim().max(120, 'De tekst onder de kalender is te lang (maximaal 120 tekens)').default(''),
   deurStijl:   z.enum(DEURSTIJLEN, { error: 'Kies een van de beschikbare opties' }).default('zwaai'),
 });
 
@@ -215,9 +218,14 @@ const VELDNAMEN: Record<string, string> = {
   achtergrond: 'achtergrondkleur', accent: 'accentkleur', licht: 'lichte kleur', primair: 'primaire kleur',
   secundair: 'secundaire kleur', lettertype: 'lettertype', dagen: 'deurtjes', opties: 'opties',
   knoppen: 'knoppen', testmodus: 'testmodus', standaardLabel: 'standaard knoptekst', openen: 'openen', aan: 'knop aan', deurStijl: 'deurstijl',
-  herinneringUrl: 'link in de herinnering', lettertypes: 'lettertypes', deurtjes: 'tekst op de deurtjes',
+  herinneringUrl: 'link in de herinnering', teltekst: 'tekst onder de kalender', teltekstAan: 'tekst onder de kalender', lettertypes: 'lettertypes', deurtjes: 'tekst op de deurtjes',
   popupKop: 'kop achter het deurtje', popupTekst: 'tekst achter het deurtje',
 };
+
+/** Vult {open} en {totaal} in de eigen tekst onder de kalender in. */
+export function teltekstVul(sjabloon: string, open: number, totaal: number): string {
+  return sjabloon.replace(/\{open\}/gi, String(open)).replace(/\{totaal\}/gi, String(totaal));
+}
 
 /** Het lettertype voor een plek. Is er niets gekozen, dan geldt het oude standaardgedrag: sans voor lopende tekst, het titel-lettertype voor de rest. */
 export function lettertypeVoor(config: Pick<AdventConfig, 'lettertype' | 'lettertypes'>, plek: LettertypePlek): Lettertype {

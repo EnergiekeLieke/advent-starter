@@ -697,6 +697,27 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
                 </Veld>
               )}
 
+              <div className="space-y-2">
+                <label className="flex items-start gap-3 text-sm">
+                  <input type="checkbox" checked={config.opties.teltekstAan} onChange={(e) => zetOptie('teltekstAan', e.target.checked)} className="mt-0.5 h-4 w-4" />
+                  <span>Toon onder de kalender hoeveel deurtjes er open zijn</span>
+                </label>
+                {config.opties.teltekstAan && (
+                  <Veld
+                    label="Tekst onder de kalender"
+                    hint="Laat leeg voor de standaardtekst. Typ {open} voor het aantal geopende deurtjes en {totaal} voor het aantal deurtjes."
+                  >
+                    <input
+                      className={INPUT}
+                      value={config.opties.teltekst}
+                      maxLength={120}
+                      onChange={(e) => zetOptie('teltekst', e.target.value)}
+                      placeholder="{open} van de {totaal} deurtjes zijn open."
+                    />
+                  </Veld>
+                )}
+              </div>
+
               <fieldset>
                 <legend className="mb-1 text-sm font-medium">Hoe gaat een deurtje open?</legend>
                 <p className="mb-3 text-xs text-slate-500">
