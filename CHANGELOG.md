@@ -2,6 +2,10 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.13.2
+
+- Overzichtelijker: bij Kleuren en logo staan de twee blokken over een eigen achtergrondafbeelding nu onder het logo en zijn ze standaard ingeklapt. Klik op de kop om ze te openen. Gebruik je een afbeelding, dan staat er "in gebruik" achter de kop, ook als het blok dicht is.
+
 ## v1.13.1
 
 - Beter: een halfgetypte of ongeldige link voor een achtergrondafbeelding telt pas mee als hij geldig is. Eerder schakelde de kalender in de beheerpagina al om bij de eerste letter die je typte.

@@ -834,8 +834,57 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
                 </div>
               </div>
 
-              <div className="space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-3">
-                <p className="text-sm font-medium">Eigen achtergrondafbeelding (optioneel)</p>
+              <div className="rounded-lg border border-slate-200 bg-white p-3">
+                <p className="text-sm font-medium">Bewaar je huisstijl</p>
+                <p className="mb-2 text-xs text-slate-500">Zet je kleuren en lettertypes op je klembord om ze te bewaren, of plak ze terug. Je teksten en deurtjes blijven zoals ze zijn.</p>
+                <div className="flex flex-wrap gap-2">
+                  <button type="button" onClick={kopieerHuisstijl} className={KNOP}>Kopieer mijn kleuren</button>
+                  <button type="button" onClick={plakHuisstijl} className={KNOP}>Plak kleuren</button>
+                </div>
+                {huisPlakVeld !== null && (
+                  <div className="mt-2 space-y-2">
+                    <textarea
+                      className={`${INPUT} font-mono`}
+                      rows={6}
+                      value={huisPlakVeld}
+                      spellCheck={false}
+                      aria-label="Kleuren plakken"
+                      onChange={(e) => setHuisPlakVeld(e.target.value)}
+                    />
+                    <button type="button" onClick={() => pasHuisstijlToe(huisPlakVeld)} disabled={!huisPlakVeld.trim()} className={KNOP_PRIMAIR}>Toepassen</button>
+                  </div>
+                )}
+                {huisBericht && (
+                  <p role={huisBericht.soort === 'fout' ? 'alert' : 'status'} className={`mt-2 text-sm ${huisBericht.soort === 'ok' ? 'text-emerald-800' : 'text-red-800'}`}>
+                    {huisBericht.regels.join(' ')}
+                  </p>
+                )}
+              </div>
+
+              {waarschuwingen.length > 0 && (
+                <div className="rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900">
+                  {waarschuwingen.map((w) => <p key={w}>{w}</p>)}
+                </div>
+              )}
+
+              <div className="space-y-3 border-t border-slate-200 pt-4">
+                <p className="text-sm font-medium">Logo</p>
+                {config.logoUrl && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={config.logoUrl} alt="Je logo" className="max-h-16 max-w-full rounded border border-slate-200 bg-slate-200 p-2" />
+                )}
+                <Veld label="Link naar je logo" hint="Plak een link die met https:// begint, of upload hieronder een bestand (png, jpg, webp of gif, max 2 MB).">
+                  <input className={INPUT} value={config.logoUrl} onChange={(e) => zet('logoUrl', e.target.value.trim())} placeholder="https://" />
+                </Veld>
+                <div className="flex flex-wrap gap-2">
+                  <UploadKnop label="Logo uploaden" onUrl={(url) => zet('logoUrl', url)} />
+                  {config.logoUrl && <button type="button" onClick={() => zet('logoUrl', '')} className={KNOP}>Logo weghalen</button>}
+                </div>
+              </div>
+
+              <details className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                <summary className="cursor-pointer text-sm font-medium">Eigen achtergrondafbeelding (optioneel){achtergrondActief && <span className="ml-2 rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-800">in gebruik</span>}</summary>
+                <div className="mt-3 space-y-3">
                 <p className="text-xs text-slate-500">
                   Zet een eigen afbeelding achter je hele kalender. De deurtjes komen eroverheen. Zolang je een afbeelding gebruikt, doen de achtergrondkleur en de onderkant van de kalender (bij Opties) niet mee.
                   De kleuren van de deurtjes, de knoppen en het popupvenster blijven gewoon gelden.
@@ -886,10 +935,12 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
                     </Veld>
                   </div>
                 )}
-              </div>
+                </div>
+              </details>
 
-              <div className="space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-3">
-                <p className="text-sm font-medium">Eigen achtergrond voor elk geopend deurtje (optioneel)</p>
+              <details className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                <summary className="cursor-pointer text-sm font-medium">Eigen achtergrond voor elk geopend deurtje (optioneel){popupActief && <span className="ml-2 rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-800">in gebruik</span>}</summary>
+                <div className="mt-3 space-y-3">
                 <p className="text-xs text-slate-500">
                   Zet een eigen afbeelding achter de tekst in elk deurtje dat openstaat. De titel, de tekst en de knoppen komen eroverheen.
                   Een afbeelding voor alle schermen. Zonder afbeelding blijft het deurtje de lichte kleur van je huisstijl houden.
@@ -933,55 +984,8 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
                     </Veld>
                   </div>
                 )}
-              </div>
-
-              <div className="rounded-lg border border-slate-200 bg-white p-3">
-                <p className="text-sm font-medium">Bewaar je huisstijl</p>
-                <p className="mb-2 text-xs text-slate-500">Zet je kleuren en lettertypes op je klembord om ze te bewaren, of plak ze terug. Je teksten en deurtjes blijven zoals ze zijn.</p>
-                <div className="flex flex-wrap gap-2">
-                  <button type="button" onClick={kopieerHuisstijl} className={KNOP}>Kopieer mijn kleuren</button>
-                  <button type="button" onClick={plakHuisstijl} className={KNOP}>Plak kleuren</button>
                 </div>
-                {huisPlakVeld !== null && (
-                  <div className="mt-2 space-y-2">
-                    <textarea
-                      className={`${INPUT} font-mono`}
-                      rows={6}
-                      value={huisPlakVeld}
-                      spellCheck={false}
-                      aria-label="Kleuren plakken"
-                      onChange={(e) => setHuisPlakVeld(e.target.value)}
-                    />
-                    <button type="button" onClick={() => pasHuisstijlToe(huisPlakVeld)} disabled={!huisPlakVeld.trim()} className={KNOP_PRIMAIR}>Toepassen</button>
-                  </div>
-                )}
-                {huisBericht && (
-                  <p role={huisBericht.soort === 'fout' ? 'alert' : 'status'} className={`mt-2 text-sm ${huisBericht.soort === 'ok' ? 'text-emerald-800' : 'text-red-800'}`}>
-                    {huisBericht.regels.join(' ')}
-                  </p>
-                )}
-              </div>
-
-              {waarschuwingen.length > 0 && (
-                <div className="rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900">
-                  {waarschuwingen.map((w) => <p key={w}>{w}</p>)}
-                </div>
-              )}
-
-              <div className="space-y-3 border-t border-slate-200 pt-4">
-                <p className="text-sm font-medium">Logo</p>
-                {config.logoUrl && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={config.logoUrl} alt="Je logo" className="max-h-16 max-w-full rounded border border-slate-200 bg-slate-200 p-2" />
-                )}
-                <Veld label="Link naar je logo" hint="Plak een link die met https:// begint, of upload hieronder een bestand (png, jpg, webp of gif, max 2 MB).">
-                  <input className={INPUT} value={config.logoUrl} onChange={(e) => zet('logoUrl', e.target.value.trim())} placeholder="https://" />
-                </Veld>
-                <div className="flex flex-wrap gap-2">
-                  <UploadKnop label="Logo uploaden" onUrl={(url) => zet('logoUrl', url)} />
-                  {config.logoUrl && <button type="button" onClick={() => zet('logoUrl', '')} className={KNOP}>Logo weghalen</button>}
-                </div>
-              </div>
+              </details>
             </div>
           )}
 
