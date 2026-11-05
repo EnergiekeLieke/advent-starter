@@ -22,6 +22,34 @@ h1, h2, h3 {
   perspective: 900px;
 }
 
+/* Eigen achtergrondafbeelding: de computerversie vanaf 768 px breed, anders de telefoonversie. Is er maar een, dan geldt die voor alle schermen. */
+.adv-achtergrond {
+  background-image: var(--adv-bg-mob, var(--adv-bg-pc));
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+@media (min-width: 768px) {
+  .adv-achtergrond {
+    background-image: var(--adv-bg-pc, var(--adv-bg-mob));
+  }
+}
+
+/* Eigen achtergrond van het geopende deurtje. De laag over de afbeelding zit in dezelfde achtergrond, zodat hij blijft staan als de tekst scrolt. */
+.adv-popup-achtergrond {
+  background-image:
+    linear-gradient(rgb(var(--adv-popup-laag-kleur) / var(--adv-popup-laag)), rgb(var(--adv-popup-laag-kleur) / var(--adv-popup-laag))),
+    var(--adv-popup-bg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.adv-popup-achtergrond.adv-popup-licht .adv-ptekst {
+  color: rgb(var(--adv-popup-tekst));
+}
+
 .adv-deur {
   transform-origin: left center;
   transition: transform 0.7s cubic-bezier(0.22, 0.8, 0.36, 1);

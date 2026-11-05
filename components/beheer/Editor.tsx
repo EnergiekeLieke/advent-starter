@@ -9,6 +9,7 @@ import { INPUT, KNOP, KNOP_PRIMAIR, Veld, type Bericht } from '@/components/behe
 import AdventIcoon from '@/components/AdventIcoon';
 import { Omhulsel } from '@/components/Adventkalender';
 import EigenLettertypeStijl from '@/components/EigenLettertypeStijl';
+import { achtergrondMaten, POPUP_ACHTERGROND_MAAT } from '@/lib/achtergrond';
 import { BERICHT_CONFIG, BERICHT_KLAAR, BERICHT_MARKEER } from '@/components/KalenderPagina';
 import { AUDIO_FOUTMELDING, audioGeldig, schoonAudio } from '@/lib/audio';
 import { dagenVoor, LETTERTYPE_PLEKKEN, LETTERTYPES, lettertypeVoor, leesConfig, MAX_DAGEN, THEMAS, themaVan, type AdventConfig, type AdventDag, type AdventKleuren, type DeurStijl, type Lettertype, type LettertypePlek, type Onderkant, type ThemaNaam } from '@/lib/config';
@@ -354,6 +355,9 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
 
   const controle = useMemo(() => leesConfig(config), [config]);
   const gewijzigd = JSON.stringify(config) !== opgeslagen;
+  // Gebruikt de kalender een eigen achtergrondafbeelding? Dan doen de achtergrondkleur en de onderkant niet mee.
+  const achtergrondActief = Boolean(config.opties.achtergrondAfbeelding || config.opties.achtergrondAfbeeldingMobiel);
+  const maten = achtergrondMaten(config.aantalDagen);
   // Welke eigen lettertypes zijn geüpload? Alleen die staan in de keuzelijstjes.
   const eigenGebruik = EIGEN_LETTERTYPES.map((e) => ({ ...e, naam: config[e.sleutel].naam || LETTERTYPES[e.keuze].naam, aanwezig: Boolean(config[e.sleutel].normaal || config[e.sleutel].vet) }));
   const dagen = useMemo(() => dagenVoor(config), [config]);
@@ -808,7 +812,8 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
 
               <p className="text-xs text-slate-500">
                 Wijs een kleur aan: in het voorbeeld lichten de onderdelen op die deze kleur gebruiken.
-                {config.opties.landschap === 'winter' && ' Let op: het winterlandschap heeft vaste kleuren en verandert niet mee. Kies bij Opties zachte of golvende heuvels als het landschap je huisstijl moet volgen.'}
+                {achtergrondActief && ' Je gebruikt een eigen achtergrondafbeelding: de achtergrondkleur zie je alleen even terwijl die laadt.'}
+                {config.opties.landschap === 'winter' && !achtergrondActief && ' Let op: het winterlandschap heeft vaste kleuren en verandert niet mee. Kies bij Opties zachte of golvende heuvels als het landschap je huisstijl moet volgen.'}
               </p>
               <div className="grid gap-4 sm:grid-cols-2">
                 <KleurVeld sleutel="achtergrond" gebruikt={KLEUR_GEBRUIK.achtergrond} opMarkeer={markeerKleur} label="Achtergrond van de kaart" waarde={config.kleuren.achtergrond} onChange={(h) => zetKleur('achtergrond', h)} />
@@ -826,6 +831,107 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
                     <KleurVeld key={i} sleutel={`tegel${i + 1}`} gebruikt="Wisselt af met de andere deurtjeskleuren." opMarkeer={markeerKleur} label={`Deurtjeskleur ${i + 1}`} waarde={t} onChange={(h) => zetTegel(i, h)} />
                   ))}
                 </div>
+              </div>
+
+              <div className="space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-3">
+                <p className="text-sm font-medium">Eigen achtergrondafbeelding (optioneel)</p>
+                <p className="text-xs text-slate-500">
+                  Zet een eigen afbeelding achter je hele kalender. De deurtjes komen eroverheen. Zolang je een afbeelding gebruikt, doen de achtergrondkleur en de onderkant van de kalender (bij Opties) niet mee.
+                  De kleuren van de deurtjes, de knoppen en het popupvenster blijven gewoon gelden.
+                </p>
+                <div className="space-y-1 rounded-lg border border-sky-200 bg-sky-50 p-3 text-xs text-sky-950">
+                  <p className="font-semibold">Zo maak je hem (voor jouw kalender met {config.aantalDagen} deurtjes)</p>
+                  <ul className="ml-4 list-disc space-y-1">
+                    <li><strong>Computer en laptop</strong> (schermen vanaf 768 px breed): <strong>{maten.computer.breedte} × {maten.computer.hoogte} px</strong>. De kalender is dan 768 px breed en ongeveer {maten.computer.hoogte / 2} px hoog. Wij rekenen twee keer zo groot, zodat het ook op een scherm met veel pixels scherp blijft.</li>
+                    <li><strong>Telefoon</strong>: <strong>{maten.telefoon.breedte} × {maten.telefoon.hoogte} px</strong>. De kalender is op een telefoon ongeveer 370 px breed. Let op: de kalender in je Kennis Shop-les is meestal smaller dan 768 px en laat dus ook de <strong>telefoonversie</strong> zien. Lever die dus zeker aan.</li>
+                    <li>Heb je er maar één? Dan gebruikt de kalender die voor alle schermen. Past de verhouding niet precies, dan wordt de afbeelding bijgesneden en vult hij de kalender helemaal. Houd belangrijke dingen dus in het midden.</li>
+                    <li>Verander je het aantal deurtjes, dan verandert de hoogte van de kalender. Controleer dan de maat opnieuw.</li>
+                    <li>Kies rustig beeld waar de deurtjes goed op afsteken. Jpg of webp, maximaal 2 MB. Een afbeelding met veel rustige ruimte werkt het best.</li>
+                  </ul>
+                </div>
+                {([
+                  { sleutel: 'achtergrondAfbeelding', kop: 'Computer en laptop', maat: `${maten.computer.breedte} × ${maten.computer.hoogte} px` },
+                  { sleutel: 'achtergrondAfbeeldingMobiel', kop: 'Telefoon', maat: `${maten.telefoon.breedte} × ${maten.telefoon.hoogte} px` },
+                ] as const).map(({ sleutel, kop, maat }) => (
+                  <div key={sleutel} className="space-y-2 rounded-lg border border-slate-200 bg-white p-3">
+                    <p className="text-sm font-semibold">{kop} <span className="font-normal text-slate-500">({maat})</span></p>
+                    {config.opties[sleutel] && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={config.opties[sleutel]} alt="" className="max-h-40 rounded-lg border border-slate-200 object-contain" style={{ background: config.kleuren.achtergrond }} />
+                    )}
+                    <div className="flex flex-wrap items-start gap-2">
+                      <UploadKnop label={config.opties[sleutel] ? 'Vervang afbeelding' : 'Afbeelding uploaden'} onUrl={(url) => zetOptie(sleutel, url)} />
+                      {config.opties[sleutel] && <button type="button" onClick={() => zetOptie(sleutel, '')} className={KNOP}>Verwijder</button>}
+                    </div>
+                    <Veld label="Of plak een link" hint="Een link die met https:// begint.">
+                      <input className={INPUT} value={config.opties[sleutel]} maxLength={500} onChange={(e) => zetOptie(sleutel, e.target.value.trim())} placeholder="https://" />
+                    </Veld>
+                  </div>
+                ))}
+                {achtergrondActief && (
+                  <div className="space-y-3 rounded-lg border border-slate-200 bg-white p-3">
+                    <fieldset>
+                      <legend className="text-sm font-semibold">Kleur van de titel en de tekst op de afbeelding</legend>
+                      <div className="mt-1 space-y-1 text-sm">
+                        <label className="flex items-center gap-2"><input type="radio" name="achtergrondTekst" checked={config.opties.achtergrondTekst === 'licht'} onChange={() => zetOptie('achtergrondTekst', 'licht')} /> Lichte tekst (voor een donkere afbeelding)</label>
+                        <label className="flex items-center gap-2"><input type="radio" name="achtergrondTekst" checked={config.opties.achtergrondTekst === 'donker'} onChange={() => zetOptie('achtergrondTekst', 'donker')} /> Donkere tekst (voor een lichte afbeelding)</label>
+                      </div>
+                    </fieldset>
+                    <Veld label="Laag over de afbeelding" hint={`Een ${config.opties.achtergrondTekst === 'licht' ? 'donkere' : 'lichte'} laag over je afbeelding maakt de titel en de teksten beter leesbaar. 0% laat de afbeelding helemaal zoals hij is.`}>
+                      <div className="flex items-center gap-3">
+                        <input type="range" min={0} max={80} step={5} value={config.opties.achtergrondLaag} onChange={(e) => zetOptie('achtergrondLaag', Number(e.target.value))} aria-label="Sterkte van de laag over de afbeelding in procenten" className="h-2 flex-1 cursor-pointer" />
+                        <span className="w-14 text-right text-sm tabular-nums">{config.opties.achtergrondLaag}%</span>
+                      </div>
+                    </Veld>
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-3">
+                <p className="text-sm font-medium">Eigen achtergrond voor elk geopend deurtje (optioneel)</p>
+                <p className="text-xs text-slate-500">
+                  Zet een eigen afbeelding achter de tekst in elk deurtje dat openstaat. De titel, de tekst en de knoppen komen eroverheen.
+                  Een afbeelding voor alle schermen. Zonder afbeelding blijft het deurtje de lichte kleur van je huisstijl houden.
+                </p>
+                <div className="space-y-1 rounded-lg border border-sky-200 bg-sky-50 p-3 text-xs text-sky-950">
+                  <p className="font-semibold">Zo maak je hem</p>
+                  <ul className="ml-4 list-disc space-y-1">
+                    <li><strong>{POPUP_ACHTERGROND_MAAT.breedte} × {POPUP_ACHTERGROND_MAAT.hoogte} px</strong>. Het deurtje is 448 px breed op een computer en ongeveer 330 tot 360 px op een telefoon. De hoogte hangt af van de tekst: ongeveer 330 px bij een kort tekstje, meer met een afbeelding of audio erbij. Wij rekenen twee keer zo groot, zodat het ook op een scherm met veel pixels scherp blijft.</li>
+                    <li>De afbeelding vult het hele deurtje. Past de verhouding niet, dan wordt hij bijgesneden (boven en onder, of links en rechts). Houd belangrijke dingen dus in het midden.</li>
+                    <li>Kies rustig beeld, zonder veel details: de tekst moet eroverheen goed te lezen zijn. Jpg of webp, maximaal 2 MB.</li>
+                    <li>Het balkje bovenin (&quot;Dag 1 van 24&quot;) en de knop Sluiten houden hun kleur uit je huisstijl.</li>
+                  </ul>
+                </div>
+                <div className="space-y-2 rounded-lg border border-slate-200 bg-white p-3">
+                  {config.opties.popupAchtergrond && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={config.opties.popupAchtergrond} alt="" className="max-h-40 rounded-lg border border-slate-200 object-contain" style={{ background: config.kleuren.licht }} />
+                  )}
+                  <div className="flex flex-wrap items-start gap-2">
+                    <UploadKnop label={config.opties.popupAchtergrond ? 'Vervang afbeelding' : 'Afbeelding uploaden'} onUrl={(url) => zetOptie('popupAchtergrond', url)} />
+                    {config.opties.popupAchtergrond && <button type="button" onClick={() => zetOptie('popupAchtergrond', '')} className={KNOP}>Verwijder</button>}
+                  </div>
+                  <Veld label="Of plak een link" hint="Een link die met https:// begint.">
+                    <input className={INPUT} value={config.opties.popupAchtergrond} maxLength={500} onChange={(e) => zetOptie('popupAchtergrond', e.target.value.trim())} placeholder="https://" />
+                  </Veld>
+                </div>
+                {config.opties.popupAchtergrond && (
+                  <div className="space-y-3 rounded-lg border border-slate-200 bg-white p-3">
+                    <fieldset>
+                      <legend className="text-sm font-semibold">Kleur van de titel en de tekst in het deurtje</legend>
+                      <div className="mt-1 space-y-1 text-sm">
+                        <label className="flex items-center gap-2"><input type="radio" name="popupAchtergrondTekst" checked={config.opties.popupAchtergrondTekst === 'donker'} onChange={() => zetOptie('popupAchtergrondTekst', 'donker')} /> Donkere tekst (voor een lichte afbeelding)</label>
+                        <label className="flex items-center gap-2"><input type="radio" name="popupAchtergrondTekst" checked={config.opties.popupAchtergrondTekst === 'licht'} onChange={() => zetOptie('popupAchtergrondTekst', 'licht')} /> Lichte tekst (voor een donkere afbeelding)</label>
+                      </div>
+                    </fieldset>
+                    <Veld label="Laag over de afbeelding" hint={`Een ${config.opties.popupAchtergrondTekst === 'licht' ? 'donkere' : 'lichte'} laag over je afbeelding maakt de tekst beter leesbaar. 0% laat de afbeelding helemaal zoals hij is. Open een deurtje in het voorbeeld om het resultaat te zien.`}>
+                      <div className="flex items-center gap-3">
+                        <input type="range" min={0} max={90} step={5} value={config.opties.popupAchtergrondLaag} onChange={(e) => zetOptie('popupAchtergrondLaag', Number(e.target.value))} aria-label="Sterkte van de laag over de achtergrond van het deurtje in procenten" className="h-2 flex-1 cursor-pointer" />
+                        <span className="w-14 text-right text-sm tabular-nums">{config.opties.popupAchtergrondLaag}%</span>
+                      </div>
+                    </Veld>
+                  </div>
+                )}
               </div>
 
               <div className="rounded-lg border border-slate-200 bg-white p-3">
@@ -1053,6 +1159,11 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
                   Een thema kiest hier zelf een passende standaard: sneeuw valt weg op een lichte achtergrond, dus daar komen zachte heuvels. Je kunt dit altijd aanpassen.
                   Bij het winterlandschap en de zachte heuvels krijgt de kerstboom elke dag een kerstbal erbij. Bij het dorpje gaat elke dag een lichtje aan.
                 </p>
+                {achtergrondActief && (
+                  <p className="mb-3 rounded-lg border border-sky-200 bg-sky-50 p-2 text-xs text-sky-950">
+                    Je gebruikt een eigen achtergrondafbeelding (bij Kleuren en logo). Zolang je die gebruikt, staat deze onderkant uit.
+                  </p>
+                )}
                 <div className="grid gap-2 sm:grid-cols-2">
                   {ONDERKANT_KEUZES.map((o) => (
                     <label

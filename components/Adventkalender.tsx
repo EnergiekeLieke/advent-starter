@@ -7,7 +7,7 @@ import { Landschap, Sneeuw, STERREN, Strik } from '@/components/AdventDecor';
 import EigenLettertypeStijl from '@/components/EigenLettertypeStijl';
 import { audioSpelerUrl } from '@/lib/audio';
 import { dagenVoor, teltekstVul, type AdventConfig } from '@/lib/config';
-import { confettiKleuren, cssVariabelen, landschapPalet, tegelKleuren } from '@/lib/kleur';
+import { confettiKleuren, cssVariabelen, heeftAchtergrondAfbeelding, landschapPalet, tegelKleuren } from '@/lib/kleur';
 import { isoVan, labelKort, labelLang, parseIso, plusDagen, verschilInDagen, type Datum } from '@/lib/datum';
 
 type Fase = 'voor' | 'bezig' | 'na';
@@ -126,10 +126,12 @@ export default function Adventkalender({ config, datum, embed = false, preview =
   const confettiSet = useMemo(() => confettiKleuren(config.kleuren), [config.kleuren]);
   const onderkant = opties.landschap;
   // Een eigen afbeelding telt pas als er ook een is geüpload
-  const eigenAfbeelding = onderkant === 'eigen' && Boolean(opties.onderkantAfbeelding || opties.onderkantAfbeeldingMobiel);
-  const heeftOnderkant = onderkant !== 'geen' && (onderkant !== 'eigen' || eigenAfbeelding);
+  // Een eigen achtergrondafbeelding vervangt de achtergrondkleur en de onderkant: die tekenen we dan niet
+  const achtergrondAfbeelding = heeftAchtergrondAfbeelding(opties);
+  const eigenAfbeelding = !achtergrondAfbeelding && onderkant === 'eigen' && Boolean(opties.onderkantAfbeelding || opties.onderkantAfbeeldingMobiel);
+  const heeftOnderkant = !achtergrondAfbeelding && onderkant !== 'geen' && (onderkant !== 'eigen' || eigenAfbeelding);
   // Alleen het winterlandschap en de zachte heuvels hebben de kerstboom waar elke dag een bal bij komt
-  const heeftBoom = onderkant === 'winter' || onderkant === 'heuvels';
+  const heeftBoom = !achtergrondAfbeelding && (onderkant === 'winter' || onderkant === 'heuvels');
   const palet = useMemo(() => landschapPalet(onderkant === 'geen' || onderkant === 'eigen' ? 'winter' : onderkant, config.kleuren), [onderkant, config.kleuren]);
   const ballen = useMemo(() => [config.kleuren.accent, '#b8421f', config.kleuren.licht, config.kleuren.tegels[2]], [config.kleuren]);
   const variabelen = useMemo(() => cssVariabelen(config) as React.CSSProperties, [config]);
@@ -335,8 +337,12 @@ export default function Adventkalender({ config, datum, embed = false, preview =
       <div className="max-w-3xl mx-auto">
       <div
         data-kleur="achtergrond"
-        className={`adv-vlak relative overflow-hidden bg-nacht border-2 border-goud/60 shadow-xl rounded-3xl px-3 sm:px-10 pt-8 ${eigenAfbeelding ? 'pb-0' : heeftOnderkant ? 'pb-36' : 'pb-8'}`}
+        className={`adv-vlak ${achtergrondAfbeelding ? 'adv-achtergrond' : ''} relative overflow-hidden bg-nacht border-2 border-goud/60 shadow-xl rounded-3xl px-3 sm:px-10 pt-8 ${eigenAfbeelding ? 'pb-0' : heeftOnderkant ? 'pb-36' : 'pb-8'}`}
       >
+        {/* Een laag over de afbeelding, zodat de titel en de teksten leesbaar blijven */}
+        {achtergrondAfbeelding && opties.achtergrondLaag > 0 && (
+          <span aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'rgb(var(--adv-laag-kleur) / var(--adv-laag))' }} />
+        )}
         {opties.sneeuw && <Sneeuw />}
         {opties.sterren && STERREN.map((s, i) => (
           <span
@@ -473,7 +479,7 @@ export default function Adventkalender({ config, datum, embed = false, preview =
           <p className="relative mt-3 text-center text-xs sm:text-sm text-opach/80" aria-live="polite">
             {opties.teltekst
               ? teltekstVul(opties.teltekst, aantalOpen, aantal)
-              : onderkant === 'dorp'
+              : onderkant === 'dorp' && !achtergrondAfbeelding
                 ? (aantalOpen === 0
                     ? 'Het dorp ligt nog in het donker. Elke dag gaat er een lichtje aan.'
                     : aantalOpen === aantal
@@ -532,7 +538,7 @@ export default function Adventkalender({ config, datum, embed = false, preview =
             onTouchEnd={(e) => opSwipeEinde(e.changedTouches[0].clientX)}
             style={embed && zicht ? { maxHeight: Math.max(240, zicht.hoogte - 32) } : undefined}
             data-kleur="licht"
-            className={`adv-vlak adv-popup font-poptekst relative w-full max-w-md ${embed && zicht ? '' : 'max-h-[85vh]'} overflow-y-auto rounded-3xl bg-licht border-4 shadow-2xl text-center ${opdracht ? 'border-primair' : 'border-goud'}`}
+            className={`adv-vlak adv-popup ${opties.popupAchtergrond ? `adv-popup-achtergrond${opties.popupAchtergrondTekst === 'licht' ? ' adv-popup-licht' : ''}` : ''} font-poptekst relative w-full max-w-md ${embed && zicht ? '' : 'max-h-[85vh]'} overflow-y-auto rounded-3xl bg-licht border-4 shadow-2xl text-center ${opdracht ? 'border-primair' : 'border-goud'}`}
           >
             <div data-kleur={opdracht ? 'primair' : 'secundair'} className={`adv-deel border-b-2 border-goud py-2 text-xs tracking-[0.25em] uppercase ${opdracht ? 'bg-primair text-oppri' : 'bg-secundair text-opsec'}`}>
               ✦ {opdracht ? 'Opdracht' : 'Dag'} {inhoud.dag} van {aantal} ✦
@@ -562,8 +568,8 @@ export default function Adventkalender({ config, datum, embed = false, preview =
                 <div className="adv-medaillon mx-auto flex h-20 w-20 items-center justify-center rounded-full border-2 border-goud text-secundair">
                   <AdventIcoon nr={inhoud.dag - 1} className="h-11 w-11" />
                 </div>
-                <h2 data-kleur="primair" className="adv-deel font-popkop text-2xl font-bold text-primair mt-4">{inhoud.titel}</h2>
-                {inhoud.tekst && <p data-kleur="tekst" className="adv-deel mt-3 text-inkt leading-relaxed whitespace-pre-line">{inhoud.tekst}</p>}
+                <h2 data-kleur="primair" className="adv-deel adv-ptekst font-popkop text-2xl font-bold text-primair mt-4">{inhoud.titel}</h2>
+                {inhoud.tekst && <p data-kleur="tekst" className="adv-deel adv-ptekst mt-3 text-inkt leading-relaxed whitespace-pre-line">{inhoud.tekst}</p>}
                 {inhoud.afbeelding && (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={inhoud.afbeelding} alt="" className="mt-4 mx-auto max-h-56 w-auto max-w-full rounded-xl object-cover" />
@@ -593,7 +599,7 @@ export default function Adventkalender({ config, datum, embed = false, preview =
                   </a>
                 )}
                 {inhoud.dag === aantal && config.afsluiting && (
-                  <p className="mt-5 font-popkop italic text-secundair text-lg">
+                  <p className="adv-ptekst mt-5 font-popkop italic text-secundair text-lg">
                     ✦ {config.afsluiting} ✦
                   </p>
                 )}
@@ -606,7 +612,7 @@ export default function Adventkalender({ config, datum, embed = false, preview =
                 onClick={() => setActief(inhoud.dag - 1)}
                 disabled={inhoud.dag <= 1 || !toegankelijk(inhoud.dag - 1)}
                 aria-label="Vorige dag"
-                className="rounded-full border border-goud px-4 py-2 text-sm text-primair disabled:opacity-30 hover:bg-goud/20"
+                className="adv-ptekst rounded-full border border-goud px-4 py-2 text-sm text-primair disabled:opacity-30 hover:bg-goud/20"
               >
                 ‹ {inhoud.dag - 1 >= 1 ? inhoud.dag - 1 : ''}
               </button>
@@ -622,7 +628,7 @@ export default function Adventkalender({ config, datum, embed = false, preview =
                 onClick={() => setActief(inhoud.dag + 1)}
                 disabled={inhoud.dag >= aantal || !toegankelijk(inhoud.dag + 1)}
                 aria-label="Volgende dag"
-                className="rounded-full border border-goud px-4 py-2 text-sm text-primair disabled:opacity-30 hover:bg-goud/20"
+                className="adv-ptekst rounded-full border border-goud px-4 py-2 text-sm text-primair disabled:opacity-30 hover:bg-goud/20"
               >
                 {inhoud.dag + 1 <= aantal ? inhoud.dag + 1 : ''} ›
               </button>

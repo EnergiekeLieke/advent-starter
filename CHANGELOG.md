@@ -2,6 +2,17 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.13.0
+
+- Nieuw: een eigen afbeelding als achtergrond van elk geopend deurtje. Bij Kleuren en logo upload je een afbeelding (of plak je een link) voor alle schermen. De titel, de tekst en de knoppen komen eroverheen. Een goede maat is 896 × 1000 px: het deurtje is 448 px breed op een computer en ongeveer 330 tot 360 px op een telefoon, en de hoogte hangt af van de tekst. Past de verhouding niet, dan wordt de afbeelding bijgesneden.
+- Zodat de tekst leesbaar blijft, kies je of de titel en de tekst licht of donker zijn, en leg je zo nodig een lichte of donkere laag over de afbeelding (0 tot 90%). Het balkje bovenin en de knop Sluiten houden hun kleur uit je huisstijl. Zonder afbeelding verandert er niets.
+
+## v1.12.0
+
+- Nieuw: een eigen achtergrondafbeelding voor je hele kalender. Bij Kleuren en logo upload je een afbeelding voor de computer en een voor de telefoon (of maar een: dan geldt die voor alle schermen). De deurtjes komen eroverheen. Zolang je een achtergrondafbeelding gebruikt, doen de achtergrondkleur en de onderkant van de kalender niet mee. Alles wat je al had, blijft werken.
+- De kalender rekent voor jouw aantal deurtjes uit welke maat past. Bij 24 deurtjes is dat 1536 × 2760 px voor de computer (vanaf 768 px breed) en 780 × 1790 px voor de telefoon. De kalender in een Kennis Shop-les laat meestal de telefoonversie zien, dus lever die zeker aan. Past de verhouding niet precies, dan wordt de afbeelding bijgesneden.
+- Zodat alles leesbaar blijft, kies je of de titel en de teksten licht of donker zijn, en leg je zo nodig een donkere of lichte laag over de afbeelding (0 tot 80%).
+
 ## v1.11.0
 
 - Nieuw: een eigen afbeelding onderaan de kalender. Kies bij Opties, bij de onderkant van de kalender, voor "Eigen afbeelding" en upload je afbeelding (of plak een link). Je kunt een versie voor de computer en een voor de telefoon aanleveren. Heb je er maar een, dan gebruikt de kalender die voor alle schermen.

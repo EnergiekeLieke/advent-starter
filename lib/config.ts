@@ -159,6 +159,16 @@ const optiesSchema = z.object({
   // Is er maar één, dan gebruikt de kalender die voor alle schermen.
   onderkantAfbeelding:       afbeeldingUrl.default(''),
   onderkantAfbeeldingMobiel: afbeeldingUrl.default(''),
+  // Eigen afbeelding als achtergrond van de hele kaart. De deurtjes komen erover. Zolang er een is, doen de achtergrondkleur en de onderkant niet mee.
+  // achtergrondTekst is de kleur van de titel en de tekst op de afbeelding, achtergrondLaag hoe sterk een donkere (bij lichte tekst) of lichte laag eroverheen ligt.
+  achtergrondAfbeelding:       afbeeldingUrl.default(''),
+  achtergrondAfbeeldingMobiel: afbeeldingUrl.default(''),
+  achtergrondTekst:            z.enum(['licht', 'donker'], { error: 'Kies een van de beschikbare opties' }).default('licht'),
+  achtergrondLaag:             z.number({ error: 'Kies hoe sterk de laag over de afbeelding is' }).int('Een heel getal graag').min(0, 'Minimaal 0%').max(80, 'Maximaal 80%').default(30),
+  // Eigen afbeelding als achtergrond van elk geopend deurtje (de popup), met de tekst erover. Een afbeelding voor alle schermen.
+  popupAchtergrond:            afbeeldingUrl.default(''),
+  popupAchtergrondTekst:       z.enum(['donker', 'licht'], { error: 'Kies een van de beschikbare opties' }).default('donker'),
+  popupAchtergrondLaag:        z.number({ error: 'Kies hoe sterk de laag over de afbeelding is' }).int('Een heel getal graag').min(0, 'Minimaal 0%').max(90, 'Maximaal 90%').default(50),
   deurStijl:   z.enum(DEURSTIJLEN, { error: 'Kies een van de beschikbare opties' }).default('zwaai'),
 });
 
@@ -239,7 +249,7 @@ const VELDNAMEN: Record<string, string> = {
   achtergrond: 'achtergrondkleur', accent: 'accentkleur', licht: 'lichte kleur', primair: 'primaire kleur',
   secundair: 'secundaire kleur', lettertype: 'lettertype', dagen: 'deurtjes', opties: 'opties',
   knoppen: 'knoppen', testmodus: 'testmodus', standaardLabel: 'standaard knoptekst', openen: 'openen', aan: 'knop aan', deurStijl: 'deurstijl',
-  herinneringUrl: 'link in de herinnering', teltekst: 'tekst onder de kalender', onderkantAfbeelding: 'afbeelding onderkant (computer)', onderkantAfbeeldingMobiel: 'afbeelding onderkant (telefoon)', teltekstAan: 'tekst onder de kalender', titelGrootte: 'grootte van de titel', lettertypes: 'lettertypes', eigenLettertype: 'eigen lettertype 1', eigenLettertype2: 'eigen lettertype 2', normaal: 'gewoon lettertypebestand', vet: 'vet lettertypebestand', deurtjes: 'tekst op de deurtjes',
+  herinneringUrl: 'link in de herinnering', teltekst: 'tekst onder de kalender', popupAchtergrond: 'achtergrond van het deurtje', popupAchtergrondTekst: 'tekstkleur in het deurtje', popupAchtergrondLaag: 'laag over de achtergrond van het deurtje', achtergrondAfbeelding: 'achtergrondafbeelding (computer)', achtergrondAfbeeldingMobiel: 'achtergrondafbeelding (telefoon)', achtergrondTekst: 'tekstkleur op de achtergrond', achtergrondLaag: 'laag over de achtergrond', onderkantAfbeelding: 'afbeelding onderkant (computer)', onderkantAfbeeldingMobiel: 'afbeelding onderkant (telefoon)', teltekstAan: 'tekst onder de kalender', titelGrootte: 'grootte van de titel', lettertypes: 'lettertypes', eigenLettertype: 'eigen lettertype 1', eigenLettertype2: 'eigen lettertype 2', normaal: 'gewoon lettertypebestand', vet: 'vet lettertypebestand', deurtjes: 'tekst op de deurtjes',
   popupKop: 'kop achter het deurtje', popupTekst: 'tekst achter het deurtje',
 };
 

@@ -51,11 +51,48 @@ function mengHex(a: string, b: string, aandeel: number): string {
   return `#${m(ar, br)}${m(ag, bg)}${m(ab, bb)}`;
 }
 
+// Een adres in een CSS-url(): aanhalingstekens en schuine strepen achterstevoren kunnen de url niet uit zijn vak laten breken
+function cssUrl(adres: string): string {
+  return `url("${adres.replace(/["\\\n\r]/g, (c) => encodeURIComponent(c))}")`;
+}
+
+/** Heeft de kalender een eigen achtergrondafbeelding? Dan vervangt die de achtergrondkleur en de onderkant. */
+export function heeftAchtergrondAfbeelding(opties: AdventConfig['opties']): boolean {
+  return Boolean(opties.achtergrondAfbeelding || opties.achtergrondAfbeeldingMobiel);
+}
+
+function achtergrondVariabelen(config: AdventConfig): Record<string, string> {
+  const { achtergrondAfbeelding: pc, achtergrondAfbeeldingMobiel: mob, achtergrondTekst, achtergrondLaag } = config.opties;
+  if (!pc && !mob) return {};
+  return {
+    ...(pc ? { '--adv-bg-pc': cssUrl(pc) } : {}),
+    ...(mob ? { '--adv-bg-mob': cssUrl(mob) } : {}),
+    '--adv-laag-kleur': achtergrondTekst === 'donker' ? '255 255 255' : '0 0 0',
+    '--adv-laag': String(achtergrondLaag / 100),
+  };
+}
+
+// Een eigen afbeelding achter de tekst in elk geopend deurtje. Bij lichte tekst ligt er een donkere laag over, bij donkere tekst een lichte.
+function popupVariabelen(config: AdventConfig): Record<string, string> {
+  const { popupAchtergrond, popupAchtergrondTekst, popupAchtergrondLaag } = config.opties;
+  if (!popupAchtergrond) return {};
+  return {
+    '--adv-popup-bg': cssUrl(popupAchtergrond),
+    '--adv-popup-laag-kleur': popupAchtergrondTekst === 'licht' ? '0 0 0' : '255 255 255',
+    '--adv-popup-laag': String(popupAchtergrondLaag / 100),
+    '--adv-popup-tekst': rgb(config.kleuren.licht),
+  };
+}
+
 /** CSS-variabelen die de kalender gebruikt (zie tailwind.config.ts en globals.css). */
 export function cssVariabelen(config: AdventConfig): Record<string, string> {
   const k = config.kleuren;
-  const lichteAchtergrond = luminantie(k.achtergrond) > 0.5;
+  const metAfbeelding = heeftAchtergrondAfbeelding(config.opties);
+  // Met een eigen achtergrondafbeelding bepaalt de keuze licht of donker de tekstkleuren, want de kleur van de kaart zie je dan niet meer
+  const lichteAchtergrond = metAfbeelding ? config.opties.achtergrondTekst === 'donker' : luminantie(k.achtergrond) > 0.5;
   return {
+    ...achtergrondVariabelen(config),
+    ...popupVariabelen(config),
     '--adv-nacht': rgb(k.achtergrond),
     '--adv-goud': rgb(k.accent),
     '--adv-goud-donker': meng(k.accent, '#000000', lichteAchtergrond ? 0.4 : 0.25),
@@ -68,7 +105,7 @@ export function cssVariabelen(config: AdventConfig): Record<string, string> {
     '--adv-primair': rgb(k.primair),
     '--adv-secundair': rgb(k.secundair),
     '--adv-inkt': rgb(k.tekst),
-    '--adv-opach': rgb(leesbaar(k.achtergrond, [k.licht, k.tekst])),
+    '--adv-opach': metAfbeelding ? rgb(config.opties.achtergrondTekst === 'donker' ? k.tekst : k.licht) : rgb(leesbaar(k.achtergrond, [k.licht, k.tekst])),
     '--adv-oppri': rgb(leesbaar(k.primair, [k.licht, k.tekst])),
     '--adv-opsec': rgb(leesbaar(k.secundair, [k.licht, k.tekst])),
     '--adv-titel-schaal': String(config.titelGrootte / 100),
