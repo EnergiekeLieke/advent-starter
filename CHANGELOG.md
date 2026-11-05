@@ -2,6 +2,10 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.10.0
+
+- Nieuw: de grootte van de titel van de kalender kun je zelf instellen, bij Algemeen met een schuifje van 60% tot 160% (100% is de standaardgrootte). Handig voor een lange titel, of juist voor een grote titel die opvalt. Het advies voor de hoogte van je embedcode bij Delen houdt rekening met de grootte. De grootte zit ook in "Kopieer mijn kleuren". Bestaande kalenders blijven op 100%.
+
 ## v1.9.0
 
 - Nieuw: je kunt nu twee eigen lettertypes uploaden in plaats van één. Bij elk lettertype upload je een bestand voor gewone tekst en eventueel een voor vette tekst. Beide verschijnen in de keuzelijstjes bij elk onderdeel, dus je kunt bijvoorbeeld het ene voor de titel en het andere voor de tekst achter de deurtjes gebruiken. Heb je al een eigen lettertype geüpload, dan staat dat nu bij "Eigen lettertype 1" en verandert er niets aan je kalender.

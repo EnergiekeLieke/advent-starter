@@ -257,8 +257,8 @@ function voegSamen(huidig: AdventConfig, ingevoerd: Record<string, unknown>): un
 
 // Huisstijl: de kleuren en lettertypes, als blok tekst om te bewaren of in een andere kalender te plakken
 function huisstijlTekst(config: AdventConfig): string {
-  const { kleuren, lettertype, lettertypes } = config;
-  return JSON.stringify({ kleuren, lettertype, lettertypes }, null, 2);
+  const { kleuren, lettertype, lettertypes, titelGrootte } = config;
+  return JSON.stringify({ kleuren, lettertype, lettertypes, titelGrootte }, null, 2);
 }
 
 /** Leest een geplakt huisstijlblok en zet het in de instellingen. Andere instellingen (teksten, deurtjes) blijven zoals ze zijn. */
@@ -279,6 +279,7 @@ function huisstijlToepassen(huidig: AdventConfig, tekst: string): { ok: true; co
     kleuren: { ...huidig.kleuren, ...ruw.kleuren },
     ...(ruw.lettertype !== undefined ? { lettertype: ruw.lettertype } : {}),
     ...(isObject(ruw.lettertypes) ? { lettertypes: { ...huidig.lettertypes, ...ruw.lettertypes } } : {}),
+    ...(ruw.titelGrootte !== undefined ? { titelGrootte: ruw.titelGrootte } : {}),
   });
   if (!uitkomst.ok) return { ok: false, regel: `Deze kleuren kloppen niet helemaal: ${uitkomst.fouten[0]}` };
   return { ok: true, config: uitkomst.config };
@@ -688,6 +689,22 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
           {tab === 'Algemeen' && (
             <div className="space-y-4">
               <Veld label="Titel van de kalender"><input className={INPUT} value={config.titel} maxLength={80} onChange={(e) => zet('titel', e.target.value)} /></Veld>
+              <Veld label="Grootte van de titel" hint="100% is de standaardgrootte. Een lange titel past beter met een kleinere grootte. Bij een grotere titel heb je in je embedcode misschien meer hoogte nodig: het advies bij Delen past zich aan.">
+                <div className="flex items-center gap-3">
+                  <input
+                    type="range"
+                    min={60}
+                    max={160}
+                    step={5}
+                    value={config.titelGrootte}
+                    onChange={(e) => zet('titelGrootte', Number(e.target.value))}
+                    aria-label="Grootte van de titel in procenten"
+                    className="h-2 flex-1 cursor-pointer"
+                  />
+                  <span className="w-14 text-right text-sm tabular-nums">{config.titelGrootte}%</span>
+                  <button type="button" onClick={() => zet('titelGrootte', 100)} disabled={config.titelGrootte === 100} className={KNOP}>Standaard</button>
+                </div>
+              </Veld>
               <Veld label="Ondertitel"><input className={INPUT} value={config.ondertitel} maxLength={120} onChange={(e) => zet('ondertitel', e.target.value)} /></Veld>
               <Veld label="Tekst onder de deurtjes"><input className={INPUT} value={config.footer} maxLength={200} onChange={(e) => zet('footer', e.target.value)} /></Veld>
               <Veld label="Afsluiting" hint="Staat in het laatste deurtje en onder de kalender zodra alles open is.">

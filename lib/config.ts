@@ -206,6 +206,8 @@ export const configSchema = z.object({
   footer:     z.string().trim().max(200, 'De voettekst is te lang').default(''),
   afsluiting: z.string().trim().max(200, 'De afsluiting is te lang').default(''),
   logoUrl:    afbeeldingUrl.default(''),
+  // Grootte van de titel in procenten van de standaardgrootte
+  titelGrootte: z.number({ error: 'Kies een grootte voor de titel' }).int('Een heel getal graag').min(60, 'De titel mag niet kleiner dan 60%').max(160, 'De titel mag niet groter dan 160%').default(100),
   // Het oorspronkelijke lettertype voor de titels. Blijft bestaan voor kalenders die het al hebben, de keuze per plek (`lettertypes`) gaat voor.
   lettertype: z.enum(LETTERTYPE_SLEUTELS, { error: 'Kies een van de beschikbare opties' }).default('serif'),
   lettertypes: lettertypesSchema.prefault({}),
@@ -233,7 +235,7 @@ const VELDNAMEN: Record<string, string> = {
   achtergrond: 'achtergrondkleur', accent: 'accentkleur', licht: 'lichte kleur', primair: 'primaire kleur',
   secundair: 'secundaire kleur', lettertype: 'lettertype', dagen: 'deurtjes', opties: 'opties',
   knoppen: 'knoppen', testmodus: 'testmodus', standaardLabel: 'standaard knoptekst', openen: 'openen', aan: 'knop aan', deurStijl: 'deurstijl',
-  herinneringUrl: 'link in de herinnering', teltekst: 'tekst onder de kalender', teltekstAan: 'tekst onder de kalender', lettertypes: 'lettertypes', eigenLettertype: 'eigen lettertype 1', eigenLettertype2: 'eigen lettertype 2', normaal: 'gewoon lettertypebestand', vet: 'vet lettertypebestand', deurtjes: 'tekst op de deurtjes',
+  herinneringUrl: 'link in de herinnering', teltekst: 'tekst onder de kalender', teltekstAan: 'tekst onder de kalender', titelGrootte: 'grootte van de titel', lettertypes: 'lettertypes', eigenLettertype: 'eigen lettertype 1', eigenLettertype2: 'eigen lettertype 2', normaal: 'gewoon lettertypebestand', vet: 'vet lettertypebestand', deurtjes: 'tekst op de deurtjes',
   popupKop: 'kop achter het deurtje', popupTekst: 'tekst achter het deurtje',
 };
 

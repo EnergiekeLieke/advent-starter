@@ -363,7 +363,7 @@ export default function Adventkalender({ config, datum, embed = false, preview =
               className="mx-auto mb-3 w-auto max-w-full object-contain max-h-16 sm:max-h-20"
             />
           )}
-          <h1 data-kleur="accent" className="adv-deel adv-goudtekst font-titel font-bold leading-tight text-3xl sm:text-5xl">
+          <h1 data-kleur="accent" className="adv-deel adv-goudtekst adv-titel font-titel font-bold leading-tight">
             {config.titel}
           </h1>
           {config.ondertitel && (

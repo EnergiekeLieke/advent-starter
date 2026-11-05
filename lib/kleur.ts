@@ -71,6 +71,7 @@ export function cssVariabelen(config: AdventConfig): Record<string, string> {
     '--adv-opach': rgb(leesbaar(k.achtergrond, [k.licht, k.tekst])),
     '--adv-oppri': rgb(leesbaar(k.primair, [k.licht, k.tekst])),
     '--adv-opsec': rgb(leesbaar(k.secundair, [k.licht, k.tekst])),
+    '--adv-titel-schaal': String(config.titelGrootte / 100),
     '--adv-font-titel': LETTERTYPES[lettertypeVoor(config, 'titel')].stack,
     '--adv-font-onder': LETTERTYPES[lettertypeVoor(config, 'ondertitel')].stack,
     '--adv-font-deur': LETTERTYPES[lettertypeVoor(config, 'deurtjes')].stack,

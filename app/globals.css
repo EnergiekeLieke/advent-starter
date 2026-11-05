@@ -111,6 +111,17 @@ h1, h2, h3 {
   animation: adv-twinkel 3s ease-in-out infinite;
 }
 
+/* De titel schaalt mee met de instelling Grootte van de titel (standaard 100%) */
+.adv-titel {
+  font-size: calc(1.875rem * var(--adv-titel-schaal, 1));
+}
+
+@media (min-width: 640px) {
+  .adv-titel {
+    font-size: calc(3rem * var(--adv-titel-schaal, 1));
+  }
+}
+
 .adv-goudtekst {
   /* --adv-goud-donker en --adv-goud-licht komen uit lib/kleur.ts: op een lichte achtergrond wordt de glans donkerder in plaats van lichter */
   background: linear-gradient(
