@@ -2,6 +2,10 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.6.0
+
+- Nieuw: bij Kleuren en logo kun je je huisstijl bewaren. "Kopieer mijn kleuren" zet je kleuren en lettertypes op je klembord, bijvoorbeeld om in een notitie te bewaren of in een andere kalender te gebruiken. "Plak kleuren" zet ze terug. Je teksten en deurtjes blijven daarbij zoals ze zijn. Je ziet het resultaat eerst in het voorbeeld en het wordt pas bewaard als je op Opslaan klikt.
+
 ## v1.5.0
 
 - Nieuw: bij Kleuren en logo zie je nu waar elke kleur in de kalender zit. Wijs een kleurveld aan (of tik erop), dan lichten in het voorbeeld de onderdelen op die deze kleur gebruiken, en wordt de rest zachter. Dit werkt voor alle kleuren, ook voor de vier deurtjeskleuren en voor het landschap. Onder elk kleurveld staat ook in woorden waar de kleur voor dient.

@@ -193,6 +193,35 @@ function voegSamen(huidig: AdventConfig, ingevoerd: Record<string, unknown>): un
   };
 }
 
+// Huisstijl: de kleuren en lettertypes, als blok tekst om te bewaren of in een andere kalender te plakken
+function huisstijlTekst(config: AdventConfig): string {
+  const { kleuren, lettertype, lettertypes } = config;
+  return JSON.stringify({ kleuren, lettertype, lettertypes }, null, 2);
+}
+
+/** Leest een geplakt huisstijlblok en zet het in de instellingen. Andere instellingen (teksten, deurtjes) blijven zoals ze zijn. */
+function huisstijlToepassen(huidig: AdventConfig, tekst: string): { ok: true; config: AdventConfig } | { ok: false; regel: string } {
+  const van = tekst.indexOf('{');
+  const tot = tekst.lastIndexOf('}');
+  let ruw: unknown;
+  try {
+    ruw = JSON.parse(van >= 0 && tot > van ? tekst.slice(van, tot + 1) : tekst);
+  } catch {
+    return { ok: false, regel: 'Dit lijkt niet op gekopieerde kleuren. Kopieer ze eerst met "Kopieer mijn kleuren".' };
+  }
+  if (!isObject(ruw) || !isObject(ruw.kleuren)) {
+    return { ok: false, regel: 'Ik vind hier geen kleuren in. Kopieer ze eerst met "Kopieer mijn kleuren".' };
+  }
+  const uitkomst = leesConfig({
+    ...huidig,
+    kleuren: { ...huidig.kleuren, ...ruw.kleuren },
+    ...(ruw.lettertype !== undefined ? { lettertype: ruw.lettertype } : {}),
+    ...(isObject(ruw.lettertypes) ? { lettertypes: { ...huidig.lettertypes, ...ruw.lettertypes } } : {}),
+  });
+  if (!uitkomst.ok) return { ok: false, regel: `Deze kleuren kloppen niet helemaal: ${uitkomst.fouten[0]}` };
+  return { ok: true, config: uitkomst.config };
+}
+
 const PREVIEW_DATA = [
   { sleutel: 'vandaag', label: 'Vandaag' },
   { sleutel: 'voor', label: 'Voor de start' },
@@ -248,6 +277,8 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
   const [audioActief, setAudioActief] = useState<number | null>(null);
   const [bezig, setBezig] = useState(false);
   const [uitlogVraag, setUitlogVraag] = useState(false);
+  const [huisBericht, setHuisBericht] = useState<Bericht>(null);
+  const [huisPlakVeld, setHuisPlakVeld] = useState<string | null>(null);
   const [bericht, setBericht] = useState<Bericht>(null);
   const [previewDatum, setPreviewDatum] = useState<(typeof PREVIEW_DATA)[number]['sleutel']>('halverwege');
   const [previewEmbed, setPreviewEmbed] = useState(false);
@@ -437,6 +468,37 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
       setImportBericht({ soort: 'ok', regels: ['Geïmporteerd. Controleer het voorbeeld en klik daarna op Opslaan.'] });
     } else {
       setImportBericht({ soort: 'fout', regels: uitkomst.fouten });
+    }
+  }
+
+  async function kopieerHuisstijl() {
+    try {
+      await navigator.clipboard.writeText(huisstijlTekst(config));
+      setHuisBericht({ soort: 'ok', regels: ['Je kleuren en lettertypes staan op je klembord. Plak ze ergens veilig, bijvoorbeeld in een notitie.'] });
+    } catch {
+      setHuisPlakVeld(huisstijlTekst(config));
+      setHuisBericht({ soort: 'fout', regels: ['Kopiëren lukt niet in deze browser. Selecteer de tekst hieronder en kopieer hem zelf.'] });
+    }
+  }
+
+  function pasHuisstijlToe(tekst: string) {
+    const uitkomst = huisstijlToepassen(config, tekst);
+    if (uitkomst.ok) {
+      setConfig(uitkomst.config);
+      setHuisPlakVeld(null);
+      setHuisBericht({ soort: 'ok', regels: ['De kleuren zijn toegepast. Kijk in het voorbeeld en klik op Opslaan als je ze wilt houden.'] });
+    } else {
+      setHuisBericht({ soort: 'fout', regels: [uitkomst.regel] });
+    }
+  }
+
+  async function plakHuisstijl() {
+    try {
+      pasHuisstijlToe(await navigator.clipboard.readText());
+    } catch {
+      // Sommige browsers laten het klembord niet zomaar lezen: dan plakt de gebruiker zelf in een vak
+      setHuisPlakVeld('');
+      setHuisBericht({ soort: 'ok', regels: ['Plak je kleuren in het vak hieronder en klik op Toepassen.'] });
     }
   }
 
@@ -644,6 +706,33 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
                     <KleurVeld key={i} sleutel={`tegel${i + 1}`} gebruikt="Wisselt af met de andere deurtjeskleuren." opMarkeer={markeerKleur} label={`Deurtjeskleur ${i + 1}`} waarde={t} onChange={(h) => zetTegel(i, h)} />
                   ))}
                 </div>
+              </div>
+
+              <div className="rounded-lg border border-slate-200 bg-white p-3">
+                <p className="text-sm font-medium">Bewaar je huisstijl</p>
+                <p className="mb-2 text-xs text-slate-500">Zet je kleuren en lettertypes op je klembord om ze te bewaren, of plak ze terug. Je teksten en deurtjes blijven zoals ze zijn.</p>
+                <div className="flex flex-wrap gap-2">
+                  <button type="button" onClick={kopieerHuisstijl} className={KNOP}>Kopieer mijn kleuren</button>
+                  <button type="button" onClick={plakHuisstijl} className={KNOP}>Plak kleuren</button>
+                </div>
+                {huisPlakVeld !== null && (
+                  <div className="mt-2 space-y-2">
+                    <textarea
+                      className={`${INPUT} font-mono`}
+                      rows={6}
+                      value={huisPlakVeld}
+                      spellCheck={false}
+                      aria-label="Kleuren plakken"
+                      onChange={(e) => setHuisPlakVeld(e.target.value)}
+                    />
+                    <button type="button" onClick={() => pasHuisstijlToe(huisPlakVeld)} disabled={!huisPlakVeld.trim()} className={KNOP_PRIMAIR}>Toepassen</button>
+                  </div>
+                )}
+                {huisBericht && (
+                  <p role={huisBericht.soort === 'fout' ? 'alert' : 'status'} className={`mt-2 text-sm ${huisBericht.soort === 'ok' ? 'text-emerald-800' : 'text-red-800'}`}>
+                    {huisBericht.regels.join(' ')}
+                  </p>
+                )}
               </div>
 
               {waarschuwingen.length > 0 && (
