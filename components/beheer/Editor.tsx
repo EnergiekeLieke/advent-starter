@@ -91,6 +91,13 @@ function UploadKnop({ onUrl, label = 'Afbeelding uploaden' }: { onUrl: (url: str
   );
 }
 
+// De twee plekken voor een eigen lettertype: elk met een gewoon en een vet bestand
+const EIGEN_LETTERTYPES = [
+  { sleutel: 'eigenLettertype', keuze: 'eigen', kop: 'Eigen lettertype 1' },
+  { sleutel: 'eigenLettertype2', keuze: 'eigen2', kop: 'Eigen lettertype 2' },
+] as const;
+type EigenSleutel = (typeof EIGEN_LETTERTYPES)[number]['sleutel'];
+
 // Eén lettertypebestand uploaden (otf, ttf, woff of woff2). We bewaren alleen de naam in de opslag, het bestand zelf blijft daar.
 function LettertypeUpload({ label, id, onId, onWis }: { label: string; id: string; onId: (id: string) => void; onWis: () => void }) {
   const invoer = useRef<HTMLInputElement>(null);
@@ -343,7 +350,8 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
 
   const controle = useMemo(() => leesConfig(config), [config]);
   const gewijzigd = JSON.stringify(config) !== opgeslagen;
-  const heeftEigen = Boolean(config.eigenLettertype.normaal || config.eigenLettertype.vet);
+  // Welke eigen lettertypes zijn geüpload? Alleen die staan in de keuzelijstjes.
+  const eigenGebruik = EIGEN_LETTERTYPES.map((e) => ({ ...e, naam: config[e.sleutel].naam || LETTERTYPES[e.keuze].naam, aanwezig: Boolean(config[e.sleutel].normaal || config[e.sleutel].vet) }));
   const dagen = useMemo(() => dagenVoor(config), [config]);
   const actiefThema = useMemo(() => themaVan(config.kleuren), [config.kleuren]);
   const opgeslagenTestmodus = useMemo(() => Boolean(JSON.parse(opgeslagen).testmodus), [opgeslagen]);
@@ -425,14 +433,15 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
     setConfig((c) => ({ ...c, lettertypes: { ...c.lettertypes, [plek]: waarde } }));
   }
 
-  function zetEigenLettertype(delen: Partial<AdventConfig['eigenLettertype']>) {
+  function zetEigenLettertype(sleutel: EigenSleutel, delen: Partial<AdventConfig['eigenLettertype']>) {
     setConfig((c) => {
-      const eigen = { ...c.eigenLettertype, ...delen };
+      const eigen = { ...c[sleutel], ...delen };
+      const keuze = EIGEN_LETTERTYPES.find((e) => e.sleutel === sleutel)?.keuze;
       // Is er geen bestand meer, dan kan geen enkel onderdeel het nog gebruiken
       const lettertypes = eigen.normaal || eigen.vet
         ? c.lettertypes
-        : Object.fromEntries(Object.entries(c.lettertypes).map(([plek, keuze]) => [plek, keuze === 'eigen' ? '' : keuze])) as AdventConfig['lettertypes'];
-      return { ...c, eigenLettertype: eigen, lettertypes };
+        : Object.fromEntries(Object.entries(c.lettertypes).map(([plek, k]) => [plek, k === keuze ? '' : k])) as AdventConfig['lettertypes'];
+      return { ...c, [sleutel]: eigen, lettertypes };
     });
   }
 
@@ -580,7 +589,7 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6">
-      <EigenLettertypeStijl eigen={config.eigenLettertype} />
+      <EigenLettertypeStijl eigen={config.eigenLettertype} eigen2={config.eigenLettertype2} />
       <header className="mb-4 flex flex-wrap items-center gap-3">
         <h1 className="mr-auto text-2xl font-bold">Beheer van je adventkalender</h1>
         {config.testmodus && <span className="rounded-full bg-amber-300 px-3 py-1 text-xs font-bold text-amber-950">TESTMODUS AAN</span>}
@@ -707,29 +716,34 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
                   return (
                     <Veld key={plek} label={LETTERTYPE_PLEKKEN[plek].naam} hint={LETTERTYPE_PLEKKEN[plek].uitleg}>
                       <select className={INPUT} value={gekozen} onChange={(e) => zetLettertype(plek, e.target.value as Lettertype)}>
-                        {(Object.keys(LETTERTYPES) as Lettertype[]).filter((l) => l !== 'eigen' || heeftEigen).map((l) => <option key={l} value={l}>{l === 'eigen' ? (config.eigenLettertype.naam || LETTERTYPES.eigen.naam) : LETTERTYPES[l].naam}</option>)}
+                        {(Object.keys(LETTERTYPES) as Lettertype[]).map((l) => ({ l, eigen: eigenGebruik.find((e) => e.keuze === l) })).filter(({ l, eigen }) => (l !== 'eigen' && l !== 'eigen2') || eigen?.aanwezig).map(({ l, eigen }) => <option key={l} value={l}>{eigen ? eigen.naam : LETTERTYPES[l].naam}</option>)}
                       </select>
                       <p className="mt-1 text-lg text-slate-700" style={{ fontFamily: LETTERTYPES[gekozen].stack }}>Achter elk deurtje 1 2 3 ✦</p>
                     </Veld>
                   );
                 })}
                 <div className="space-y-2 rounded-lg border border-slate-200 bg-slate-50 p-3">
-                  <p className="text-sm font-medium">Eigen lettertype (optioneel)</p>
+                  <p className="text-sm font-medium">Eigen lettertypes (optioneel)</p>
                   <p className="text-xs text-slate-500">
-                    Upload een lettertype dat je zelf hebt: een bestand voor gewone tekst en eventueel een voor vette tekst (otf, ttf, woff of woff2, maximaal 2 MB per bestand).
-                    Daarna kies je het hierboven bij elk onderdeel, net als de andere lettertypes.
+                    Upload tot twee lettertypes die je zelf hebt. Bij elk lettertype upload je een bestand voor gewone tekst en eventueel een voor vette tekst
+                    (otf, ttf, woff of woff2, maximaal 2 MB per bestand). Daarna kies je ze hierboven bij elk onderdeel, net als de andere lettertypes.
                   </p>
                   <p className="rounded-lg border border-amber-300 bg-amber-50 p-2 text-xs text-amber-950">
                     <strong>Let op de licentie.</strong> Een lettertype op een website tonen is vaak een andere licentie dan een lettertype op je computer gebruiken. Controleer of jouw licentie webgebruik toestaat.
-                    Het bestand laadt alleen vanaf deze kalender, maar een bezoeker kan het met de ontwikkelaarstools van zijn browser nog steeds downloaden. Echt geheim blijft een lettertype op een website nooit.
+                    De bestanden laden alleen vanaf deze kalender, maar een bezoeker kan ze met de ontwikkelaarstools van zijn browser nog steeds downloaden. Echt geheim blijft een lettertype op een website nooit.
                   </p>
-                  <Veld label="Naam van het lettertype" hint="Alleen voor jezelf, zodat je het hierboven herkent.">
-                    <input className={INPUT} value={config.eigenLettertype.naam} maxLength={40} onChange={(e) => zetEigenLettertype({ naam: e.target.value })} placeholder="Bijvoorbeeld de naam van je huisstijllettertype" />
-                  </Veld>
-                  <div className="grid gap-2 sm:grid-cols-2">
-                    <LettertypeUpload label="Gewoon" id={config.eigenLettertype.normaal} onId={(id) => zetEigenLettertype({ normaal: id })} onWis={() => zetEigenLettertype({ normaal: '' })} />
-                    <LettertypeUpload label="Vet (optioneel)" id={config.eigenLettertype.vet} onId={(id) => zetEigenLettertype({ vet: id })} onWis={() => zetEigenLettertype({ vet: '' })} />
-                  </div>
+                  {EIGEN_LETTERTYPES.map(({ sleutel, kop }) => (
+                    <div key={sleutel} className="space-y-2 rounded-lg border border-slate-200 bg-white p-3">
+                      <p className="text-sm font-semibold">{kop}</p>
+                      <Veld label="Naam van het lettertype" hint="Alleen voor jezelf, zodat je het hierboven herkent.">
+                        <input className={INPUT} value={config[sleutel].naam} maxLength={40} onChange={(e) => zetEigenLettertype(sleutel, { naam: e.target.value })} placeholder="Bijvoorbeeld de naam van je huisstijllettertype" />
+                      </Veld>
+                      <div className="grid gap-2 sm:grid-cols-2">
+                        <LettertypeUpload label="Gewoon" id={config[sleutel].normaal} onId={(id) => zetEigenLettertype(sleutel, { normaal: id })} onWis={() => zetEigenLettertype(sleutel, { normaal: '' })} />
+                        <LettertypeUpload label="Vet (optioneel)" id={config[sleutel].vet} onId={(id) => zetEigenLettertype(sleutel, { vet: id })} onWis={() => zetEigenLettertype(sleutel, { vet: '' })} />
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </fieldset>
             </div>

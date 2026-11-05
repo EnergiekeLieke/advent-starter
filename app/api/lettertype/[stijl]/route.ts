@@ -6,7 +6,9 @@ import { leesLettertype } from '@/lib/lettertypeOpslag';
 // zodat anderen er niet naar kunnen linken. Het bestand zelf kan een bezoeker nog steeds downloaden: de browser heeft het nodig om het te tonen.
 export async function GET(req: Request, { params }: { params: Promise<{ stijl: string }> }) {
   const { stijl } = await params;
-  if (stijl !== 'normaal' && stijl !== 'vet') return new Response(null, { status: 404 });
+  // normaal en vet horen bij het eerste eigen lettertype, normaal2 en vet2 bij het tweede
+  const keuze = ({ normaal: ['eigenLettertype', 'normaal'], vet: ['eigenLettertype', 'vet'], normaal2: ['eigenLettertype2', 'normaal'], vet2: ['eigenLettertype2', 'vet'] } as Record<string, ['eigenLettertype' | 'eigenLettertype2', 'normaal' | 'vet']>)[stijl];
+  if (!keuze) return new Response(null, { status: 404 });
 
   const toegestaan = ophalenToegestaan({
     secFetchSite: req.headers.get('sec-fetch-site'),
@@ -15,7 +17,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ stijl: s
   });
   if (!toegestaan) return new Response('Dit lettertype is alleen te gebruiken op de website waar het bij hoort.', { status: 403 });
 
-  const id = (await laadConfig()).eigenLettertype[stijl];
+  const id = (await laadConfig())[keuze[0]][keuze[1]];
   const ext = id ? extensieVan(id) : null;
   if (!id || !ext) return new Response(null, { status: 404 });
 

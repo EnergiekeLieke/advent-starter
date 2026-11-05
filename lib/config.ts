@@ -15,11 +15,12 @@ export const LETTERTYPES = {
   poppins:     { naam: 'Poppins',              stack: "var(--font-poppins), 'Segoe UI', Arial, sans-serif" },
   verdana:     { naam: 'Verdana',              stack: "Verdana, Geneva, 'DejaVu Sans', sans-serif" },
   // Het lettertype dat de beheerder zelf uploadt (zie components/EigenLettertypeStijl.tsx). Zonder upload valt het terug op sans-serif.
-  eigen:       { naam: 'Eigen lettertype',     stack: "'EigenLettertype', system-ui, 'Segoe UI', Arial, sans-serif" },
+  eigen:       { naam: 'Eigen lettertype 1',   stack: "'EigenLettertype', system-ui, 'Segoe UI', Arial, sans-serif" },
+  eigen2:      { naam: 'Eigen lettertype 2',   stack: "'EigenLettertype2', system-ui, 'Segoe UI', Arial, sans-serif" },
 } as const;
 
 export type Lettertype = keyof typeof LETTERTYPES;
-export const LETTERTYPE_SLEUTELS = ['serif', 'sierlijk', 'sans', 'rond', 'lato', 'baskerville', 'poppins', 'verdana', 'eigen'] as const;
+export const LETTERTYPE_SLEUTELS = ['serif', 'sierlijk', 'sans', 'rond', 'lato', 'baskerville', 'poppins', 'verdana', 'eigen', 'eigen2'] as const;
 
 // Waar een lettertype voor kan worden ingezet. Leeg betekent: het standaard lettertype van die plek (zie `lettertypeVoor`).
 export const LETTERTYPE_PLEKKEN = {
@@ -209,6 +210,7 @@ export const configSchema = z.object({
   lettertype: z.enum(LETTERTYPE_SLEUTELS, { error: 'Kies een van de beschikbare opties' }).default('serif'),
   lettertypes: lettertypesSchema.prefault({}),
   eigenLettertype: eigenLettertypeSchema.prefault({}),
+  eigenLettertype2: eigenLettertypeSchema.prefault({}),
   startDatum: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Gebruik een datum als 2026-12-01'),
   aantalDagen: z.number().int('Een heel getal graag').min(1, 'Minimaal 1 dag').max(MAX_DAGEN, `Maximaal ${MAX_DAGEN} dagen`).default(24),
   kleuren:    kleurenSchema.prefault({}),
@@ -231,7 +233,7 @@ const VELDNAMEN: Record<string, string> = {
   achtergrond: 'achtergrondkleur', accent: 'accentkleur', licht: 'lichte kleur', primair: 'primaire kleur',
   secundair: 'secundaire kleur', lettertype: 'lettertype', dagen: 'deurtjes', opties: 'opties',
   knoppen: 'knoppen', testmodus: 'testmodus', standaardLabel: 'standaard knoptekst', openen: 'openen', aan: 'knop aan', deurStijl: 'deurstijl',
-  herinneringUrl: 'link in de herinnering', teltekst: 'tekst onder de kalender', teltekstAan: 'tekst onder de kalender', lettertypes: 'lettertypes', eigenLettertype: 'eigen lettertype', normaal: 'gewoon lettertypebestand', vet: 'vet lettertypebestand', deurtjes: 'tekst op de deurtjes',
+  herinneringUrl: 'link in de herinnering', teltekst: 'tekst onder de kalender', teltekstAan: 'tekst onder de kalender', lettertypes: 'lettertypes', eigenLettertype: 'eigen lettertype 1', eigenLettertype2: 'eigen lettertype 2', normaal: 'gewoon lettertypebestand', vet: 'vet lettertypebestand', deurtjes: 'tekst op de deurtjes',
   popupKop: 'kop achter het deurtje', popupTekst: 'tekst achter het deurtje',
 };
 

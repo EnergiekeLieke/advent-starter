@@ -2,6 +2,10 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.9.0
+
+- Nieuw: je kunt nu twee eigen lettertypes uploaden in plaats van één. Bij elk lettertype upload je een bestand voor gewone tekst en eventueel een voor vette tekst. Beide verschijnen in de keuzelijstjes bij elk onderdeel, dus je kunt bijvoorbeeld het ene voor de titel en het andere voor de tekst achter de deurtjes gebruiken. Heb je al een eigen lettertype geüpload, dan staat dat nu bij "Eigen lettertype 1" en verandert er niets aan je kalender.
+
 ## v1.8.0
 
 - Nieuw: een eigen lettertype uploaden. Bij Algemeen, onder Lettertypes, upload je een bestand voor gewone tekst en eventueel een voor vette tekst (otf, ttf, woff of woff2, maximaal 2 MB per bestand). Daarna kies je het bij elk onderdeel, net als de andere lettertypes. Het werkt ook als de kalender is ingebed in een andere pagina.

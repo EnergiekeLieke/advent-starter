@@ -26,7 +26,7 @@ export async function PUT(req: Request) {
     const detail = fout instanceof Error ? (fout.message.split('\n')[0] ?? '').slice(0, 200) : '';
     return Response.json({ fouten: ['Opslaan is niet gelukt. Probeer het zo nog eens.', ...(detail ? [`Technische melding: ${detail}`] : [])] }, { status: 500 });
   }
-  const { normaal, vet } = uitkomst.config.eigenLettertype;
-  await ruimLettertypesOp([normaal, vet].filter(Boolean));
+  const { eigenLettertype: een, eigenLettertype2: twee } = uitkomst.config;
+  await ruimLettertypesOp([een.normaal, een.vet, twee.normaal, twee.vet].filter(Boolean));
   return Response.json({ ok: true, config: uitkomst.config });
 }

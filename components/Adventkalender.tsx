@@ -326,7 +326,7 @@ export default function Adventkalender({ config, datum, embed = false, preview =
   return (
     // Ingebed krijgt de kalender geen paginakleur en geen vaste minimale hoogte, zodat alleen de kaart zichtbaar is
     <div style={variabelen} data-markeer={preview && markeer ? markeer : undefined} data-kleur="licht" className={`${embed ? 'relative p-2' : 'min-h-screen bg-licht px-3 sm:px-4 py-6'} adv-vlak`}>
-      <EigenLettertypeStijl eigen={config.eigenLettertype} />
+      <EigenLettertypeStijl eigen={config.eigenLettertype} eigen2={config.eigenLettertype2} />
       {embed && <div ref={zichtRef} aria-hidden className="pointer-events-none absolute inset-0" />}
       {confettiKeys.map((k) => <Confetti key={k} kleuren={confettiSet} />)}
 
