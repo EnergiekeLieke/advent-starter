@@ -10,8 +10,8 @@ export const HUIDIGE_VERSIE: string = pakket.version;
 const TEMPLATE_REPO = process.env.TEMPLATE_REPO || 'EnergiekeLieke/advent-starter';
 const RAW = process.env.TEMPLATE_RAW_BASE || 'https://raw.githubusercontent.com';
 const API = process.env.TEMPLATE_API_BASE || 'https://api.github.com';
-// Een half uur is kort genoeg om een nieuwe versie snel te melden, en lang genoeg om GitHub niet te belasten
-const BEWAARTIJD_SECONDEN = 30 * 60;
+// Tien minuten is kort genoeg om een nieuwe versie snel te melden, en lang genoeg om GitHub niet te belasten
+const BEWAARTIJD_SECONDEN = 10 * 60;
 
 const parse = (tekst: string) => {
   const m = /^v?(\d+)\.(\d+)\.(\d+)$/.exec(tekst);
@@ -27,10 +27,11 @@ export function vergelijkVersies(a: string, b: string): number {
   return 0;
 }
 
-async function viaPackageJson(haal: typeof fetch): Promise<string | null> {
+// Bij `vers` slaan we onze eigen bewaartijd over (de knop Zoek naar updates). De query-string zorgt dat ook de cache van GitHub zelf niet meespeelt.
+async function viaPackageJson(haal: typeof fetch, vers: boolean): Promise<string | null> {
   try {
-    const res = await haal(`${RAW}/${TEMPLATE_REPO}/main/package.json`, {
-      next: { revalidate: BEWAARTIJD_SECONDEN },
+    const res = await haal(`${RAW}/${TEMPLATE_REPO}/main/package.json${vers ? `?t=${Date.now()}` : ''}`, {
+      ...(vers ? { cache: 'no-store' as const } : { next: { revalidate: BEWAARTIJD_SECONDEN } }),
       signal: AbortSignal.timeout(3000),
     });
     if (!res.ok) return null;
@@ -41,11 +42,11 @@ async function viaPackageJson(haal: typeof fetch): Promise<string | null> {
   }
 }
 
-async function viaTags(haal: typeof fetch): Promise<string | null> {
+async function viaTags(haal: typeof fetch, vers: boolean): Promise<string | null> {
   try {
     const res = await haal(`${API}/repos/${TEMPLATE_REPO}/tags?per_page=50`, {
       headers: { Accept: 'application/vnd.github+json' },
-      next: { revalidate: BEWAARTIJD_SECONDEN },
+      ...(vers ? { cache: 'no-store' as const } : { next: { revalidate: BEWAARTIJD_SECONDEN } }),
       signal: AbortSignal.timeout(3000),
     });
     if (!res.ok) return null;
@@ -58,8 +59,8 @@ async function viaTags(haal: typeof fetch): Promise<string | null> {
   }
 }
 
-export async function haalNieuwsteVersie(haal: typeof fetch = fetch): Promise<string | null> {
-  return (await viaPackageJson(haal)) ?? (await viaTags(haal));
+export async function haalNieuwsteVersie(haal: typeof fetch = fetch, vers = false): Promise<string | null> {
+  return (await viaPackageJson(haal, vers)) ?? (await viaTags(haal, vers));
 }
 
 /** Eigenaar en naam van de repo van deze kalender. Vercel geeft die mee, lokaal niet. */
@@ -80,8 +81,8 @@ export interface VersieInfo {
   workflowUrl: string;
 }
 
-export async function versieInfo(): Promise<VersieInfo> {
-  const nieuwste = await haalNieuwsteVersie();
+export async function versieInfo(vers = false): Promise<VersieInfo> {
+  const nieuwste = await haalNieuwsteVersie(fetch, vers);
   return {
     huidig: HUIDIGE_VERSIE,
     nieuwste: nieuwste && vergelijkVersies(nieuwste, HUIDIGE_VERSIE) > 0 ? nieuwste : null,

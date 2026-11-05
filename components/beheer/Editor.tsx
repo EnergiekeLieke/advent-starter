@@ -329,7 +329,9 @@ function UitlogVenster({ fouten, bezig, opOpslaan, opZonderOpslaan, opTerug }: {
   );
 }
 
-export default function Editor({ beginConfig, modus, versie }: { beginConfig: AdventConfig; modus: OpslagModus; versie: VersieInfo }) {
+export default function Editor({ beginConfig, modus, versie: beginVersie }: { beginConfig: AdventConfig; modus: OpslagModus; versie: VersieInfo }) {
+  // De versie-informatie komt bij het openen van de pagina mee, en wordt bijgewerkt met de knop Zoek naar updates
+  const [versie, setVersie] = useState(beginVersie);
   const router = useRouter();
   const [config, setConfig] = useState(beginConfig);
   const [opgeslagen, setOpgeslagen] = useState(() => JSON.stringify(beginConfig));
@@ -689,12 +691,12 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
           {tab === 'Algemeen' && (
             <div className="space-y-4">
               <Veld label="Titel van de kalender"><input className={INPUT} value={config.titel} maxLength={80} onChange={(e) => zet('titel', e.target.value)} /></Veld>
-              <Veld label="Grootte van de titel" hint="100% is de standaardgrootte. Een lange titel past beter met een kleinere grootte. Bij een grotere titel heb je in je embedcode misschien meer hoogte nodig: het advies bij Delen past zich aan.">
+              <Veld label="Grootte van de titel" hint="100% is de standaardgrootte. Een lange titel past beter met een kleinere grootte. Op een telefoon is de kaart smal: een heel grote titel breekt daar lange woorden af. Bij een grotere titel heb je in je embedcode misschien meer hoogte nodig: het advies bij Delen past zich aan.">
                 <div className="flex items-center gap-3">
                   <input
                     type="range"
                     min={60}
-                    max={160}
+                    max={200}
                     step={5}
                     value={config.titelGrootte}
                     onChange={(e) => zet('titelGrootte', Number(e.target.value))}
@@ -1089,7 +1091,7 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
             />
           )}
 
-          {tab === 'Updates' && <UpdatesTab versie={versie} gewijzigd={gewijzigd} bezig={bezig} kanOpslaan={controle.ok} opOpslaan={() => void bewaar()} />}
+          {tab === 'Updates' && <UpdatesTab versie={versie} opVersie={setVersie} gewijzigd={gewijzigd} bezig={bezig} kanOpslaan={controle.ok} opOpslaan={() => void bewaar()} />}
 
           {tab === 'Importeren en exporteren' && (
             <div className="space-y-4">

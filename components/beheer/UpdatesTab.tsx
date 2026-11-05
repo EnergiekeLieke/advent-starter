@@ -8,6 +8,8 @@ const WORKFLOW_PAD = '.github/workflows/update-van-template.yml';
 
 interface Props {
   versie: VersieInfo;
+  /** Zet nieuwe versie-informatie in de editor (na Zoek naar updates) */
+  opVersie: (versie: VersieInfo) => void;
   /** Zijn er wijzigingen die nog niet zijn opgeslagen? */
   gewijzigd: boolean;
   bezig: boolean;
@@ -16,10 +18,12 @@ interface Props {
   opOpslaan: () => void;
 }
 
-export default function UpdatesTab({ versie, gewijzigd, bezig, kanOpslaan, opOpslaan }: Props) {
+export default function UpdatesTab({ versie, opVersie, gewijzigd, bezig, kanOpslaan, opOpslaan }: Props) {
   const [workflow, setWorkflow] = useState<string | null>(null);
   const [laden, setLaden] = useState(true);
   const [bericht, setBericht] = useState<Bericht>(null);
+  const [zoekt, setZoekt] = useState(false);
+  const [zoekBericht, setZoekBericht] = useState<Bericht>(null);
 
   // De tekst van de update-knop halen we bij de template zelf op, zodat hij altijd de nieuwste is
   useEffect(() => {
@@ -48,6 +52,24 @@ export default function UpdatesTab({ versie, gewijzigd, bezig, kanOpslaan, opOps
     }
   }
 
+  async function zoekUpdates() {
+    setZoekt(true);
+    setZoekBericht(null);
+    try {
+      const res = await fetch('/api/beheer/versie');
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data) throw new Error(data?.fout ?? 'mislukt');
+      opVersie(data as VersieInfo);
+      setZoekBericht({
+        soort: 'ok',
+        regels: [(data as VersieInfo).nieuwste ? `Er is een nieuwe versie: ${(data as VersieInfo).nieuwste}.` : 'Je gebruikt de nieuwste versie.'],
+      });
+    } catch {
+      setZoekBericht({ soort: 'fout', regels: ['Zoeken naar updates lukt nu niet. Probeer het over een paar minuten nog eens.'] });
+    }
+    setZoekt(false);
+  }
+
   return (
     <div className="space-y-6">
       <section className="rounded-lg border border-slate-200 bg-white p-3 text-sm">
@@ -59,6 +81,14 @@ export default function UpdatesTab({ versie, gewijzigd, bezig, kanOpslaan, opOps
             'Er is geen nieuwere versie gevonden.'
           )}
         </p>
+        <div className="mt-2 flex flex-wrap items-center gap-3">
+          <button type="button" onClick={zoekUpdates} disabled={zoekt} className={KNOP}>{zoekt ? 'Zoeken...' : 'Zoek naar updates'}</button>
+          {zoekBericht && (
+            <span role={zoekBericht.soort === 'fout' ? 'alert' : 'status'} className={`text-sm ${zoekBericht.soort === 'ok' ? 'text-emerald-800' : 'text-red-800'}`}>
+              {zoekBericht.regels.join(' ')}
+            </span>
+          )}
+        </div>
         <p className="mt-1 text-xs text-slate-500">
           Een update vervangt alleen de code van je kalender. Je teksten, kleuren en logo staan in je eigen opslag en blijven bewaard.
         </p>

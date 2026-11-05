@@ -114,6 +114,9 @@ h1, h2, h3 {
 /* De titel schaalt mee met de instelling Grootte van de titel (standaard 100%) */
 .adv-titel {
   font-size: calc(1.875rem * var(--adv-titel-schaal, 1));
+  /* Een lang woord in een grote titel wordt afgebroken in plaats van buiten de kaart te vallen */
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 @media (min-width: 640px) {

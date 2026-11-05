@@ -207,7 +207,7 @@ export const configSchema = z.object({
   afsluiting: z.string().trim().max(200, 'De afsluiting is te lang').default(''),
   logoUrl:    afbeeldingUrl.default(''),
   // Grootte van de titel in procenten van de standaardgrootte
-  titelGrootte: z.number({ error: 'Kies een grootte voor de titel' }).int('Een heel getal graag').min(60, 'De titel mag niet kleiner dan 60%').max(160, 'De titel mag niet groter dan 160%').default(100),
+  titelGrootte: z.number({ error: 'Kies een grootte voor de titel' }).int('Een heel getal graag').min(60, 'De titel mag niet kleiner dan 60%').max(200, 'De titel mag niet groter dan 200%').default(100),
   // Het oorspronkelijke lettertype voor de titels. Blijft bestaan voor kalenders die het al hebben, de keuze per plek (`lettertypes`) gaat voor.
   lettertype: z.enum(LETTERTYPE_SLEUTELS, { error: 'Kies een van de beschikbare opties' }).default('serif'),
   lettertypes: lettertypesSchema.prefault({}),

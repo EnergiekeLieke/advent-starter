@@ -2,6 +2,11 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.10.1
+
+- De titel mag nu tot 200% groot worden (eerst 160%). Een heel lang woord in een grote titel breekt af in plaats van buiten de kaart te vallen. Op een telefoon zie je dat het eerst, want daar is de kaart smal.
+- Beter: de melding dat er een nieuwe versie is, verschijnt sneller. De kalender onthoudt de nieuwste versie nog maar 10 minuten in plaats van een half uur. Op het tabblad Updates staat ook een knop "Zoek naar updates", die meteen kijkt of er een nieuwere versie is.
+
 ## v1.10.0
 
 - Nieuw: de grootte van de titel van de kalender kun je zelf instellen, bij Algemeen met een schuifje van 60% tot 160% (100% is de standaardgrootte). Handig voor een lange titel, of juist voor een grote titel die opvalt. Het advies voor de hoogte van je embedcode bij Delen houdt rekening met de grootte. De grootte zit ook in "Kopieer mijn kleuren". Bestaande kalenders blijven op 100%.
