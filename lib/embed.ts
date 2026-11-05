@@ -18,7 +18,7 @@ function titelHoogte(titel: string, schaal: number, beschikbaar: number, breed: 
  * De getallen zijn gemeten in de echte kalender: 470 px voor titel, knoppen en voetregel (iets meer bij een heel smal of een breed scherm),
  * plus de rijen met deurtjes. Het advies houdt rekening met de langste fase (voor de start, want dan staat er extra tekst boven).
  */
-export function adviesIframeHoogte(aantalDagen: number, breedte = 600, metOnderkant = true, titel = '', titelGrootte = 100): number {
+export function adviesIframeHoogte(aantalDagen: number, breedte = 600, metOnderkant = true, titel = '', titelGrootte = 100, eigenOnderkant = false): number {
   const n = Math.max(1, Math.min(31, Math.round(Number.isFinite(aantalDagen) ? aantalDagen : 24)));
   const w = Math.max(280, Math.min(1400, Math.round(Number.isFinite(breedte) ? breedte : 600)));
 
@@ -31,7 +31,11 @@ export function adviesIframeHoogte(aantalDagen: number, breedte = 600, metOnderk
   const tegel = (kaart - marges - (kolommen - 1) * gat) / kolommen;
 
   const kopEnVoet = w < 400 ? 515 : breed ? 496 : 470;
-  const hoogte = kopEnVoet - (metOnderkant ? 0 : HOOGTE_ONDERKANT) + rijen * tegel + (rijen - 1) * gat;
+  // Een eigen afbeelding staat onder de tekst en is zo hoog als de kaart breed is gedeeld door zijn verhouding (computerversie vanaf 768 px, anders de telefoonversie), plus 16 px ruimte
+  // erboven. Daar gaat de normale ruimte onderaan (32 px) vanaf. Het landschap telt als vaste 112 px erbij.
+  const afbeeldingHoogte = kaart * (w >= 768 ? 140 / 1200 : 140 / 520);
+  const onderkantHoogte = eigenOnderkant ? Math.max(0, afbeeldingHoogte - 16) : 0;
+  const hoogte = kopEnVoet - (metOnderkant ? 0 : HOOGTE_ONDERKANT) + onderkantHoogte + rijen * tegel + (rijen - 1) * gat;
 
   // Een grotere of kleinere titel past op meer of minder regels en is zelf hoger. We schatten het verschil met de standaardgrootte.
   const titelVerschil = titelGrootte === 100 ? 0 : titelHoogte(titel, titelGrootte / 100, kaart - marges, breed) - titelHoogte(titel, 1, kaart - marges, breed);

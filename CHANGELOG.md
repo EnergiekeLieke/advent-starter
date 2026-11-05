@@ -2,6 +2,12 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.11.0
+
+- Nieuw: een eigen afbeelding onderaan de kalender. Kies bij Opties, bij de onderkant van de kalender, voor "Eigen afbeelding" en upload je afbeelding (of plak een link). Je kunt een versie voor de computer en een voor de telefoon aanleveren. Heb je er maar een, dan gebruikt de kalender die voor alle schermen.
+- Maten: voor de computer (schermen vanaf 768 px breed) 2400 × 280 px, voor de telefoon 1040 × 280 px. De afbeelding loopt over de hele breedte van de kaart en wordt zo hoog als zijn verhouding is. Past de verhouding niet, dan wordt hij bijgesneden. Het advies voor de hoogte van je embedcode bij Delen houdt er rekening mee.
+- De kalender in een Kennis Shop-les is meestal smaller dan 768 px en laat dus de telefoonversie zien. Lever die dus zeker aan.
+
 ## v1.10.1
 
 - De titel mag nu tot 200% groot worden (eerst 160%). Een heel lang woord in een grote titel breekt af in plaats van buiten de kaart te vallen. Op een telefoon zie je dat het eerst, want daar is de kaart smal.

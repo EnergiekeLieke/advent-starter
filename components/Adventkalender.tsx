@@ -125,10 +125,12 @@ export default function Adventkalender({ config, datum, embed = false, preview =
   const tegels = useMemo(() => tegelKleuren(config.kleuren), [config.kleuren]);
   const confettiSet = useMemo(() => confettiKleuren(config.kleuren), [config.kleuren]);
   const onderkant = opties.landschap;
-  const heeftOnderkant = onderkant !== 'geen';
+  // Een eigen afbeelding telt pas als er ook een is geüpload
+  const eigenAfbeelding = onderkant === 'eigen' && Boolean(opties.onderkantAfbeelding || opties.onderkantAfbeeldingMobiel);
+  const heeftOnderkant = onderkant !== 'geen' && (onderkant !== 'eigen' || eigenAfbeelding);
   // Alleen het winterlandschap en de zachte heuvels hebben de kerstboom waar elke dag een bal bij komt
   const heeftBoom = onderkant === 'winter' || onderkant === 'heuvels';
-  const palet = useMemo(() => landschapPalet(onderkant === 'geen' ? 'winter' : onderkant, config.kleuren), [onderkant, config.kleuren]);
+  const palet = useMemo(() => landschapPalet(onderkant === 'geen' || onderkant === 'eigen' ? 'winter' : onderkant, config.kleuren), [onderkant, config.kleuren]);
   const ballen = useMemo(() => [config.kleuren.accent, '#b8421f', config.kleuren.licht, config.kleuren.tegels[2]], [config.kleuren]);
   const variabelen = useMemo(() => cssVariabelen(config) as React.CSSProperties, [config]);
 
@@ -333,7 +335,7 @@ export default function Adventkalender({ config, datum, embed = false, preview =
       <div className="max-w-3xl mx-auto">
       <div
         data-kleur="achtergrond"
-        className={`adv-vlak relative overflow-hidden bg-nacht border-2 border-goud/60 shadow-xl rounded-3xl px-3 sm:px-10 pt-8 ${heeftOnderkant ? 'pb-36' : 'pb-8'}`}
+        className={`adv-vlak relative overflow-hidden bg-nacht border-2 border-goud/60 shadow-xl rounded-3xl px-3 sm:px-10 pt-8 ${eigenAfbeelding ? 'pb-0' : heeftOnderkant ? 'pb-36' : 'pb-8'}`}
       >
         {opties.sneeuw && <Sneeuw />}
         {opties.sterren && STERREN.map((s, i) => (
@@ -487,7 +489,21 @@ export default function Adventkalender({ config, datum, embed = false, preview =
           </p>
         )}
 
-        {onderkant !== 'geen' && (
+        {eigenAfbeelding && (
+          // Een eigen afbeelding loopt over de volle breedte van de kaart (tegen de randen aan) en bepaalt zelf de hoogte, zodat hij nooit over de tekst valt.
+          // Schermen vanaf 768 px breed krijgen de computerversie, smallere schermen (en de meeste insluitingen in Kennis Shop) de telefoonversie.
+          <picture>
+            {opties.onderkantAfbeelding && <source media="(min-width: 768px)" srcSet={opties.onderkantAfbeelding} />}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={opties.onderkantAfbeeldingMobiel || opties.onderkantAfbeelding}
+              alt=""
+              className="pointer-events-none mt-4 -mx-3 block aspect-[520/140] w-[calc(100%+1.5rem)] max-w-none object-cover object-bottom sm:-mx-10 sm:w-[calc(100%+5rem)] md:aspect-[1200/140]"
+            />
+          </picture>
+        )}
+
+        {heeftOnderkant && onderkant !== 'eigen' && (
           <>
             <Landschap compact stijl={onderkant} palet={palet} hangt={isOpen} sterAan={sterAan} aantal={aantal} accent={config.kleuren.accent} ballen={ballen} />
             <Landschap compact={false} stijl={onderkant} palet={palet} hangt={isOpen} sterAan={sterAan} aantal={aantal} accent={config.kleuren.accent} ballen={ballen} />

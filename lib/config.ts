@@ -36,10 +36,10 @@ export type LettertypePlek = keyof typeof LETTERTYPE_PLEKKEN;
 export const MAX_DAGEN = 31;
 
 // Onderkant van de kalender: winterlandschap met sneeuw, zachte heuvels in de themakleuren, golvende heuvels, een dorp
-// waar bij elk deurtje een raam gaat branden, of niets
-export const ONDERKANTEN = ['winter', 'heuvels', 'golven', 'dorp', 'geen'] as const;
+// waar bij elk deurtje een raam gaat branden, een eigen afbeelding (zie opties.onderkantAfbeelding), of niets
+export const ONDERKANTEN = ['winter', 'heuvels', 'golven', 'dorp', 'eigen', 'geen'] as const;
 export type Onderkant = (typeof ONDERKANTEN)[number];
-export type LandschapStijl = Exclude<Onderkant, 'geen'>;
+export type LandschapStijl = Exclude<Onderkant, 'geen' | 'eigen'>;
 
 // Hoe een deurtje opengaat: als zwaaideur, als ingepakt cadeautje, als omdraaikaartje of als schuifdeur
 export const DEURSTIJLEN = ['zwaai', 'cadeau', 'draai', 'schuif'] as const;
@@ -155,6 +155,10 @@ const optiesSchema = z.object({
   // De regel onder de kalender met het aantal geopende deurtjes. Leeg betekent: de standaardtekst. {open} en {totaal} worden ingevuld.
   teltekstAan: z.boolean().default(true),
   teltekst:    z.string().trim().max(120, 'De tekst onder de kalender is te lang (maximaal 120 tekens)').default(''),
+  // Eigen afbeelding onderaan de kalender (bij landschap 'eigen'): een voor schermen vanaf 768 px breed en een voor smallere schermen.
+  // Is er maar één, dan gebruikt de kalender die voor alle schermen.
+  onderkantAfbeelding:       afbeeldingUrl.default(''),
+  onderkantAfbeeldingMobiel: afbeeldingUrl.default(''),
   deurStijl:   z.enum(DEURSTIJLEN, { error: 'Kies een van de beschikbare opties' }).default('zwaai'),
 });
 
@@ -235,7 +239,7 @@ const VELDNAMEN: Record<string, string> = {
   achtergrond: 'achtergrondkleur', accent: 'accentkleur', licht: 'lichte kleur', primair: 'primaire kleur',
   secundair: 'secundaire kleur', lettertype: 'lettertype', dagen: 'deurtjes', opties: 'opties',
   knoppen: 'knoppen', testmodus: 'testmodus', standaardLabel: 'standaard knoptekst', openen: 'openen', aan: 'knop aan', deurStijl: 'deurstijl',
-  herinneringUrl: 'link in de herinnering', teltekst: 'tekst onder de kalender', teltekstAan: 'tekst onder de kalender', titelGrootte: 'grootte van de titel', lettertypes: 'lettertypes', eigenLettertype: 'eigen lettertype 1', eigenLettertype2: 'eigen lettertype 2', normaal: 'gewoon lettertypebestand', vet: 'vet lettertypebestand', deurtjes: 'tekst op de deurtjes',
+  herinneringUrl: 'link in de herinnering', teltekst: 'tekst onder de kalender', onderkantAfbeelding: 'afbeelding onderkant (computer)', onderkantAfbeeldingMobiel: 'afbeelding onderkant (telefoon)', teltekstAan: 'tekst onder de kalender', titelGrootte: 'grootte van de titel', lettertypes: 'lettertypes', eigenLettertype: 'eigen lettertype 1', eigenLettertype2: 'eigen lettertype 2', normaal: 'gewoon lettertypebestand', vet: 'vet lettertypebestand', deurtjes: 'tekst op de deurtjes',
   popupKop: 'kop achter het deurtje', popupTekst: 'tekst achter het deurtje',
 };
 

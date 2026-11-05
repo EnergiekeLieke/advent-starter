@@ -150,15 +150,16 @@ const ONDERKANT_KEUZES: { waarde: Onderkant; naam: string; uitleg: string }[] = 
   { waarde: 'heuvels', naam: 'Zachte heuvels', uitleg: 'Huisje en kerstboom in de kleuren van je thema, zonder sneeuw. Past bij lichte kleuren.' },
   { waarde: 'golven', naam: 'Golvende heuvels', uitleg: 'Alleen heuvels in de kleuren van je thema, zonder kerstboom. Ook mooi buiten de feestdagen.' },
   { waarde: 'dorp', naam: 'Dorpje met lichtjes', uitleg: 'Een rij huisjes met een kerkje in de kleuren van je thema. Bij elk geopend deurtje gaat er een raam branden.' },
+  { waarde: 'eigen', naam: 'Eigen afbeelding', uitleg: 'Een afbeelding die jij uploadt, bijvoorbeeld een illustratie of je eigen merkbeeld. Je kunt een versie voor de computer en een voor de telefoon aanleveren.' },
   { waarde: 'geen', naam: 'Geen onderkant', uitleg: 'Alleen de deurtjes, zonder landschap.' },
 ];
 
 // Kleine tekening van een onderkant, in de kleuren van het gekozen thema
 function OnderkantMini({ waarde, kleuren }: { waarde: Onderkant; kleuren: AdventKleuren }) {
-  if (waarde === 'geen') {
+  if (waarde === 'geen' || waarde === 'eigen') {
     return (
       <span aria-hidden className="flex h-12 items-center justify-center rounded-lg border border-dashed border-slate-400 text-xs text-slate-400" style={{ background: kleuren.achtergrond }}>
-        geen
+        {waarde === 'geen' ? 'geen' : 'eigen afbeelding'}
       </span>
     );
   }
@@ -429,7 +430,7 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
 
   function kiesThema(naam: ThemaNaam) {
     const k = THEMAS[naam].kleuren;
-    setConfig((c) => ({ ...c, kleuren: { ...k, tegels: [...k.tegels] }, opties: { ...c.opties, landschap: THEMAS[naam].landschap } }));
+    setConfig((c) => ({ ...c, kleuren: { ...k, tegels: [...k.tegels] }, opties: { ...c.opties, landschap: c.opties.landschap === 'eigen' ? 'eigen' : THEMAS[naam].landschap } }));
   }
 
   function zetLettertype(plek: LettertypePlek, waarde: Lettertype) {
@@ -1076,6 +1077,43 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
                     </label>
                   ))}
                 </div>
+                {config.opties.landschap === 'eigen' && (
+                  <div className="mt-3 space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-3">
+                    <p className="text-sm font-medium">Je eigen afbeelding onderaan de kalender</p>
+                    <div className="space-y-1 rounded-lg border border-sky-200 bg-sky-50 p-3 text-xs text-sky-950">
+                      <p className="font-semibold">Zo maak je hem</p>
+                      <ul className="ml-4 list-disc space-y-1">
+                        <li><strong>Computer en laptop</strong> (schermen vanaf 768 px breed): <strong>2400 × 280 px</strong>. Hij wordt getoond op ongeveer 770 × 90 px, dus dit is ook scherp op een scherm met veel pixels.</li>
+                        <li><strong>Telefoon</strong>: <strong>1040 × 280 px</strong>. Getoond op ongeveer 360 × 97 px. Let op: de kalender in je Kennis Shop-les is meestal smaller dan 768 px en laat dus ook de telefoonversie zien. Lever die dus zeker aan.</li>
+                        <li>Heb je er maar één? Dan gebruikt de kalender die voor alle schermen.</li>
+                        <li>Past de verhouding niet? Dan wordt de afbeelding bijgesneden. De onderkant blijft staan, de bovenkant en de zijkanten gaan eraf. Houd belangrijke dingen dus niet te dicht bij de rand.</li>
+                        <li>Een png of webp met een doorzichtige achtergrond werkt prima: de kleur van de kaart schijnt er dan doorheen. Maximaal 2 MB, dus kies voor webp of jpg als een png te groot is.</li>
+                      </ul>
+                    </div>
+                    {([
+                      { sleutel: 'onderkantAfbeelding', kop: 'Computer en laptop', maat: '2400 × 280 px' },
+                      { sleutel: 'onderkantAfbeeldingMobiel', kop: 'Telefoon', maat: '1040 × 280 px' },
+                    ] as const).map(({ sleutel, kop, maat }) => (
+                      <div key={sleutel} className="space-y-2 rounded-lg border border-slate-200 bg-white p-3">
+                        <p className="text-sm font-semibold">{kop} <span className="font-normal text-slate-500">({maat})</span></p>
+                        {config.opties[sleutel] && (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={config.opties[sleutel]} alt="" className="max-h-24 w-full rounded-lg border border-slate-200 object-cover object-bottom" style={{ background: config.kleuren.achtergrond }} />
+                        )}
+                        <div className="flex flex-wrap items-start gap-2">
+                          <UploadKnop label={config.opties[sleutel] ? 'Vervang afbeelding' : 'Afbeelding uploaden'} onUrl={(url) => zetOptie(sleutel, url)} />
+                          {config.opties[sleutel] && <button type="button" onClick={() => zetOptie(sleutel, '')} className={KNOP}>Verwijder</button>}
+                        </div>
+                        <Veld label="Of plak een link" hint="Een link die met https:// begint.">
+                          <input className={INPUT} value={config.opties[sleutel]} maxLength={500} onChange={(e) => zetOptie(sleutel, e.target.value.trim())} placeholder="https://" />
+                        </Veld>
+                      </div>
+                    ))}
+                    {!config.opties.onderkantAfbeelding && !config.opties.onderkantAfbeeldingMobiel && (
+                      <p className="rounded-lg border border-amber-300 bg-amber-50 p-2 text-xs text-amber-950">Je hebt nog geen afbeelding geüpload, dus onderaan de kalender staat nu niets. Upload er minstens een.</p>
+                    )}
+                  </div>
+                )}
               </fieldset>
             </div>
           )}
