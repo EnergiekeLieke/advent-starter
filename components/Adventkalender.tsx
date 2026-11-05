@@ -358,11 +358,11 @@ export default function Adventkalender({ config, datum, embed = false, preview =
               className="mx-auto mb-3 w-auto max-w-full object-contain max-h-16 sm:max-h-20"
             />
           )}
-          <h1 className="adv-goudtekst font-kop font-bold leading-tight text-3xl sm:text-5xl">
+          <h1 className="adv-goudtekst font-titel font-bold leading-tight text-3xl sm:text-5xl">
             {config.titel}
           </h1>
           {config.ondertitel && (
-            <p className="mt-2 text-xs sm:text-sm tracking-[0.25em] uppercase text-opach/80">
+            <p className="mt-2 font-onder text-xs sm:text-sm tracking-[0.25em] uppercase text-opach/80">
               {config.ondertitel}
             </p>
           )}
@@ -410,7 +410,7 @@ export default function Adventkalender({ config, datum, embed = false, preview =
                     {/* Binnenkant: warm goudglanzend, zodat open nooit op een dichte deur lijkt */}
                     <span className="adv-binnen absolute inset-0 rounded-xl border-2 border-goud flex flex-col items-center justify-center text-primair">
                       <AdventIcoon nr={dag - 1} className={`${dicht ? 'invisible ' : ''}w-9 h-9 sm:w-12 sm:h-12`} />
-                      <span className={`${dicht ? 'invisible ' : ''}mt-0.5 sm:mt-1 font-kop font-bold text-[9px] sm:text-xs ${isVandaag ? 'text-secundair' : ''}`}>
+                      <span className={`${dicht ? 'invisible ' : ''}mt-0.5 sm:mt-1 font-deur font-bold text-[9px] sm:text-xs ${isVandaag ? 'text-secundair' : ''}`}>
                         {isVandaag ? 'Vandaag' : datumLabel}
                       </span>
                     </span>
@@ -430,7 +430,7 @@ export default function Adventkalender({ config, datum, embed = false, preview =
                           className={opties.deurStijl === 'cadeau' ? 'relative flex flex-col items-center rounded-lg px-1.5 py-1 sm:px-2.5 sm:py-1.5' : 'contents'}
                           style={opties.deurStijl === 'cadeau' ? { backgroundColor: t.bg } : undefined}
                         >
-                          <span className="font-kop font-bold leading-none text-2xl sm:text-4xl">{dag}</span>
+                          <span className="font-deur font-bold leading-none text-2xl sm:text-4xl">{dag}</span>
                           <AdventIcoon nr={dag - 1} className="mt-1 w-5 h-5 sm:w-6 sm:h-6" />
                         </span>
                       </span>
@@ -453,7 +453,7 @@ export default function Adventkalender({ config, datum, embed = false, preview =
           ) : fase === 'na' && config.afsluiting ? (
             <p className="text-opach text-sm sm:text-base">Alle deurtjes zijn open. {config.afsluiting}</p>
           ) : config.footer ? (
-            <p className="text-opach/80 text-sm sm:text-base font-kop italic">
+            <p className="text-opach/80 text-sm sm:text-base font-titel italic">
               {config.footer}
               <span className="block text-goud text-lg mt-1" aria-hidden>♥</span>
             </p>
@@ -498,7 +498,7 @@ export default function Adventkalender({ config, datum, embed = false, preview =
             onTouchStart={(e) => { swipeStart.current = e.touches[0].clientX; }}
             onTouchEnd={(e) => opSwipeEinde(e.changedTouches[0].clientX)}
             style={embed && zicht ? { maxHeight: Math.max(240, zicht.hoogte - 32) } : undefined}
-            className={`adv-popup relative w-full max-w-md ${embed && zicht ? '' : 'max-h-[85vh]'} overflow-y-auto rounded-3xl bg-licht border-4 shadow-2xl text-center ${opdracht ? 'border-primair' : 'border-goud'}`}
+            className={`adv-popup font-poptekst relative w-full max-w-md ${embed && zicht ? '' : 'max-h-[85vh]'} overflow-y-auto rounded-3xl bg-licht border-4 shadow-2xl text-center ${opdracht ? 'border-primair' : 'border-goud'}`}
           >
             <div className={`border-b-2 border-goud py-2 text-xs tracking-[0.25em] uppercase ${opdracht ? 'bg-primair text-oppri' : 'bg-secundair text-opsec'}`}>
               ✦ {opdracht ? 'Opdracht' : 'Dag'} {inhoud.dag} van {aantal} ✦
@@ -528,7 +528,7 @@ export default function Adventkalender({ config, datum, embed = false, preview =
                 <div className="adv-medaillon mx-auto flex h-20 w-20 items-center justify-center rounded-full border-2 border-goud text-secundair">
                   <AdventIcoon nr={inhoud.dag - 1} className="h-11 w-11" />
                 </div>
-                <h2 className="font-kop text-2xl font-bold text-primair mt-4">{inhoud.titel}</h2>
+                <h2 className="font-popkop text-2xl font-bold text-primair mt-4">{inhoud.titel}</h2>
                 {inhoud.tekst && <p className="mt-3 text-inkt leading-relaxed whitespace-pre-line">{inhoud.tekst}</p>}
                 {inhoud.afbeelding && (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -558,7 +558,7 @@ export default function Adventkalender({ config, datum, embed = false, preview =
                   </a>
                 )}
                 {inhoud.dag === aantal && config.afsluiting && (
-                  <p className="mt-5 font-kop italic text-secundair text-lg">
+                  <p className="mt-5 font-popkop italic text-secundair text-lg">
                     ✦ {config.afsluiting} ✦
                   </p>
                 )}

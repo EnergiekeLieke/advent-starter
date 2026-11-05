@@ -2,6 +2,12 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.3.0
+
+- Nieuw: lettertypes per onderdeel. In het tabblad Algemeen kies je apart een lettertype voor de titel, de ondertitel, de tekst op de deurtjes, de kop achter de deurtjes en de tekst achter de deurtjes. Onder elke keuze zie je meteen hoe het eruitziet.
+- Nieuw: Lato, Libre Baskerville, Poppins en Verdana als keuze, naast de lettertypes die er al waren. De eerste drie worden vanaf je eigen site getoond, dus je bezoekers maken geen contact met Google.
+- Bestaande kalenders zien er na de update hetzelfde uit: wat je eerder als lettertype koos, blijft gelden voor de titel, de deurtjes en de kop.
+
 ## v1.2.2
 
 - Bij het audioveld staat nu dat een privé-nummer de volledige deellink nodig heeft (die eindigt op `/s-...`).

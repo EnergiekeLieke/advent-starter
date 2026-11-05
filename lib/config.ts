@@ -2,14 +2,31 @@ import { z } from 'zod';
 import { AUDIO_FOUTMELDING, audioGeldig, schoonAudio } from '@/lib/audio';
 
 // ─── Lettertypes ──────────────────────────────────────────────
+// Lato, Libre Baskerville en Poppins worden in app/layout.tsx met next/font geladen (van je eigen site, niet van Google).
+// Verdana staat al op de meeste computers, daar valt het terug op een vergelijkbaar lettertype.
 export const LETTERTYPES = {
-  serif:    { naam: 'Klassiek (serif)',  stack: "Georgia, 'Times New Roman', serif" },
-  sierlijk: { naam: 'Sierlijk',          stack: "'Palatino Linotype', Palatino, 'Book Antiqua', serif" },
-  sans:     { naam: 'Strak (sans-serif)', stack: "system-ui, 'Segoe UI', Roboto, Arial, sans-serif" },
-  rond:     { naam: 'Rond en vriendelijk', stack: "'Trebuchet MS', 'Segoe UI', Verdana, sans-serif" },
+  serif:       { naam: 'Klassiek (serif)',     stack: "Georgia, 'Times New Roman', serif" },
+  sierlijk:    { naam: 'Sierlijk',             stack: "'Palatino Linotype', Palatino, 'Book Antiqua', serif" },
+  sans:        { naam: 'Strak (sans-serif)',   stack: "system-ui, 'Segoe UI', Roboto, Arial, sans-serif" },
+  rond:        { naam: 'Rond en vriendelijk',  stack: "'Trebuchet MS', 'Segoe UI', Verdana, sans-serif" },
+  lato:        { naam: 'Lato',                 stack: "var(--font-lato), 'Segoe UI', Arial, sans-serif" },
+  baskerville: { naam: 'Libre Baskerville',    stack: "var(--font-baskerville), Georgia, 'Times New Roman', serif" },
+  poppins:     { naam: 'Poppins',              stack: "var(--font-poppins), 'Segoe UI', Arial, sans-serif" },
+  verdana:     { naam: 'Verdana',              stack: "Verdana, Geneva, 'DejaVu Sans', sans-serif" },
 } as const;
 
 export type Lettertype = keyof typeof LETTERTYPES;
+export const LETTERTYPE_SLEUTELS = ['serif', 'sierlijk', 'sans', 'rond', 'lato', 'baskerville', 'poppins', 'verdana'] as const;
+
+// Waar een lettertype voor kan worden ingezet. Leeg betekent: het standaard lettertype van die plek (zie `lettertypeVoor`).
+export const LETTERTYPE_PLEKKEN = {
+  titel:      { naam: 'Titel',                                 uitleg: 'De grote titel bovenaan en de voettekst.' },
+  ondertitel: { naam: 'Ondertitel',                            uitleg: 'Het regeltje onder de titel.' },
+  deurtjes:   { naam: 'Tekst op de deurtjes',                  uitleg: 'Het nummer en de datum op de deurtjes.' },
+  popupKop:   { naam: 'Tekst achter de deurtjes (kop)',        uitleg: 'De titel van het deurtje als het openstaat.' },
+  popupTekst: { naam: 'Tekst achter de deurtjes (inhoud)',     uitleg: 'De tekst, de knop en de balkjes in het deurtje.' },
+} as const;
+export type LettertypePlek = keyof typeof LETTERTYPE_PLEKKEN;
 
 // Een kalender heeft standaard 24 deurtjes en maximaal 31 (een hele maand)
 export const MAX_DAGEN = 31;
@@ -158,13 +175,24 @@ export const dagSchema = z.object({
   audio: audioUrl.default(''),
 });
 
+const lettertypeKeuze = z.enum([...LETTERTYPE_SLEUTELS, ''], { error: 'Kies een van de beschikbare opties' }).default('');
+const lettertypesSchema = z.object({
+  titel: lettertypeKeuze,
+  ondertitel: lettertypeKeuze,
+  deurtjes: lettertypeKeuze,
+  popupKop: lettertypeKeuze,
+  popupTekst: lettertypeKeuze,
+});
+
 export const configSchema = z.object({
   titel:      z.string().trim().min(1, 'Geef de kalender een titel').max(80, 'De titel is te lang (maximaal 80 tekens)'),
   ondertitel: z.string().trim().max(120, 'De ondertitel is te lang').default(''),
   footer:     z.string().trim().max(200, 'De voettekst is te lang').default(''),
   afsluiting: z.string().trim().max(200, 'De afsluiting is te lang').default(''),
   logoUrl:    afbeeldingUrl.default(''),
-  lettertype: z.enum(['serif', 'sierlijk', 'sans', 'rond'], { error: 'Kies een van de beschikbare opties' }).default('serif'),
+  // Het oorspronkelijke lettertype voor de titels. Blijft bestaan voor kalenders die het al hebben, de keuze per plek (`lettertypes`) gaat voor.
+  lettertype: z.enum(LETTERTYPE_SLEUTELS, { error: 'Kies een van de beschikbare opties' }).default('serif'),
+  lettertypes: lettertypesSchema.prefault({}),
   startDatum: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Gebruik een datum als 2026-12-01'),
   aantalDagen: z.number().int('Een heel getal graag').min(1, 'Minimaal 1 dag').max(MAX_DAGEN, `Maximaal ${MAX_DAGEN} dagen`).default(24),
   kleuren:    kleurenSchema.prefault({}),
@@ -187,8 +215,16 @@ const VELDNAMEN: Record<string, string> = {
   achtergrond: 'achtergrondkleur', accent: 'accentkleur', licht: 'lichte kleur', primair: 'primaire kleur',
   secundair: 'secundaire kleur', lettertype: 'lettertype', dagen: 'deurtjes', opties: 'opties',
   knoppen: 'knoppen', testmodus: 'testmodus', standaardLabel: 'standaard knoptekst', openen: 'openen', aan: 'knop aan', deurStijl: 'deurstijl',
-  herinneringUrl: 'link in de herinnering',
+  herinneringUrl: 'link in de herinnering', lettertypes: 'lettertypes', deurtjes: 'tekst op de deurtjes',
+  popupKop: 'kop achter het deurtje', popupTekst: 'tekst achter het deurtje',
 };
+
+/** Het lettertype voor een plek. Is er niets gekozen, dan geldt het oude standaardgedrag: sans voor lopende tekst, het titel-lettertype voor de rest. */
+export function lettertypeVoor(config: Pick<AdventConfig, 'lettertype' | 'lettertypes'>, plek: LettertypePlek): Lettertype {
+  const keuze = config.lettertypes[plek];
+  if (keuze !== '') return keuze;
+  return plek === 'ondertitel' || plek === 'popupTekst' ? 'sans' : config.lettertype;
+}
 
 function padNaarTekst(pad: PropertyKey[]): string {
   if (pad[0] === 'dagen' && typeof pad[1] === 'number') {

@@ -20,7 +20,11 @@ const config: Config = {
         opsec: kleur('opsec'),         // tekst op secundair
       },
       fontFamily: {
-        kop: ['var(--adv-font-kop)'],
+        titel: ['var(--adv-font-titel)'],
+        onder: ['var(--adv-font-onder)'],
+        deur: ['var(--adv-font-deur)'],
+        popkop: ['var(--adv-font-popkop)'],
+        poptekst: ['var(--adv-font-poptekst)'],
       },
     },
   },

@@ -8,7 +8,7 @@ body {
 }
 
 h1, h2, h3 {
-  font-family: var(--adv-font-kop, Georgia, serif);
+  font-family: var(--adv-font-titel, Georgia, serif);
 }
 
 :focus-visible {

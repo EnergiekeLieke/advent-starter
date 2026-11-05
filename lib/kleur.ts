@@ -1,4 +1,4 @@
-import { LETTERTYPES, type AdventConfig, type AdventKleuren, type LandschapStijl } from '@/lib/config';
+import { LETTERTYPES, lettertypeVoor, type AdventConfig, type AdventKleuren, type LandschapStijl } from '@/lib/config';
 
 function hexNaarRgb(hex: string): [number, number, number] {
   const h = hex.replace('#', '');
@@ -63,7 +63,11 @@ export function cssVariabelen(config: AdventConfig): Record<string, string> {
     '--adv-opach': rgb(leesbaar(k.achtergrond, [k.licht, k.tekst])),
     '--adv-oppri': rgb(leesbaar(k.primair, [k.licht, k.tekst])),
     '--adv-opsec': rgb(leesbaar(k.secundair, [k.licht, k.tekst])),
-    '--adv-font-kop': LETTERTYPES[config.lettertype].stack,
+    '--adv-font-titel': LETTERTYPES[lettertypeVoor(config, 'titel')].stack,
+    '--adv-font-onder': LETTERTYPES[lettertypeVoor(config, 'ondertitel')].stack,
+    '--adv-font-deur': LETTERTYPES[lettertypeVoor(config, 'deurtjes')].stack,
+    '--adv-font-popkop': LETTERTYPES[lettertypeVoor(config, 'popupKop')].stack,
+    '--adv-font-poptekst': LETTERTYPES[lettertypeVoor(config, 'popupTekst')].stack,
   };
 }
 

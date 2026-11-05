@@ -10,7 +10,7 @@ import AdventIcoon from '@/components/AdventIcoon';
 import { Omhulsel } from '@/components/Adventkalender';
 import { BERICHT_CONFIG, BERICHT_KLAAR } from '@/components/KalenderPagina';
 import { AUDIO_FOUTMELDING, audioGeldig, schoonAudio } from '@/lib/audio';
-import { dagenVoor, LETTERTYPES, leesConfig, MAX_DAGEN, THEMAS, themaVan, type AdventConfig, type AdventDag, type AdventKleuren, type DeurStijl, type Lettertype, type Onderkant, type ThemaNaam } from '@/lib/config';
+import { dagenVoor, LETTERTYPE_PLEKKEN, LETTERTYPES, lettertypeVoor, leesConfig, MAX_DAGEN, THEMAS, themaVan, type AdventConfig, type AdventDag, type AdventKleuren, type DeurStijl, type Lettertype, type LettertypePlek, type Onderkant, type ThemaNaam } from '@/lib/config';
 import standaardConfig from '@/config/advent.json';
 import { labelKort, parseIso, plusDagen } from '@/lib/datum';
 import { contrast, cssVariabelen, landschapPalet, tegelKleuren } from '@/lib/kleur';
@@ -149,7 +149,7 @@ function DeurMini({ waarde, config, open }: { waarde: DeurStijl; config: AdventC
                   className={waarde === 'cadeau' ? 'rounded-lg px-2 py-1' : 'contents'}
                   style={waarde === 'cadeau' ? { backgroundColor: tegel.bg } : undefined}
                 >
-                  <span className="font-kop text-2xl font-bold leading-none">7</span>
+                  <span className="font-deur text-2xl font-bold leading-none">7</span>
                 </span>
               </span>
             </span>
@@ -273,6 +273,10 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
   function kiesThema(naam: ThemaNaam) {
     const k = THEMAS[naam].kleuren;
     setConfig((c) => ({ ...c, kleuren: { ...k, tegels: [...k.tegels] }, opties: { ...c.opties, landschap: THEMAS[naam].landschap } }));
+  }
+
+  function zetLettertype(plek: LettertypePlek, waarde: Lettertype) {
+    setConfig((c) => ({ ...c, lettertypes: { ...c.lettertypes, [plek]: waarde } }));
   }
 
   function zetOptie<K extends keyof AdventConfig['opties']>(naam: K, waarde: AdventConfig['opties'][K]) {
@@ -484,11 +488,21 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
                   />
                 </Veld>
               </div>
-              <Veld label="Lettertype voor de titels">
-                <select className={INPUT} value={config.lettertype} onChange={(e) => zet('lettertype', e.target.value as Lettertype)}>
-                  {(Object.keys(LETTERTYPES) as Lettertype[]).map((l) => <option key={l} value={l}>{LETTERTYPES[l].naam}</option>)}
-                </select>
-              </Veld>
+              <fieldset className="space-y-3 rounded-lg border border-slate-200 bg-white p-4">
+                <legend className="px-1 text-sm font-medium">Lettertypes</legend>
+                <p className="text-xs text-slate-500">Kies per onderdeel een lettertype. Onder de keuze zie je meteen hoe het eruitziet.</p>
+                {(Object.keys(LETTERTYPE_PLEKKEN) as LettertypePlek[]).map((plek) => {
+                  const gekozen = lettertypeVoor(config, plek);
+                  return (
+                    <Veld key={plek} label={LETTERTYPE_PLEKKEN[plek].naam} hint={LETTERTYPE_PLEKKEN[plek].uitleg}>
+                      <select className={INPUT} value={gekozen} onChange={(e) => zetLettertype(plek, e.target.value as Lettertype)}>
+                        {(Object.keys(LETTERTYPES) as Lettertype[]).map((l) => <option key={l} value={l}>{LETTERTYPES[l].naam}</option>)}
+                      </select>
+                      <p className="mt-1 text-lg text-slate-700" style={{ fontFamily: LETTERTYPES[gekozen].stack }}>Achter elk deurtje 1 2 3 ✦</p>
+                    </Veld>
+                  );
+                })}
+              </fieldset>
             </div>
           )}
 
