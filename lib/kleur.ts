@@ -56,17 +56,25 @@ function cssUrl(adres: string): string {
   return `url("${adres.replace(/["\\\n\r]/g, (c) => encodeURIComponent(c))}")`;
 }
 
+// Een link telt pas als hij geldig is: tijdens het typen van een link (bijvoorbeeld 'h' of 'http:/') gebruiken we hem nog niet
+export const isGeldigeAfbeeldingUrl = (v: string): boolean => /^https:\/\//i.test(v) || v.startsWith('/');
+
 /** Heeft de kalender een eigen achtergrondafbeelding? Dan vervangt die de achtergrondkleur en de onderkant. */
 export function heeftAchtergrondAfbeelding(opties: AdventConfig['opties']): boolean {
-  return Boolean(opties.achtergrondAfbeelding || opties.achtergrondAfbeeldingMobiel);
+  return isGeldigeAfbeeldingUrl(opties.achtergrondAfbeelding) || isGeldigeAfbeeldingUrl(opties.achtergrondAfbeeldingMobiel);
+}
+
+/** Heeft elk geopend deurtje een eigen achtergrondafbeelding? */
+export function heeftPopupAchtergrond(opties: AdventConfig['opties']): boolean {
+  return isGeldigeAfbeeldingUrl(opties.popupAchtergrond);
 }
 
 function achtergrondVariabelen(config: AdventConfig): Record<string, string> {
   const { achtergrondAfbeelding: pc, achtergrondAfbeeldingMobiel: mob, achtergrondTekst, achtergrondLaag } = config.opties;
-  if (!pc && !mob) return {};
+  if (!heeftAchtergrondAfbeelding(config.opties)) return {};
   return {
-    ...(pc ? { '--adv-bg-pc': cssUrl(pc) } : {}),
-    ...(mob ? { '--adv-bg-mob': cssUrl(mob) } : {}),
+    ...(isGeldigeAfbeeldingUrl(pc) ? { '--adv-bg-pc': cssUrl(pc) } : {}),
+    ...(isGeldigeAfbeeldingUrl(mob) ? { '--adv-bg-mob': cssUrl(mob) } : {}),
     '--adv-laag-kleur': achtergrondTekst === 'donker' ? '255 255 255' : '0 0 0',
     '--adv-laag': String(achtergrondLaag / 100),
   };
@@ -75,9 +83,11 @@ function achtergrondVariabelen(config: AdventConfig): Record<string, string> {
 // Een eigen afbeelding achter de tekst in elk geopend deurtje. Bij lichte tekst ligt er een donkere laag over, bij donkere tekst een lichte.
 function popupVariabelen(config: AdventConfig): Record<string, string> {
   const { popupAchtergrond, popupAchtergrondTekst, popupAchtergrondLaag } = config.opties;
-  if (!popupAchtergrond) return {};
+  if (!heeftPopupAchtergrond(config.opties)) return {};
   return {
     '--adv-popup-bg': cssUrl(popupAchtergrond),
+    // Terwijl de afbeelding laadt (of niet laadt) staat de tekst op een kleur die erbij past: lichte tekst op donker, donkere tekst op licht
+    '--adv-popup-reserve': rgb(popupAchtergrondTekst === 'licht' ? config.kleuren.achtergrond : config.kleuren.licht),
     '--adv-popup-laag-kleur': popupAchtergrondTekst === 'licht' ? '0 0 0' : '255 255 255',
     '--adv-popup-laag': String(popupAchtergrondLaag / 100),
     '--adv-popup-tekst': rgb(config.kleuren.licht),
@@ -93,7 +103,8 @@ export function cssVariabelen(config: AdventConfig): Record<string, string> {
   return {
     ...achtergrondVariabelen(config),
     ...popupVariabelen(config),
-    '--adv-nacht': rgb(k.achtergrond),
+    // Met een afbeelding is dit de kleur terwijl de afbeelding laadt (of niet laadt): passend bij de gekozen tekstkleur, anders is de tekst niet te lezen
+    '--adv-nacht': rgb(metAfbeelding && config.opties.achtergrondTekst === 'donker' ? k.licht : k.achtergrond),
     '--adv-goud': rgb(k.accent),
     '--adv-goud-donker': meng(k.accent, '#000000', lichteAchtergrond ? 0.4 : 0.25),
     '--adv-goud-licht': lichteAchtergrond ? meng(k.accent, '#000000', 0.12) : meng(k.accent, '#ffffff', 0.45),

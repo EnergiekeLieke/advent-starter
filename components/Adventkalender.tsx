@@ -7,7 +7,7 @@ import { Landschap, Sneeuw, STERREN, Strik } from '@/components/AdventDecor';
 import EigenLettertypeStijl from '@/components/EigenLettertypeStijl';
 import { audioSpelerUrl } from '@/lib/audio';
 import { dagenVoor, teltekstVul, type AdventConfig } from '@/lib/config';
-import { confettiKleuren, cssVariabelen, heeftAchtergrondAfbeelding, landschapPalet, tegelKleuren } from '@/lib/kleur';
+import { confettiKleuren, cssVariabelen, heeftAchtergrondAfbeelding, heeftPopupAchtergrond, landschapPalet, tegelKleuren } from '@/lib/kleur';
 import { isoVan, labelKort, labelLang, parseIso, plusDagen, verschilInDagen, type Datum } from '@/lib/datum';
 
 type Fase = 'voor' | 'bezig' | 'na';
@@ -339,10 +339,6 @@ export default function Adventkalender({ config, datum, embed = false, preview =
         data-kleur="achtergrond"
         className={`adv-vlak ${achtergrondAfbeelding ? 'adv-achtergrond' : ''} relative overflow-hidden bg-nacht border-2 border-goud/60 shadow-xl rounded-3xl px-3 sm:px-10 pt-8 ${eigenAfbeelding ? 'pb-0' : heeftOnderkant ? 'pb-36' : 'pb-8'}`}
       >
-        {/* Een laag over de afbeelding, zodat de titel en de teksten leesbaar blijven */}
-        {achtergrondAfbeelding && opties.achtergrondLaag > 0 && (
-          <span aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'rgb(var(--adv-laag-kleur) / var(--adv-laag))' }} />
-        )}
         {opties.sneeuw && <Sneeuw />}
         {opties.sterren && STERREN.map((s, i) => (
           <span
@@ -538,7 +534,7 @@ export default function Adventkalender({ config, datum, embed = false, preview =
             onTouchEnd={(e) => opSwipeEinde(e.changedTouches[0].clientX)}
             style={embed && zicht ? { maxHeight: Math.max(240, zicht.hoogte - 32) } : undefined}
             data-kleur="licht"
-            className={`adv-vlak adv-popup ${opties.popupAchtergrond ? `adv-popup-achtergrond${opties.popupAchtergrondTekst === 'licht' ? ' adv-popup-licht' : ''}` : ''} font-poptekst relative w-full max-w-md ${embed && zicht ? '' : 'max-h-[85vh]'} overflow-y-auto rounded-3xl bg-licht border-4 shadow-2xl text-center ${opdracht ? 'border-primair' : 'border-goud'}`}
+            className={`adv-vlak adv-popup ${heeftPopupAchtergrond(opties) ? `adv-popup-achtergrond${opties.popupAchtergrondTekst === 'licht' ? ' adv-popup-licht' : ''}` : ''} font-poptekst relative w-full max-w-md ${embed && zicht ? '' : 'max-h-[85vh]'} overflow-y-auto rounded-3xl bg-licht border-4 shadow-2xl text-center ${opdracht ? 'border-primair' : 'border-goud'}`}
           >
             <div data-kleur={opdracht ? 'primair' : 'secundair'} className={`adv-deel border-b-2 border-goud py-2 text-xs tracking-[0.25em] uppercase ${opdracht ? 'bg-primair text-oppri' : 'bg-secundair text-opsec'}`}>
               ✦ {opdracht ? 'Opdracht' : 'Dag'} {inhoud.dag} van {aantal} ✦

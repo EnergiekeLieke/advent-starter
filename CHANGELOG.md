@@ -2,6 +2,13 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.13.1
+
+- Beter: een halfgetypte of ongeldige link voor een achtergrondafbeelding telt pas mee als hij geldig is. Eerder schakelde de kalender in de beheerpagina al om bij de eerste letter die je typte.
+- Beter: laadt een achtergrondafbeelding nog niet (of helemaal niet), dan staat de tekst op een kleur die erbij past: bij lichte tekst een donkere kaart, bij donkere tekst een lichte. Voorheen kon de tekst dan onleesbaar zijn.
+- Beter: de maat die de beheerpagina adviseert voor de achtergrondafbeelding klopt nu ook bij 1 tot 3 deurtjes. Daar staan de deurtjes allemaal op een rij en zijn ze groter.
+- De laag over de achtergrondafbeelding van de kaart werkt nu op dezelfde manier als bij het geopende deurtje, zonder extra onderdeel in de pagina.
+
 ## v1.13.0
 
 - Nieuw: een eigen afbeelding als achtergrond van elk geopend deurtje. Bij Kleuren en logo upload je een afbeelding (of plak je een link) voor alle schermen. De titel, de tekst en de knoppen komen eroverheen. Een goede maat is 896 × 1000 px: het deurtje is 448 px breed op een computer en ongeveer 330 tot 360 px op een telefoon, en de hoogte hangt af van de tekst. Past de verhouding niet, dan wordt de afbeelding bijgesneden.

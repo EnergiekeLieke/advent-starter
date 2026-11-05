@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import type { AdventConfig } from '@/lib/config';
 import { INPUT, KNOP, Veld, type Bericht } from '@/components/beheer/velden';
 import { adviesIframeHoogte } from '@/lib/embed';
+import { heeftAchtergrondAfbeelding } from '@/lib/kleur';
 
 interface Props {
   config: AdventConfig;
@@ -27,7 +28,7 @@ export default function DelenTab({ config, gewijzigd, opgeslagenTestmodus, voorb
   useEffect(() => setOrigin(window.location.origin), []);
 
   // De kalender is hoger naarmate er meer deurtjes zijn en naarmate het iframe breder is (de deurtjes worden dan groter)
-  const achtergrondAfb = Boolean(config.opties.achtergrondAfbeelding || config.opties.achtergrondAfbeeldingMobiel);
+  const achtergrondAfb = heeftAchtergrondAfbeelding(config.opties);
   const advies = adviesIframeHoogte(config.aantalDagen, breedte, !achtergrondAfb && config.opties.landschap !== 'geen' && config.opties.landschap !== 'eigen', config.titel, config.titelGrootte, !achtergrondAfb && config.opties.landschap === 'eigen' && Boolean(config.opties.onderkantAfbeelding || config.opties.onderkantAfbeeldingMobiel));
   const hoogte = hoogteInvoer ?? advies;
   const link = `${origin}/`;

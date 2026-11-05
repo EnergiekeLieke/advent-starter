@@ -23,8 +23,11 @@ h1, h2, h3 {
 }
 
 /* Eigen achtergrondafbeelding: de computerversie vanaf 768 px breed, anders de telefoonversie. Is er maar een, dan geldt die voor alle schermen. */
+/* De laag over de afbeelding zit in dezelfde achtergrond, zodat hij bij elk onderdeel van de kaart onder de tekst ligt. */
 .adv-achtergrond {
-  background-image: var(--adv-bg-mob, var(--adv-bg-pc));
+  background-image:
+    linear-gradient(rgb(var(--adv-laag-kleur) / var(--adv-laag)), rgb(var(--adv-laag-kleur) / var(--adv-laag))),
+    var(--adv-bg-mob, var(--adv-bg-pc));
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -32,12 +35,15 @@ h1, h2, h3 {
 
 @media (min-width: 768px) {
   .adv-achtergrond {
-    background-image: var(--adv-bg-pc, var(--adv-bg-mob));
+    background-image:
+      linear-gradient(rgb(var(--adv-laag-kleur) / var(--adv-laag)), rgb(var(--adv-laag-kleur) / var(--adv-laag))),
+      var(--adv-bg-pc, var(--adv-bg-mob));
   }
 }
 
 /* Eigen achtergrond van het geopende deurtje. De laag over de afbeelding zit in dezelfde achtergrond, zodat hij blijft staan als de tekst scrolt. */
 .adv-popup-achtergrond {
+  background-color: rgb(var(--adv-popup-reserve));
   background-image:
     linear-gradient(rgb(var(--adv-popup-laag-kleur) / var(--adv-popup-laag)), rgb(var(--adv-popup-laag-kleur) / var(--adv-popup-laag))),
     var(--adv-popup-bg);

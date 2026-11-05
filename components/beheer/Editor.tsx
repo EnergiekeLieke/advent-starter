@@ -15,7 +15,7 @@ import { AUDIO_FOUTMELDING, audioGeldig, schoonAudio } from '@/lib/audio';
 import { dagenVoor, LETTERTYPE_PLEKKEN, LETTERTYPES, lettertypeVoor, leesConfig, MAX_DAGEN, THEMAS, themaVan, type AdventConfig, type AdventDag, type AdventKleuren, type DeurStijl, type Lettertype, type LettertypePlek, type Onderkant, type ThemaNaam } from '@/lib/config';
 import standaardConfig from '@/config/advent.json';
 import { labelKort, parseIso, plusDagen } from '@/lib/datum';
-import { contrast, cssVariabelen, landschapPalet, tegelKleuren } from '@/lib/kleur';
+import { contrast, cssVariabelen, heeftAchtergrondAfbeelding, heeftPopupAchtergrond, landschapPalet, tegelKleuren } from '@/lib/kleur';
 import type { OpslagModus } from '@/lib/opslag';
 import { PROMPT_TEKSTEN } from '@/lib/promptTeksten';
 import type { VersieInfo } from '@/lib/versie';
@@ -356,7 +356,8 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
   const controle = useMemo(() => leesConfig(config), [config]);
   const gewijzigd = JSON.stringify(config) !== opgeslagen;
   // Gebruikt de kalender een eigen achtergrondafbeelding? Dan doen de achtergrondkleur en de onderkant niet mee.
-  const achtergrondActief = Boolean(config.opties.achtergrondAfbeelding || config.opties.achtergrondAfbeeldingMobiel);
+  const achtergrondActief = heeftAchtergrondAfbeelding(config.opties);
+  const popupActief = heeftPopupAchtergrond(config.opties);
   const maten = achtergrondMaten(config.aantalDagen);
   // Welke eigen lettertypes zijn geüpload? Alleen die staan in de keuzelijstjes.
   const eigenGebruik = EIGEN_LETTERTYPES.map((e) => ({ ...e, naam: config[e.sleutel].naam || LETTERTYPES[e.keuze].naam, aanwezig: Boolean(config[e.sleutel].normaal || config[e.sleutel].vet) }));
@@ -903,7 +904,7 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
                   </ul>
                 </div>
                 <div className="space-y-2 rounded-lg border border-slate-200 bg-white p-3">
-                  {config.opties.popupAchtergrond && (
+                  {popupActief && (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={config.opties.popupAchtergrond} alt="" className="max-h-40 rounded-lg border border-slate-200 object-contain" style={{ background: config.kleuren.licht }} />
                   )}
@@ -915,7 +916,7 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
                     <input className={INPUT} value={config.opties.popupAchtergrond} maxLength={500} onChange={(e) => zetOptie('popupAchtergrond', e.target.value.trim())} placeholder="https://" />
                   </Veld>
                 </div>
-                {config.opties.popupAchtergrond && (
+                {popupActief && (
                   <div className="space-y-3 rounded-lg border border-slate-200 bg-white p-3">
                     <fieldset>
                       <legend className="text-sm font-semibold">Kleur van de titel en de tekst in het deurtje</legend>
