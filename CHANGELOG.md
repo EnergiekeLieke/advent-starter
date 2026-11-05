@@ -2,6 +2,10 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.7.2
+
+- Beter: het dorpje is groter en duidelijker. Er staan nu minder, maar grotere huisjes met meer ramen, en het brede dorp staat in het midden met bossen aan beide kanten. Het kerkje is minder hoog, zodat de ster op een breed scherm niet meer tegen de rand zit. Ook het voorbeeldplaatje bij de keuze in Opties is bijgewerkt.
+
 ## v1.7.1
 
 - Beter: de huisjes in het dorpje hebben nu goed contrast met de achtergrond, bij alle thema's. Op een donkere achtergrond krijgen ze lichtere muren in de kleuren van je huisstijl en een licht (besneeuwd) dak. Op een lichte achtergrond krijgen ze donkere muren en een donker dak. De muren zijn per huis in drie kleuren uit je huisstijl, en de ramen die branden hebben een donker randje, zodat ze op elke muur opvallen. Kies je eigen kleuren, dan wordt het contrast vanzelf bijgesteld.

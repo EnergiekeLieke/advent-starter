@@ -123,15 +123,18 @@ function OnderkantMini({ waarde, kleuren }: { waarde: Onderkant; kleuren: Advent
       <path d="M0 24Q30 12 60 22T120 18V40H0Z" fill={p.heuvelMidden} opacity={p.heuvelMiddenOpac} />
       {waarde === 'dorp' && (
         <>
-          {[8, 28, 48, 82, 100].map((x, i) => (
-            <g key={x}>
-              <rect x={x} y={i % 2 ? 22 : 20} width="14" height={i % 2 ? 10 : 12} fill={p.dorp.muren[i % 3].kleur} />
-              <path d={`M${x - 2} ${i % 2 ? 22 : 20}l9-7 9 7z`} fill={p.dorp.dak} />
-              {i !== 1 && i !== 4 && <rect x={x + 4} y={i % 2 ? 25 : 23} width="4" height="5" fill={p.dorp.raam} />}
-            </g>
-          ))}
-          <rect x="62" y="15" width="10" height="17" fill={p.dorp.muren[1].kleur} />
-          <path d="M61 15l6-9 6 9z" fill={p.dorp.dak} />
+          {[4, 24, 44, 84, 102].map((x, i) => {
+            const top = i % 2 ? 26 : 24;
+            return (
+              <g key={x}>
+                <rect x={x} y={top} width="15" height={33 - top} fill={p.dorp.muren[i % 3].kleur} />
+                <path d={`M${x - 1.500} ${top}l9-6 9 6z`} fill={p.dorp.dak} />
+                {i !== 1 && i !== 4 && <rect x={x + 5} y={top + 2.500} width="4" height="3.500" fill={p.dorp.raam} />}
+              </g>
+            );
+          })}
+          <rect x="64" y="22" width="9" height="11" fill={p.dorp.muren[1].kleur} />
+          <path d="M63 22l5.500-8 5.500 8z" fill={p.dorp.dak} />
         </>
       )}
       {(waarde === 'winter' || waarde === 'heuvels') && (
