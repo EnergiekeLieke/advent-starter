@@ -9,6 +9,7 @@ import { bepaalNu, type Datum } from '@/lib/datum';
 // Berichten tussen de editor (/beheer) en het voorbeeld in de iframe
 export const BERICHT_CONFIG = 'advent-config';
 export const BERICHT_KLAAR = 'advent-klaar';
+export const BERICHT_MARKEER = 'advent-markeer';
 
 // Hoe vaak we controleren of er een nieuwe dag is aangebroken terwijl de pagina openstaat
 const CONTROLE_INTERVAL_MS = 5 * 60 * 1000;
@@ -28,6 +29,7 @@ interface Props {
 export default function KalenderPagina({ config, datum, live, embed, preview }: Props) {
   const router = useRouter();
   const [actueel, setActueel] = useState(config);
+  const [markeer, setMarkeer] = useState<string | null>(null);
 
   useEffect(() => {
     setActueel(config);
@@ -36,7 +38,12 @@ export default function KalenderPagina({ config, datum, live, embed, preview }: 
   useEffect(() => {
     if (!preview) return;
     const opBericht = (e: MessageEvent) => {
-      if (e.origin !== window.location.origin || e.data?.type !== BERICHT_CONFIG) return;
+      if (e.origin !== window.location.origin) return;
+      if (e.data?.type === BERICHT_MARKEER) {
+        setMarkeer(typeof e.data.kleur === 'string' ? e.data.kleur : null);
+        return;
+      }
+      if (e.data?.type !== BERICHT_CONFIG) return;
       const uitkomst = leesConfig(e.data.config);
       if (uitkomst.ok) setActueel(uitkomst.config);
     };
@@ -61,5 +68,5 @@ export default function KalenderPagina({ config, datum, live, embed, preview }: 
     };
   }, [live, preview, datum, router]);
 
-  return <Adventkalender config={actueel} datum={datum} embed={embed} preview={preview} />;
+  return <Adventkalender config={actueel} datum={datum} embed={embed} preview={preview} markeer={markeer} />;
 }

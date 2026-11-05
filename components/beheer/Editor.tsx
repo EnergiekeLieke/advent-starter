@@ -8,7 +8,7 @@ import UpdatesTab from '@/components/beheer/UpdatesTab';
 import { INPUT, KNOP, KNOP_PRIMAIR, Veld, type Bericht } from '@/components/beheer/velden';
 import AdventIcoon from '@/components/AdventIcoon';
 import { Omhulsel } from '@/components/Adventkalender';
-import { BERICHT_CONFIG, BERICHT_KLAAR } from '@/components/KalenderPagina';
+import { BERICHT_CONFIG, BERICHT_KLAAR, BERICHT_MARKEER } from '@/components/KalenderPagina';
 import { AUDIO_FOUTMELDING, audioGeldig, schoonAudio } from '@/lib/audio';
 import { dagenVoor, LETTERTYPE_PLEKKEN, LETTERTYPES, lettertypeVoor, leesConfig, MAX_DAGEN, THEMAS, themaVan, type AdventConfig, type AdventDag, type AdventKleuren, type DeurStijl, type Lettertype, type LettertypePlek, type Onderkant, type ThemaNaam } from '@/lib/config';
 import standaardConfig from '@/config/advent.json';
@@ -21,12 +21,19 @@ import type { VersieInfo } from '@/lib/versie';
 const TABS = ['Algemeen', 'Kleuren en logo', 'Deurtjes', 'Kennis Shop-links', 'Opties', 'Delen', 'Updates', 'Importeren en exporteren'] as const;
 type Tab = (typeof TABS)[number];
 
-function KleurVeld({ label, waarde, onChange }: { label: string; waarde: string; onChange: (hex: string) => void }) {
+// Bij aanwijzen of selecteren van een kleurveld lichten in het voorbeeld de onderdelen met die kleur op (zie `markeer` in de kalender)
+function KleurVeld({ label, waarde, onChange, sleutel, gebruikt, opMarkeer }: { label: string; waarde: string; onChange: (hex: string) => void; sleutel: string; gebruikt: string; opMarkeer: (sleutel: string | null) => void }) {
   const [tekst, setTekst] = useState(waarde);
   useEffect(() => setTekst(waarde), [waarde]);
   return (
-    <div>
+    <div
+      onMouseEnter={() => opMarkeer(sleutel)}
+      onMouseLeave={() => opMarkeer(null)}
+      onFocus={() => opMarkeer(sleutel)}
+      onBlur={() => opMarkeer(null)}
+    >
       <span className="mb-1 block text-sm font-medium">{label}</span>
+      <span className="mb-1.5 block text-xs text-slate-500">{gebruikt}</span>
       <div className="flex items-center gap-2">
         <input
           type="color"
@@ -83,8 +90,18 @@ function UploadKnop({ onUrl, label = 'Afbeelding uploaden' }: { onUrl: (url: str
   );
 }
 
+// Waar elke kleur in de kalender te zien is, voor de regel onder het kleurveld
+const KLEUR_GEBRUIK = {
+  achtergrond: 'De kaart zelf, de rook uit de schoorsteen en de heuvels in het landschap.',
+  accent: 'De titel, de randjes, de knopjes bovenaan en de binnenkant van een geopend deurtje.',
+  licht: 'De pagina en de popup, en het licht op het huisje en de heuvels.',
+  primair: 'Knoppen en titels in de popup, de icoontjes, en het dak en de bomen in het landschap.',
+  secundair: 'De Dag-balk en de knop in de popup, en het huisje in het landschap.',
+  tekst: 'Alleen de lopende tekst in de popup. Je ziet hem pas als je een deurtje opent.',
+} as const;
+
 const ONDERKANT_KEUZES: { waarde: Onderkant; naam: string; uitleg: string }[] = [
-  { waarde: 'winter', naam: 'Winterlandschap', uitleg: 'Sneeuw, huisje en kerstboom. Mooi op een donkere achtergrond.' },
+  { waarde: 'winter', naam: 'Winterlandschap', uitleg: 'Sneeuw, huisje en kerstboom. Mooi op een donkere achtergrond. Heeft vaste kleuren, je huisstijl verandert hier niets aan.' },
   { waarde: 'heuvels', naam: 'Zachte heuvels', uitleg: 'Huisje en kerstboom in de kleuren van je thema, zonder sneeuw. Past bij lichte kleuren.' },
   { waarde: 'golven', naam: 'Golvende heuvels', uitleg: 'Alleen heuvels in de kleuren van je thema, zonder kerstboom. Ook mooi buiten de feestdagen.' },
   { waarde: 'geen', naam: 'Geen onderkant', uitleg: 'Alleen de deurtjes, zonder landschap.' },
@@ -297,6 +314,11 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
 
   function zet<K extends keyof AdventConfig>(sleutel: K, waarde: AdventConfig[K]) {
     setConfig((c) => ({ ...c, [sleutel]: waarde }));
+  }
+
+  // Laat in het voorbeeld de onderdelen met deze kleur oplichten (of niets, bij null)
+  function markeerKleur(kleur: string | null) {
+    frame.current?.contentWindow?.postMessage({ type: BERICHT_MARKEER, kleur }, window.location.origin);
   }
 
   function zetKleur(naam: Exclude<keyof AdventConfig['kleuren'], 'tegels'>, hex: string) {
@@ -602,20 +624,24 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
                 </div>
               </div>
 
+              <p className="text-xs text-slate-500">
+                Wijs een kleur aan: in het voorbeeld lichten de onderdelen op die deze kleur gebruiken.
+                {config.opties.landschap === 'winter' && ' Let op: het winterlandschap heeft vaste kleuren en verandert niet mee. Kies bij Opties zachte of golvende heuvels als het landschap je huisstijl moet volgen.'}
+              </p>
               <div className="grid gap-4 sm:grid-cols-2">
-                <KleurVeld label="Achtergrond van de kaart" waarde={config.kleuren.achtergrond} onChange={(h) => zetKleur('achtergrond', h)} />
-                <KleurVeld label="Accentkleur (titel, randjes en sterretjes)" waarde={config.kleuren.accent} onChange={(h) => zetKleur('accent', h)} />
-                <KleurVeld label="Lichte kleur (popup en pagina)" waarde={config.kleuren.licht} onChange={(h) => zetKleur('licht', h)} />
-                <KleurVeld label="Primaire kleur (knoppen en titels)" waarde={config.kleuren.primair} onChange={(h) => zetKleur('primair', h)} />
-                <KleurVeld label="Secundaire kleur (Dag-balk en knop)" waarde={config.kleuren.secundair} onChange={(h) => zetKleur('secundair', h)} />
-                <KleurVeld label="Tekstkleur in de popup" waarde={config.kleuren.tekst} onChange={(h) => zetKleur('tekst', h)} />
+                <KleurVeld sleutel="achtergrond" gebruikt={KLEUR_GEBRUIK.achtergrond} opMarkeer={markeerKleur} label="Achtergrond van de kaart" waarde={config.kleuren.achtergrond} onChange={(h) => zetKleur('achtergrond', h)} />
+                <KleurVeld sleutel="accent" gebruikt={KLEUR_GEBRUIK.accent} opMarkeer={markeerKleur} label="Accentkleur" waarde={config.kleuren.accent} onChange={(h) => zetKleur('accent', h)} />
+                <KleurVeld sleutel="licht" gebruikt={KLEUR_GEBRUIK.licht} opMarkeer={markeerKleur} label="Lichte kleur" waarde={config.kleuren.licht} onChange={(h) => zetKleur('licht', h)} />
+                <KleurVeld sleutel="primair" gebruikt={KLEUR_GEBRUIK.primair} opMarkeer={markeerKleur} label="Primaire kleur" waarde={config.kleuren.primair} onChange={(h) => zetKleur('primair', h)} />
+                <KleurVeld sleutel="secundair" gebruikt={KLEUR_GEBRUIK.secundair} opMarkeer={markeerKleur} label="Secundaire kleur" waarde={config.kleuren.secundair} onChange={(h) => zetKleur('secundair', h)} />
+                <KleurVeld sleutel="tekst" gebruikt={KLEUR_GEBRUIK.tekst} opMarkeer={markeerKleur} label="Tekstkleur in de popup" waarde={config.kleuren.tekst} onChange={(h) => zetKleur('tekst', h)} />
               </div>
 
               <div>
                 <p className="mb-2 text-sm font-medium">Kleuren van de deurtjes (ze wisselen elkaar af)</p>
                 <div className="grid gap-4 sm:grid-cols-2">
                   {config.kleuren.tegels.map((t, i) => (
-                    <KleurVeld key={i} label={`Deurtjeskleur ${i + 1}`} waarde={t} onChange={(h) => zetTegel(i, h)} />
+                    <KleurVeld key={i} sleutel={`tegel${i + 1}`} gebruikt="Wisselt af met de andere deurtjeskleuren." opMarkeer={markeerKleur} label={`Deurtjeskleur ${i + 1}`} waarde={t} onChange={(h) => zetTegel(i, h)} />
                   ))}
                 </div>
               </div>

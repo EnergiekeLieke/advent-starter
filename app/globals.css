@@ -221,3 +221,39 @@ h1, h2, h3 {
   .adv-puls, .adv-glans::after, .adv-wiebel, .adv-twinkel, .adv-goudtekst, .adv-popup, .adv-ster-aan, .adv-tekst { animation: none; }
   .adv-spat { display: none; }
 }
+
+/* ─── Kleur aanwijzen in het voorbeeld van /beheer ─────────────
+   Wijs je in de editor een kleurveld aan, dan krijgt de kalender data-markeer="<kleur>". Onderdelen met dat kleurlabel
+   (data-kleur) lichten op, de rest wordt zacht. .adv-deel zijn losse onderdelen, .adv-vlak zijn grote vlakken waar andere
+   onderdelen in staan: die krijgen alleen een rand. Bezoekers krijgen dit nooit te zien, want data-markeer staat alleen in het voorbeeld. */
+[data-markeer] .adv-deel { filter: opacity(0.22) saturate(0.2); transition: filter 0.2s; }
+[data-markeer="achtergrond"] .adv-deel[data-kleur~="achtergrond"] { filter: drop-shadow(0 0 2px #ff2d95) drop-shadow(0 0 6px #ff2d95); }
+[data-markeer="achtergrond"] .adv-vlak[data-kleur~="achtergrond"],
+.adv-vlak[data-markeer="achtergrond"][data-kleur~="achtergrond"] { outline: 4px solid #ff2d95; outline-offset: -4px; }
+[data-markeer="accent"] .adv-deel[data-kleur~="accent"] { filter: drop-shadow(0 0 2px #ff2d95) drop-shadow(0 0 6px #ff2d95); }
+[data-markeer="accent"] .adv-vlak[data-kleur~="accent"],
+.adv-vlak[data-markeer="accent"][data-kleur~="accent"] { outline: 4px solid #ff2d95; outline-offset: -4px; }
+[data-markeer="licht"] .adv-deel[data-kleur~="licht"] { filter: drop-shadow(0 0 2px #ff2d95) drop-shadow(0 0 6px #ff2d95); }
+[data-markeer="licht"] .adv-vlak[data-kleur~="licht"],
+.adv-vlak[data-markeer="licht"][data-kleur~="licht"] { outline: 4px solid #ff2d95; outline-offset: -4px; }
+[data-markeer="primair"] .adv-deel[data-kleur~="primair"] { filter: drop-shadow(0 0 2px #ff2d95) drop-shadow(0 0 6px #ff2d95); }
+[data-markeer="primair"] .adv-vlak[data-kleur~="primair"],
+.adv-vlak[data-markeer="primair"][data-kleur~="primair"] { outline: 4px solid #ff2d95; outline-offset: -4px; }
+[data-markeer="secundair"] .adv-deel[data-kleur~="secundair"] { filter: drop-shadow(0 0 2px #ff2d95) drop-shadow(0 0 6px #ff2d95); }
+[data-markeer="secundair"] .adv-vlak[data-kleur~="secundair"],
+.adv-vlak[data-markeer="secundair"][data-kleur~="secundair"] { outline: 4px solid #ff2d95; outline-offset: -4px; }
+[data-markeer="tekst"] .adv-deel[data-kleur~="tekst"] { filter: drop-shadow(0 0 2px #ff2d95) drop-shadow(0 0 6px #ff2d95); }
+[data-markeer="tekst"] .adv-vlak[data-kleur~="tekst"],
+.adv-vlak[data-markeer="tekst"][data-kleur~="tekst"] { outline: 4px solid #ff2d95; outline-offset: -4px; }
+[data-markeer="tegel1"] .adv-deel[data-kleur~="tegel1"] { filter: drop-shadow(0 0 2px #ff2d95) drop-shadow(0 0 6px #ff2d95); }
+[data-markeer="tegel1"] .adv-vlak[data-kleur~="tegel1"],
+.adv-vlak[data-markeer="tegel1"][data-kleur~="tegel1"] { outline: 4px solid #ff2d95; outline-offset: -4px; }
+[data-markeer="tegel2"] .adv-deel[data-kleur~="tegel2"] { filter: drop-shadow(0 0 2px #ff2d95) drop-shadow(0 0 6px #ff2d95); }
+[data-markeer="tegel2"] .adv-vlak[data-kleur~="tegel2"],
+.adv-vlak[data-markeer="tegel2"][data-kleur~="tegel2"] { outline: 4px solid #ff2d95; outline-offset: -4px; }
+[data-markeer="tegel3"] .adv-deel[data-kleur~="tegel3"] { filter: drop-shadow(0 0 2px #ff2d95) drop-shadow(0 0 6px #ff2d95); }
+[data-markeer="tegel3"] .adv-vlak[data-kleur~="tegel3"],
+.adv-vlak[data-markeer="tegel3"][data-kleur~="tegel3"] { outline: 4px solid #ff2d95; outline-offset: -4px; }
+[data-markeer="tegel4"] .adv-deel[data-kleur~="tegel4"] { filter: drop-shadow(0 0 2px #ff2d95) drop-shadow(0 0 6px #ff2d95); }
+[data-markeer="tegel4"] .adv-vlak[data-kleur~="tegel4"],
+.adv-vlak[data-markeer="tegel4"][data-kleur~="tegel4"] { outline: 4px solid #ff2d95; outline-offset: -4px; }

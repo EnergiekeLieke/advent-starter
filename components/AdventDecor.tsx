@@ -139,14 +139,19 @@ export function BoomTekening({ hangt, sterAan, aantal, accent, ballen }: BoomPro
   );
 }
 
+// In het voorbeeld van de editor lichten we de delen op die bij een kleur horen (zie `markeer` in globals.css).
+// Het winterlandschap heeft vaste kleuren: dat krijgt het label 'vast' en licht dus bij geen enkele kleur op.
+const deel = (stijl: LandschapStijl, kleuren: string) => ({ className: 'adv-deel', 'data-kleur': stijl === 'winter' ? 'vast' : kleuren });
+
 // Dennenboom met sneeuw, voet op (0, 0), ongeveer 66 hoog
-export function Den({ x, y, s, palet }: { x: number; y: number; s: number; palet: LandschapPalet }) {
+export function Den({ x, y, s, palet, stijl }: { x: number; y: number; s: number; palet: LandschapPalet; stijl: LandschapStijl }) {
+  const groen = deel(stijl, 'primair');
   return (
     <g transform={`translate(${x} ${y}) scale(${s})`}>
-      <rect x="-2" y="-6" width="4" height="6" fill={palet.denStam} />
-      <path d="M-18 -6H18L0 -34Z" fill={palet.den[0]} />
-      <path d="M-14 -24H14L0 -50Z" fill={palet.den[1]} />
-      <path d="M-10 -42H10L0 -66Z" fill={palet.den[2]} />
+      <rect x="-2" y="-6" width="4" height="6" fill={palet.denStam} {...groen} />
+      <path d="M-18 -6H18L0 -34Z" fill={palet.den[0]} {...groen} />
+      <path d="M-14 -24H14L0 -50Z" fill={palet.den[1]} {...groen} />
+      <path d="M-10 -42H10L0 -66Z" fill={palet.den[2]} {...groen} />
       <path d="M-9.500 -20H9.500L0 -34L-4 -28Z" fill={palet.denSneeuw} opacity={palet.denSneeuwOpac} />
       <path d="M-7 -38H7L0 -50L-3 -45Z" fill={palet.denSneeuw} opacity={palet.denSneeuwOpac} />
       <path d="M-5 -54H5L0 -66L-2 -62Z" fill={palet.denSneeuw} opacity={palet.denSneeuwOpac} />
@@ -204,25 +209,29 @@ export function Landschap({ compact, stijl, palet, ...boom }: BoomProps & { comp
         </radialGradient>
       </defs>
 
-      <path d="M0 140Q150 100 320 130T640 120T960 125T1200 110V200H0Z" fill={palet.heuvelVer} opacity={palet.heuvelVerOpac} />
-      {metDorp && VERRE_BOMEN.map((b, i) => (
-        <path key={i} d={`M${b.x} ${b.basis}l14 0l-7 -${b.h}z`} fill={palet.bosVer} opacity={palet.bosVerOpac} />
-      ))}
-      <path d="M0 160Q200 130 420 152T800 150T1200 140V200H0Z" fill={palet.heuvelMidden} opacity={palet.heuvelMiddenOpac} />
+      <path d="M0 140Q150 100 320 130T640 120T960 125T1200 110V200H0Z" fill={palet.heuvelVer} opacity={palet.heuvelVerOpac} {...deel(stijl, 'achtergrond primair')} />
+      {metDorp && (
+        <g {...deel(stijl, 'achtergrond primair')}>
+          {VERRE_BOMEN.map((b, i) => (
+            <path key={i} d={`M${b.x} ${b.basis}l14 0l-7 -${b.h}z`} fill={palet.bosVer} opacity={palet.bosVerOpac} />
+          ))}
+        </g>
+      )}
+      <path d="M0 160Q200 130 420 152T800 150T1200 140V200H0Z" fill={palet.heuvelMidden} opacity={palet.heuvelMiddenOpac} {...deel(stijl, 'achtergrond primair licht')} />
 
       {metDorp && (
         <g transform={`translate(${huisX} 118)`}>
           <circle cx="17" cy="44" r="26" fill={`url(#${raamId})`} className="adv-raamlicht" />
-          <rect x="0" y="28" width="60" height="34" fill={palet.huisMuur} />
-          <rect x="44" y="6" width="8" height="16" fill={palet.huisSchoorsteen} />
-          <rect x="42" y="3" width="12" height="4" rx="1.500" fill={palet.huisSneeuw} />
-          <path d="M-6 30L30 2L66 30Z" fill={palet.huisDak} />
-          <path d="M-2 28L30 3L62 28L56 27L30 10L4 27Z" fill={palet.huisSneeuw} />
+          <rect x="0" y="28" width="60" height="34" fill={palet.huisMuur} {...deel(stijl, 'secundair')} />
+          <rect x="44" y="6" width="8" height="16" fill={palet.huisSchoorsteen} {...deel(stijl, 'secundair')} />
+          <rect x="42" y="3" width="12" height="4" rx="1.500" fill={palet.huisSneeuw} {...deel(stijl, 'licht')} />
+          <path d="M-6 30L30 2L66 30Z" fill={palet.huisDak} {...deel(stijl, 'primair')} />
+          <path d="M-2 28L30 3L62 28L56 27L30 10L4 27Z" fill={palet.huisSneeuw} {...deel(stijl, 'licht')} />
           <rect x="10" y="37" width="14" height="12" rx="1" fill="#ffd877" className="adv-raamlicht" />
           <path d="M17 37v12M10 43h14" stroke={palet.huisMuur} strokeWidth="1.200" />
-          <rect x="38" y="41" width="12" height="21" rx="1" fill={palet.huisDeur} />
+          <rect x="38" y="41" width="12" height="21" rx="1" fill={palet.huisDeur} {...deel(stijl, 'secundair')} />
           <circle cx="47" cy="52" r="1" fill={boom.accent} />
-          <g fill={palet.rook} opacity={palet.rookOpac}>
+          <g fill={palet.rook} opacity={palet.rookOpac} {...deel(stijl, 'achtergrond')}>
             <circle cx="48" cy="-4" r="3" />
             <circle cx="52" cy="-12" r="4" />
             <circle cx="58" cy="-21" r="5" />
@@ -230,10 +239,10 @@ export function Landschap({ compact, stijl, palet, ...boom }: BoomProps & { comp
         </g>
       )}
 
-      {metDorp && dennen.map((d, i) => <Den key={i} {...d} palet={palet} />)}
+      {metDorp && dennen.map((d, i) => <Den key={i} {...d} palet={palet} stijl={stijl} />)}
 
-      <path d="M0 178Q150 160 330 172T700 170T1000 165T1200 172V200H0Z" fill={palet.heuvelVoor1} opacity={palet.heuvelVoor1Opac} />
-      <path d="M0 190Q200 178 420 186T860 184T1200 188V200H0Z" fill={palet.heuvelVoor2} opacity={palet.heuvelVoor2Opac} />
+      <path d="M0 178Q150 160 330 172T700 170T1000 165T1200 172V200H0Z" fill={palet.heuvelVoor1} opacity={palet.heuvelVoor1Opac} {...deel(stijl, 'achtergrond primair licht')} />
+      <path d="M0 190Q200 178 420 186T860 184T1200 188V200H0Z" fill={palet.heuvelVoor2} opacity={palet.heuvelVoor2Opac} {...deel(stijl, 'achtergrond primair')} />
 
       {/* de boom met de bollen, op de heuvel */}
       {metDorp && (

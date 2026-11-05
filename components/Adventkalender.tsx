@@ -77,7 +77,7 @@ function Slot() {
   );
 }
 
-const KNOP_PILL = 'rounded-full border border-goud/70 text-opach text-xs sm:text-sm px-4 py-2 hover:bg-goud/20 transition-colors focus-visible:outline-goud';
+const KNOP_PILL = 'adv-deel rounded-full border border-goud/70 text-opach text-xs sm:text-sm px-4 py-2 hover:bg-goud/20 transition-colors focus-visible:outline-goud';
 
 // Het deel van de pagina dat de bezoeker op dit moment ziet, in pixels vanaf de bovenkant van de pagina
 interface Zicht { top: number; hoogte: number }
@@ -90,6 +90,8 @@ interface Props {
   embed?: boolean;
   /** Voorbeeld in de editor: geen automatische popup en confetti bij het openen */
   preview?: boolean;
+  /** Voorbeeld in de editor: de kleur (bijvoorbeeld 'primair' of 'tegel2') waarvan we de onderdelen laten oplichten */
+  markeer?: string | null;
 }
 
 // Bij de schuifdeur blijft de deur binnen zijn vakje terwijl hij wegschuift. Bij de andere stijlen is er geen omhulsel nodig.
@@ -97,7 +99,7 @@ export function Omhulsel({ actief, children }: { actief: boolean; children: Reac
   return actief ? <span className="absolute inset-0 block overflow-hidden rounded-xl">{children}</span> : <>{children}</>;
 }
 
-export default function Adventkalender({ config, datum, embed = false, preview = false }: Props) {
+export default function Adventkalender({ config, datum, embed = false, preview = false, markeer = null }: Props) {
   const [beweging, setBeweging] = useState(true);
   const [verledenOpen, setVerledenOpen] = useState(false);
   const [vandaagOpen, setVandaagOpen] = useState(false);
@@ -322,13 +324,14 @@ export default function Adventkalender({ config, datum, embed = false, preview =
 
   return (
     // Ingebed krijgt de kalender geen paginakleur en geen vaste minimale hoogte, zodat alleen de kaart zichtbaar is
-    <div style={variabelen} className={embed ? 'relative p-2' : 'min-h-screen bg-licht px-3 sm:px-4 py-6'}>
+    <div style={variabelen} data-markeer={preview && markeer ? markeer : undefined} data-kleur="licht" className={`${embed ? 'relative p-2' : 'min-h-screen bg-licht px-3 sm:px-4 py-6'} adv-vlak`}>
       {embed && <div ref={zichtRef} aria-hidden className="pointer-events-none absolute inset-0" />}
       {confettiKeys.map((k) => <Confetti key={k} kleuren={confettiSet} />)}
 
       <div className="max-w-3xl mx-auto">
       <div
-        className={`relative overflow-hidden bg-nacht border-2 border-goud/60 shadow-xl rounded-3xl px-3 sm:px-10 pt-8 ${heeftOnderkant ? 'pb-36' : 'pb-8'}`}
+        data-kleur="achtergrond"
+        className={`adv-vlak relative overflow-hidden bg-nacht border-2 border-goud/60 shadow-xl rounded-3xl px-3 sm:px-10 pt-8 ${heeftOnderkant ? 'pb-36' : 'pb-8'}`}
       >
         {opties.sneeuw && <Sneeuw />}
         {opties.sterren && STERREN.map((s, i) => (
@@ -358,7 +361,7 @@ export default function Adventkalender({ config, datum, embed = false, preview =
               className="mx-auto mb-3 w-auto max-w-full object-contain max-h-16 sm:max-h-20"
             />
           )}
-          <h1 className="adv-goudtekst font-titel font-bold leading-tight text-3xl sm:text-5xl">
+          <h1 data-kleur="accent" className="adv-deel adv-goudtekst font-titel font-bold leading-tight text-3xl sm:text-5xl">
             {config.titel}
           </h1>
           {config.ondertitel && (
@@ -374,10 +377,10 @@ export default function Adventkalender({ config, datum, embed = false, preview =
           {fase !== 'na' && (
             <div className="mt-4 flex flex-wrap justify-center gap-2">
               {fase === 'bezig' && (
-                <button type="button" onClick={naarVandaag} className={KNOP_PILL}>Spring naar vandaag</button>
+                <button type="button" data-kleur="accent" onClick={naarVandaag} className={KNOP_PILL}>Spring naar vandaag</button>
               )}
               {opties.herinnering && (
-                <button type="button" onClick={() => downloadHerinnering(config.titel, start, aantal, fase === 'bezig' ? vandaag : 1, opties.herinneringUrl)} className={KNOP_PILL}>
+                <button type="button" onClick={() => downloadHerinnering(config.titel, start, aantal, fase === 'bezig' ? vandaag : 1, opties.herinneringUrl)} data-kleur="accent" className={KNOP_PILL}>
                   Dagelijkse herinnering in je agenda
                 </button>
               )}
@@ -391,7 +394,8 @@ export default function Adventkalender({ config, datum, embed = false, preview =
         >
           {dagen.map(({ dag }) => {
             // Kleurpatroon per rasterbreedte: geen twee gelijke kleuren naast of onder elkaar
-            const t = tegels[(dag - 1 + Math.floor((dag - 1) / kolommen)) % tegels.length];
+            const tegelNr = (dag - 1 + Math.floor((dag - 1) / kolommen)) % tegels.length;
+            const t = tegels[tegelNr];
             const isVandaag = dag === vandaag;
             const open = isOpen(dag);
             const dicht = !toegankelijk(dag);
@@ -408,14 +412,15 @@ export default function Adventkalender({ config, datum, embed = false, preview =
                   >
                     <Omhulsel actief={opties.deurStijl === 'schuif'}>
                     {/* Binnenkant: warm goudglanzend, zodat open nooit op een dichte deur lijkt */}
-                    <span className="adv-binnen absolute inset-0 rounded-xl border-2 border-goud flex flex-col items-center justify-center text-primair">
+                    <span data-kleur="accent primair" className="adv-deel adv-binnen absolute inset-0 rounded-xl border-2 border-goud flex flex-col items-center justify-center text-primair">
                       <AdventIcoon nr={dag - 1} className={`${dicht ? 'invisible ' : ''}w-9 h-9 sm:w-12 sm:h-12`} />
                       <span className={`${dicht ? 'invisible ' : ''}mt-0.5 sm:mt-1 font-deur font-bold text-[9px] sm:text-xs ${isVandaag ? 'text-secundair' : ''}`}>
                         {isVandaag ? 'Vandaag' : datumLabel}
                       </span>
                     </span>
                     <span
-                      className={`adv-deur ${open ? 'is-open' : ''} ${isVandaag && !open ? 'adv-glans' : ''} absolute inset-0 block rounded-xl border border-goud/80 shadow-md`}
+                      data-kleur={`tegel${tegelNr + 1} accent`}
+                      className={`adv-deel adv-deur ${open ? 'is-open' : ''} ${isVandaag && !open ? 'adv-glans' : ''} absolute inset-0 block rounded-xl border border-goud/80 shadow-md`}
                       style={{
                         backgroundColor: t.bg,
                         color: t.tekst,
@@ -502,9 +507,10 @@ export default function Adventkalender({ config, datum, embed = false, preview =
             onTouchStart={(e) => { swipeStart.current = e.touches[0].clientX; }}
             onTouchEnd={(e) => opSwipeEinde(e.changedTouches[0].clientX)}
             style={embed && zicht ? { maxHeight: Math.max(240, zicht.hoogte - 32) } : undefined}
-            className={`adv-popup font-poptekst relative w-full max-w-md ${embed && zicht ? '' : 'max-h-[85vh]'} overflow-y-auto rounded-3xl bg-licht border-4 shadow-2xl text-center ${opdracht ? 'border-primair' : 'border-goud'}`}
+            data-kleur="licht"
+            className={`adv-vlak adv-popup font-poptekst relative w-full max-w-md ${embed && zicht ? '' : 'max-h-[85vh]'} overflow-y-auto rounded-3xl bg-licht border-4 shadow-2xl text-center ${opdracht ? 'border-primair' : 'border-goud'}`}
           >
-            <div className={`border-b-2 border-goud py-2 text-xs tracking-[0.25em] uppercase ${opdracht ? 'bg-primair text-oppri' : 'bg-secundair text-opsec'}`}>
+            <div data-kleur={opdracht ? 'primair' : 'secundair'} className={`adv-deel border-b-2 border-goud py-2 text-xs tracking-[0.25em] uppercase ${opdracht ? 'bg-primair text-oppri' : 'bg-secundair text-opsec'}`}>
               ✦ {opdracht ? 'Opdracht' : 'Dag'} {inhoud.dag} van {aantal} ✦
             </div>
             <button
@@ -532,8 +538,8 @@ export default function Adventkalender({ config, datum, embed = false, preview =
                 <div className="adv-medaillon mx-auto flex h-20 w-20 items-center justify-center rounded-full border-2 border-goud text-secundair">
                   <AdventIcoon nr={inhoud.dag - 1} className="h-11 w-11" />
                 </div>
-                <h2 className="font-popkop text-2xl font-bold text-primair mt-4">{inhoud.titel}</h2>
-                {inhoud.tekst && <p className="mt-3 text-inkt leading-relaxed whitespace-pre-line">{inhoud.tekst}</p>}
+                <h2 data-kleur="primair" className="adv-deel font-popkop text-2xl font-bold text-primair mt-4">{inhoud.titel}</h2>
+                {inhoud.tekst && <p data-kleur="tekst" className="adv-deel mt-3 text-inkt leading-relaxed whitespace-pre-line">{inhoud.tekst}</p>}
                 {inhoud.afbeelding && (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={inhoud.afbeelding} alt="" className="mt-4 mx-auto max-h-56 w-auto max-w-full rounded-xl object-cover" />
@@ -556,7 +562,8 @@ export default function Adventkalender({ config, datum, embed = false, preview =
                     href={inhoud.knop.url}
                     target={knopDoel}
                     rel={knopDoel === '_blank' ? 'noopener noreferrer' : 'noopener'}
-                    className="mt-5 inline-block rounded-full bg-secundair text-opsec px-6 py-2.5 text-sm font-semibold hover:opacity-90 transition-opacity"
+                    data-kleur="secundair"
+                    className="adv-deel mt-5 inline-block rounded-full bg-secundair text-opsec px-6 py-2.5 text-sm font-semibold hover:opacity-90 transition-opacity"
                   >
                     {inhoud.knop.label || config.knoppen.standaardLabel}
                   </a>

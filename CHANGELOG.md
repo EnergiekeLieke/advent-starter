@@ -2,6 +2,11 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.5.0
+
+- Nieuw: bij Kleuren en logo zie je nu waar elke kleur in de kalender zit. Wijs een kleurveld aan (of tik erop), dan lichten in het voorbeeld de onderdelen op die deze kleur gebruiken, en wordt de rest zachter. Dit werkt voor alle kleuren, ook voor de vier deurtjeskleuren en voor het landschap. Onder elk kleurveld staat ook in woorden waar de kleur voor dient.
+- Het winterlandschap heeft vaste kleuren. Dat staat nu duidelijk bij de keuze voor de onderkant en bij de kleuren, zodat het niet lijkt alsof er iets stuk is als het landschap niet meekleurt.
+
 ## v1.4.2
 
 - Opgelost: bij de onderkant met zachte heuvels of golven kleurde de derde tegelkleur mee in het landschap. Gaf je deurtje 3 de kleur roze, dan werd het gras ook roze. De heuvels volgen nu de hoofdkleuren van je thema, dus de kleur van één deurtje verandert het landschap niet meer. Bij de standaardthema's zien de heuvels er vrijwel hetzelfde uit als eerst.
