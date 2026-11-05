@@ -125,13 +125,13 @@ function OnderkantMini({ waarde, kleuren }: { waarde: Onderkant; kleuren: Advent
         <>
           {[8, 28, 48, 82, 100].map((x, i) => (
             <g key={x}>
-              <rect x={x} y={i % 2 ? 22 : 20} width="14" height={i % 2 ? 10 : 12} fill={[p.huisMuur, p.huisSchoorsteen, p.huisDeur][i % 3]} />
-              <path d={`M${x - 2} ${i % 2 ? 22 : 20}l9-7 9 7z`} fill={p.huisDak} />
-              {i !== 1 && i !== 4 && <rect x={x + 4} y={i % 2 ? 25 : 23} width="4" height="5" fill="#ffd877" />}
+              <rect x={x} y={i % 2 ? 22 : 20} width="14" height={i % 2 ? 10 : 12} fill={p.dorp.muren[i % 3].kleur} />
+              <path d={`M${x - 2} ${i % 2 ? 22 : 20}l9-7 9 7z`} fill={p.dorp.dak} />
+              {i !== 1 && i !== 4 && <rect x={x + 4} y={i % 2 ? 25 : 23} width="4" height="5" fill={p.dorp.raam} />}
             </g>
           ))}
-          <rect x="62" y="15" width="10" height="17" fill={p.huisDeur} />
-          <path d="M61 15l6-9 6 9z" fill={p.huisDak} />
+          <rect x="62" y="15" width="10" height="17" fill={p.dorp.muren[1].kleur} />
+          <path d="M61 15l6-9 6 9z" fill={p.dorp.dak} />
         </>
       )}
       {(waarde === 'winter' || waarde === 'heuvels') && (

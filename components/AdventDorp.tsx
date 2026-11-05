@@ -11,9 +11,9 @@ interface Huis {
   schoorsteen?: boolean;
 }
 
-const BASIS_Y = 178;
-const RAAM_B = 7;
-const RAAM_H = 8;
+const BASIS_Y = 174;
+const RAAM_B = 8;
+const RAAM_H = 9;
 
 // Posities horen bij het smalle dorp (zichtbaar gebied x 280 t/m 800). Het brede dorp spreidt ze uit.
 const HUIZEN: Huis[] = [
@@ -79,7 +79,7 @@ interface DorpProps {
 }
 
 export function Dorp({ compact, palet, hangt, sterAan, aantal, accent, raamId }: DorpProps) {
-  const muren = [palet.huisMuur, palet.huisSchoorsteen, palet.huisDeur];
+  const { muren, dak, dakSleutel, deur, raam } = palet.dorp;
   const dagen = dagPerRaam(aantal);
   const kerkX = plaats(KERK.x, compact);
   const kerkTop = BASIS_Y - KERK.h;
@@ -94,11 +94,11 @@ export function Dorp({ compact, palet, hangt, sterAan, aantal, accent, raamId }:
         return (
           <g key={i}>
             {huis.schoorsteen && (
-              <rect x={x + huis.b * 0.7} y={top - huis.r * 0.9} width="6" height="12" fill={palet.huisSchoorsteen} className="adv-deel" data-kleur="secundair" />
+              <rect x={x + huis.b * 0.7} y={top - huis.r * 0.9} width="6" height="12" fill={muren[huis.muur].kleur} className="adv-deel" data-kleur={muren[huis.muur].sleutel} />
             )}
-            <rect x={x} y={top} width={huis.b} height={huis.h} fill={muren[huis.muur]} className="adv-deel" data-kleur="secundair" />
-            <path d={`M${x - 3} ${top}L${x + huis.b / 2} ${top - huis.r}L${x + huis.b + 3} ${top}Z`} fill={palet.huisDak} className="adv-deel" data-kleur="primair" />
-            {huis.rijen === 1 && <rect x={x + huis.b / 2 - 3} y={BASIS_Y - 11} width="6" height="11" rx="1" fill={palet.huisDeur} />}
+            <rect x={x} y={top} width={huis.b} height={huis.h} fill={muren[huis.muur].kleur} className="adv-deel" data-kleur={muren[huis.muur].sleutel} />
+            <path d={`M${x - 3} ${top}L${x + huis.b / 2} ${top - huis.r}L${x + huis.b + 3} ${top}Z`} fill={dak} className="adv-deel" data-kleur={dakSleutel} />
+            {huis.rijen === 1 && <rect x={x + huis.b / 2 - 3} y={BASIS_Y - 11} width="6" height="11" rx="1" fill={deur} />}
             {rijen.flatMap((ry, r) =>
               kolommen.map((kx, k) => {
                 const slot = EERSTE_RAAM[i] + r * huis.kolommen + k;
@@ -110,10 +110,10 @@ export function Dorp({ compact, palet, hangt, sterAan, aantal, accent, raamId }:
                 const vertraging = aan ? `${dag * 45}ms` : '0ms';
                 return (
                   <g key={slot}>
-                    <circle cx={cx} cy={cy} r="12" fill={`url(#${raamId})`} className={`adv-venster ${aan ? 'is-aan' : ''}`} style={{ transitionDelay: vertraging }} />
+                    <circle cx={cx} cy={cy} r="13" fill={`url(#${raamId})`} className={`adv-venster ${aan ? 'is-aan' : ''}`} style={{ transitionDelay: vertraging }} />
                     <rect x={cx - RAAM_B / 2} y={cy - RAAM_H / 2} width={RAAM_B} height={RAAM_H} rx="1" fill="rgba(0,0,0,0.38)" />
                     <rect
-                      x={cx - RAAM_B / 2} y={cy - RAAM_H / 2} width={RAAM_B} height={RAAM_H} rx="1" fill="#ffd877"
+                      x={cx - RAAM_B / 2} y={cy - RAAM_H / 2} width={RAAM_B} height={RAAM_H} rx="1" fill={raam} stroke="rgba(50,25,0,0.55)" strokeWidth="0.9"
                       className={`adv-venster ${aan ? 'is-aan' : ''}`} style={{ transitionDelay: vertraging }}
                     />
                   </g>
@@ -125,9 +125,9 @@ export function Dorp({ compact, palet, hangt, sterAan, aantal, accent, raamId }:
       })}
 
       {/* Het kerkje met de ster: die gaat branden zodra alle deurtjes open zijn */}
-      <rect x={kerkX} y={kerkTop} width={KERK.b} height={KERK.h} fill={palet.huisDeur} className="adv-deel" data-kleur="secundair" />
-      <path d={`M${kerkX - 2} ${kerkTop}L${kerkX + KERK.b / 2} ${kerkTop - KERK.r}L${kerkX + KERK.b + 2} ${kerkTop}Z`} fill={palet.huisDak} className="adv-deel" data-kleur="primair" />
-      <rect x={kerkX + KERK.b / 2 - 2.5} y={BASIS_Y - 12} width="5" height="12" rx="2.5" fill={palet.huisDak} />
+      <rect x={kerkX} y={kerkTop} width={KERK.b} height={KERK.h} fill={muren[1].kleur} className="adv-deel" data-kleur={muren[1].sleutel} />
+      <path d={`M${kerkX - 2} ${kerkTop}L${kerkX + KERK.b / 2} ${kerkTop - KERK.r}L${kerkX + KERK.b + 2} ${kerkTop}Z`} fill={dak} className="adv-deel" data-kleur={dakSleutel} />
+      <rect x={kerkX + KERK.b / 2 - 2.5} y={BASIS_Y - 12} width="5" height="12" rx="2.5" fill={deur} />
       <circle cx={kerkX + KERK.b / 2} cy={kerkTop + 10} r="4" fill="rgba(0,0,0,0.38)" />
       <polygon
         transform={`translate(${kerkX + KERK.b / 2} ${kerkTop - KERK.r - 8})`}

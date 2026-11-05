@@ -80,6 +80,14 @@ export function cssVariabelen(config: AdventConfig): Record<string, string> {
 }
 
 // ─── Onderkant van de kalender ────────────────────────────────
+/** Kleuren van de huisjes in het dorp. `sleutel` zegt welke huisstijlkleur erin zit (voor het oplichten in de editor). */
+export interface DorpKleuren {
+  muren: { kleur: string; sleutel: string }[];
+  dak: string; dakSleutel: string;
+  deur: string;
+  raam: string;
+}
+
 export interface LandschapPalet {
   heuvelVer: string; heuvelVerOpac: number;
   bosVer: string; bosVerOpac: number;
@@ -89,6 +97,7 @@ export interface LandschapPalet {
   huisMuur: string; huisSchoorsteen: string; huisDak: string; huisSneeuw: string; huisDeur: string;
   rook: string; rookOpac: number;
   den: [string, string, string]; denStam: string; denSneeuw: string; denSneeuwOpac: number;
+  dorp: DorpKleuren;
 }
 
 // Het winterlandschap met sneeuw (voor donkere achtergronden)
@@ -101,7 +110,44 @@ const WINTER_PALET: LandschapPalet = {
   huisMuur: '#8f3b22', huisSchoorsteen: '#5a2a1a', huisDak: '#2a3a3c', huisSneeuw: '#f4f7f1', huisDeur: '#4a2a1a',
   rook: '#f4f7f1', rookOpac: 0.5,
   den: ['#2a4d33', '#2e5638', '#336040'], denStam: '#4a3322', denSneeuw: '#f0f5f0', denSneeuwOpac: 0.85,
+  // Het dorp bestaat niet in het winterlandschap, dit is alleen om het type compleet te houden
+  dorp: { muren: [{ kleur: '#8f3b22', sleutel: 'vast' }, { kleur: '#5a2a1a', sleutel: 'vast' }, { kleur: '#4a2a1a', sleutel: 'vast' }], dak: '#2a3a3c', dakSleutel: 'vast', deur: '#4a2a1a', raam: '#ffd877' },
 };
+
+/** Maakt een kleur lichter (op een donkere achtergrond) of donkerder (op een lichte) tot hij er genoeg tegen afsteekt. */
+function metContrast(kleur: string, achtergrond: string, minimaal: number): string {
+  const richting = luminantie(achtergrond) < 0.3 ? '#ffffff' : '#000000';
+  for (let t = 0; t <= 1; t += 0.05) {
+    const kandidaat = mengHex(kleur, richting, t);
+    if (contrast(kandidaat, achtergrond) >= minimaal) return kandidaat;
+  }
+  return richting;
+}
+
+/**
+ * Kleuren van de huisjes uit de huisstijl, met voldoende contrast tegen de achtergrond.
+ * Op een donkere achtergrond krijgen de huisjes lichtere muren en een licht (besneeuwd) dak, zodat de lichtjes in de ramen opvallen.
+ * Op een lichte achtergrond krijgen ze donkere muren en een donker dak.
+ */
+function dorpKleuren(k: AdventKleuren): DorpKleuren {
+  const bg = k.achtergrond;
+  const donker = luminantie(bg) < 0.3;
+  const raam = '#ffd877';
+  if (donker) {
+    const muren = [
+      { kleur: metContrast(k.secundair, bg, 3.4), sleutel: 'secundair' },
+      { kleur: metContrast(mengHex(k.primair, k.licht, 0.2), bg, 3.4), sleutel: 'primair licht' },
+      { kleur: metContrast(mengHex(k.accent, k.secundair, 0.4), bg, 3.4), sleutel: 'accent secundair' },
+    ];
+    return { muren, dak: mengHex(k.licht, bg, 0.12), dakSleutel: 'licht achtergrond', deur: mengHex(muren[0].kleur, '#000000', 0.45), raam };
+  }
+  const muren = [
+    { kleur: metContrast(k.secundair, bg, 3.4), sleutel: 'secundair' },
+    { kleur: metContrast(k.primair, bg, 3.4), sleutel: 'primair' },
+    { kleur: metContrast(mengHex(k.secundair, k.primair, 0.5), bg, 3.4), sleutel: 'secundair primair' },
+  ];
+  return { muren, dak: mengHex(k.primair, '#000000', 0.5), dakSleutel: 'primair', deur: mengHex(muren[0].kleur, '#000000', 0.45), raam };
+}
 
 /** Kleuren van de onderkant. 'heuvels' en 'golven' gebruiken de kleuren van het thema in plaats van sneeuw. */
 export function landschapPalet(stijl: LandschapStijl, k: AdventKleuren): LandschapPalet {
@@ -125,5 +171,6 @@ export function landschapPalet(stijl: LandschapStijl, k: AdventKleuren): Landsch
     rook: meng(bg, '#000000', 0.18), rookOpac: 0.55,
     den: [meng(groen, '#000000', 0.2), groen, meng(groen, '#ffffff', 0.14)],
     denStam: meng(groen, '#000000', 0.5), denSneeuw: k.licht, denSneeuwOpac: 0,
+    dorp: dorpKleuren(k),
   };
 }

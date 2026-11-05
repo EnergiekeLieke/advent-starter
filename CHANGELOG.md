@@ -2,6 +2,10 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.7.1
+
+- Beter: de huisjes in het dorpje hebben nu goed contrast met de achtergrond, bij alle thema's. Op een donkere achtergrond krijgen ze lichtere muren in de kleuren van je huisstijl en een licht (besneeuwd) dak. Op een lichte achtergrond krijgen ze donkere muren en een donker dak. De muren zijn per huis in drie kleuren uit je huisstijl, en de ramen die branden hebben een donker randje, zodat ze op elke muur opvallen. Kies je eigen kleuren, dan wordt het contrast vanzelf bijgesteld.
+
 ## v1.7.0
 
 - Nieuw: een vijfde onderkant, het dorpje met lichtjes. Een rij huisjes met een kerkje, in de kleuren van je thema. Elk deurtje heeft een eigen raam: bij elk geopend deurtje gaat er een raam branden, verspreid over het dorp. Zijn alle deurtjes open, dan gaat ook de ster op de kerktoren branden. Je kiest hem bij Opties, bij de onderkant van de kalender. De tekst onder de kalender past zich aan ("12 van de 24 lichtjes branden al in het dorp.").
