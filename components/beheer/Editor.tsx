@@ -184,6 +184,42 @@ const PREVIEW_DATA = [
   { sleutel: 'na', label: 'Na afloop' },
 ] as const;
 
+function UitlogVenster({ fouten, bezig, opOpslaan, opZonderOpslaan, opTerug }: { fouten: string[]; bezig: boolean; opOpslaan: () => void; opZonderOpslaan: () => void; opTerug: () => void }) {
+  const eerste = useRef<HTMLButtonElement>(null);
+  useEffect(() => { eerste.current?.focus(); }, []);
+  const kanOpslaan = fouten.length === 0;
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+      onClick={opTerug}
+      onKeyDown={(e) => { if (e.key === 'Escape') opTerug(); }}
+    >
+      <div role="dialog" aria-modal="true" aria-labelledby="uitlog-titel" onClick={(e) => e.stopPropagation()} className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+        <h2 id="uitlog-titel" className="text-lg font-bold">{kanOpslaan ? 'Je hebt nog niet opgeslagen' : 'Eerst dit oplossen'}</h2>
+        {kanOpslaan ? (
+          <p className="mt-2 text-sm text-slate-700">Als je nu uitlogt, gaan je wijzigingen verloren. Wil je ze eerst opslaan?</p>
+        ) : (
+          <>
+            <p className="mt-2 text-sm text-slate-700">Je wijzigingen kunnen nog niet worden opgeslagen. Dit moet eerst nog aangepast worden:</p>
+            <ul className="ml-5 mt-2 list-disc text-sm text-red-800">{fouten.slice(0, 6).map((f) => <li key={f}>{f}</li>)}</ul>
+          </>
+        )}
+        <div className="mt-5 flex flex-wrap justify-end gap-2">
+          <button type="button" onClick={opZonderOpslaan} className={KNOP}>Uitloggen zonder opslaan</button>
+          {kanOpslaan ? (
+            <>
+              <button type="button" onClick={opTerug} className={KNOP}>Terug</button>
+              <button ref={eerste} type="button" onClick={opOpslaan} disabled={bezig} className={KNOP_PRIMAIR}>{bezig ? 'Opslaan...' : 'Opslaan en uitloggen'}</button>
+            </>
+          ) : (
+            <button ref={eerste} type="button" onClick={opTerug} className={KNOP_PRIMAIR}>Terug en oplossen</button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Editor({ beginConfig, modus, versie }: { beginConfig: AdventConfig; modus: OpslagModus; versie: VersieInfo }) {
   const router = useRouter();
   const [config, setConfig] = useState(beginConfig);
@@ -194,6 +230,7 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
   // Het deurtje waarvan het audioveld nu wordt getypt: dan tonen we nog geen foutmelding over een half ingevulde link
   const [audioActief, setAudioActief] = useState<number | null>(null);
   const [bezig, setBezig] = useState(false);
+  const [uitlogVraag, setUitlogVraag] = useState(false);
   const [bericht, setBericht] = useState<Bericht>(null);
   const [previewDatum, setPreviewDatum] = useState<(typeof PREVIEW_DATA)[number]['sleutel']>('halverwege');
   const [previewEmbed, setPreviewEmbed] = useState(false);
@@ -318,7 +355,7 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
     document.getElementById(`tab-${volgende}`)?.focus();
   }
 
-  async function bewaar() {
+  async function bewaar(): Promise<boolean> {
     setBezig(true);
     setBericht(null);
     const res = await fetch('/api/beheer/config', {
@@ -337,11 +374,23 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
       setBericht({ soort: 'fout', regels: data.fouten ?? ['Opslaan is niet gelukt.'] });
     }
     setBezig(false);
+    return res.ok;
   }
 
   async function uitloggen() {
     await fetch('/api/beheer/logout', { method: 'POST' });
     router.refresh();
+  }
+
+  // Uitloggen laadt de pagina niet opnieuw, dus de waarschuwing van de browser springt hier niet aan. We vragen het zelf.
+  function vraagUitloggen() {
+    if (gewijzigd) setUitlogVraag(true);
+    else void uitloggen();
+  }
+
+  async function bewaarEnLoguit() {
+    if (await bewaar()) await uitloggen();
+    else setUitlogVraag(false);
   }
 
   function importeer() {
@@ -384,11 +433,21 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
         <h1 className="mr-auto text-2xl font-bold">Beheer van je adventkalender</h1>
         {config.testmodus && <span className="rounded-full bg-amber-300 px-3 py-1 text-xs font-bold text-amber-950">TESTMODUS AAN</span>}
         <a href="/" target="_blank" rel="noopener noreferrer" className={KNOP}>Bekijk de kalender</a>
-        <button type="button" onClick={uitloggen} className={KNOP}>Uitloggen</button>
+        <button type="button" onClick={vraagUitloggen} className={KNOP}>Uitloggen</button>
         <button type="button" onClick={bewaar} disabled={bezig || !gewijzigd || !controle.ok} className={KNOP_PRIMAIR}>
           {bezig ? 'Opslaan...' : gewijzigd ? 'Opslaan' : 'Opgeslagen'}
         </button>
       </header>
+
+      {uitlogVraag && (
+        <UitlogVenster
+          fouten={controle.ok ? [] : controle.fouten}
+          bezig={bezig}
+          opOpslaan={bewaarEnLoguit}
+          opZonderOpslaan={uitloggen}
+          opTerug={() => setUitlogVraag(false)}
+        />
+      )}
 
       {versie.nieuwste && (
         <div role="status" className="mb-4 flex flex-wrap items-center gap-3 rounded-lg border border-sky-300 bg-sky-50 p-3 text-sm text-sky-900">

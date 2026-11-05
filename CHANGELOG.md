@@ -2,6 +2,14 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.4.2
+
+- Opgelost: bij de onderkant met zachte heuvels of golven kleurde de derde tegelkleur mee in het landschap. Gaf je deurtje 3 de kleur roze, dan werd het gras ook roze. De heuvels volgen nu de hoofdkleuren van je thema, dus de kleur van één deurtje verandert het landschap niet meer. Bij de standaardthema's zien de heuvels er vrijwel hetzelfde uit als eerst.
+
+## v1.4.1
+
+- Uitloggen met onopgeslagen wijzigingen vraagt nu eerst wat je wilt: opslaan en uitloggen, uitloggen zonder opslaan of terug. Kunnen je wijzigingen nog niet worden opgeslagen, bijvoorbeeld omdat er een veld leeg is, dan zie je wat je eerst moet oplossen.
+
 ## v1.4.0
 
 - Nieuw: de regel onder de kalender ("13 van de 24 deurtjes zijn open.") kun je zelf schrijven. Bij Opties typ je je eigen tekst en zet je er `{open}` en `{totaal}` in voor de aantallen, bijvoorbeeld "Al {open} van de {totaal} cadeautjes uitgepakt!". Laat je het veld leeg, dan blijft de standaardtekst. Je kunt de regel ook helemaal uitzetten.

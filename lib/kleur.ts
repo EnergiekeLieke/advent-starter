@@ -100,7 +100,9 @@ export function landschapPalet(stijl: LandschapStijl, k: AdventKleuren): Landsch
   if (stijl === 'winter') return WINTER_PALET;
   const bg = k.achtergrond;
   const groen = k.primair;
-  const zacht = k.tegels[2];
+  // De heuvels volgen het thema, niet de kleur die iemand aan één deurtje geeft: een roze deurtje mag geen roze gras maken.
+  // Deze mix komt bij de standaardthema's dicht in de buurt van de derde tegelkleur.
+  const zacht = meng(k.primair, k.licht, 0.35);
   return {
     heuvelVer: meng(bg, groen, 0.14), heuvelVerOpac: 1,
     bosVer: meng(bg, groen, 0.42), bosVerOpac: 1,
