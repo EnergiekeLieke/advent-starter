@@ -2,6 +2,12 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.7.0
+
+- Nieuw: een vijfde onderkant, het dorpje met lichtjes. Een rij huisjes met een kerkje, in de kleuren van je thema. Elk deurtje heeft een eigen raam: bij elk geopend deurtje gaat er een raam branden, verspreid over het dorp. Zijn alle deurtjes open, dan gaat ook de ster op de kerktoren branden. Je kiest hem bij Opties, bij de onderkant van de kalender. De tekst onder de kalender past zich aan ("12 van de 24 lichtjes branden al in het dorp.").
+- Bij het tabblad Updates staat nu als stap 0 dat je eerst opslaat wat je hebt gebouwd, want wijzigingen die je nog niet hebt opgeslagen zijn na het verversen weg. Heb je nog niet opgeslagen, dan staat er een knop "Nu opslaan" bij.
+- Opgelost: in versie 1.4.2 kregen de zachte heuvels en de golvende heuvels een ongeldige kleur, waardoor de voorste heuvels donker (bijna zwart) werden. Ze hebben nu weer de kleuren van je thema.
+
 ## v1.6.0
 
 - Nieuw: bij Kleuren en logo kun je je huisstijl bewaren. "Kopieer mijn kleuren" zet je kleuren en lettertypes op je klembord, bijvoorbeeld om in een notitie te bewaren of in een andere kalender te gebruiken. "Plak kleuren" zet ze terug. Je teksten en deurtjes blijven daarbij zoals ze zijn. Je ziet het resultaat eerst in het voorbeeld en het wordt pas bewaard als je op Opslaan klikt.

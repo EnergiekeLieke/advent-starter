@@ -149,6 +149,15 @@ h1, h2, h3 {
   opacity: 1;
 }
 
+.adv-venster {
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+
+.adv-venster.is-aan {
+  opacity: 1;
+}
+
 .adv-ster-aan {
   animation: adv-ster 2.4s ease-in-out infinite;
 }
@@ -216,7 +225,7 @@ h1, h2, h3 {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .adv-deur, .adv-bol, .adv-stijl-cadeau .adv-deur { transition: none; }
+  .adv-deur, .adv-bol, .adv-venster, .adv-stijl-cadeau .adv-deur { transition: none; }
   .adv-raamlicht { animation: none; }
   .adv-puls, .adv-glans::after, .adv-wiebel, .adv-twinkel, .adv-goudtekst, .adv-popup, .adv-ster-aan, .adv-tekst { animation: none; }
   .adv-spat { display: none; }

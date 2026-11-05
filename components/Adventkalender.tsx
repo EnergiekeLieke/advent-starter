@@ -469,6 +469,12 @@ export default function Adventkalender({ config, datum, embed = false, preview =
           <p className="relative mt-3 text-center text-xs sm:text-sm text-opach/80" aria-live="polite">
             {opties.teltekst
               ? teltekstVul(opties.teltekst, aantalOpen, aantal)
+              : onderkant === 'dorp'
+                ? (aantalOpen === 0
+                    ? 'Het dorp ligt nog in het donker. Elke dag gaat er een lichtje aan.'
+                    : aantalOpen === aantal
+                      ? `Alle ${aantal} lichtjes branden, het dorp straalt!`
+                      : `${aantalOpen} van de ${aantal} lichtjes branden al in het dorp.`)
               : !heeftBoom
                 ? `${aantalOpen} van de ${aantal} deurtjes zijn open.`
                 : aantalOpen === 0

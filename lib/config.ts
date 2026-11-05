@@ -31,8 +31,9 @@ export type LettertypePlek = keyof typeof LETTERTYPE_PLEKKEN;
 // Een kalender heeft standaard 24 deurtjes en maximaal 31 (een hele maand)
 export const MAX_DAGEN = 31;
 
-// Onderkant van de kalender: winterlandschap met sneeuw, zachte heuvels in de themakleuren, alleen golvende heuvels of niets
-export const ONDERKANTEN = ['winter', 'heuvels', 'golven', 'geen'] as const;
+// Onderkant van de kalender: winterlandschap met sneeuw, zachte heuvels in de themakleuren, golvende heuvels, een dorp
+// waar bij elk deurtje een raam gaat branden, of niets
+export const ONDERKANTEN = ['winter', 'heuvels', 'golven', 'dorp', 'geen'] as const;
 export type Onderkant = (typeof ONDERKANTEN)[number];
 export type LandschapStijl = Exclude<Onderkant, 'geen'>;
 

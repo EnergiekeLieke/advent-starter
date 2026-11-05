@@ -96,7 +96,7 @@ const KLEUR_GEBRUIK = {
   accent: 'De titel, de randjes, de knopjes bovenaan en de binnenkant van een geopend deurtje.',
   licht: 'De pagina en de popup, en het licht op het huisje en de heuvels.',
   primair: 'Knoppen en titels in de popup, de icoontjes, en het dak en de bomen in het landschap.',
-  secundair: 'De Dag-balk en de knop in de popup, en het huisje in het landschap.',
+  secundair: 'De Dag-balk en de knop in de popup, en het huisje (of de huisjes) in het landschap.',
   tekst: 'Alleen de lopende tekst in de popup. Je ziet hem pas als je een deurtje opent.',
 } as const;
 
@@ -104,6 +104,7 @@ const ONDERKANT_KEUZES: { waarde: Onderkant; naam: string; uitleg: string }[] = 
   { waarde: 'winter', naam: 'Winterlandschap', uitleg: 'Sneeuw, huisje en kerstboom. Mooi op een donkere achtergrond. Heeft vaste kleuren, je huisstijl verandert hier niets aan.' },
   { waarde: 'heuvels', naam: 'Zachte heuvels', uitleg: 'Huisje en kerstboom in de kleuren van je thema, zonder sneeuw. Past bij lichte kleuren.' },
   { waarde: 'golven', naam: 'Golvende heuvels', uitleg: 'Alleen heuvels in de kleuren van je thema, zonder kerstboom. Ook mooi buiten de feestdagen.' },
+  { waarde: 'dorp', naam: 'Dorpje met lichtjes', uitleg: 'Een rij huisjes met een kerkje in de kleuren van je thema. Bij elk geopend deurtje gaat er een raam branden.' },
   { waarde: 'geen', naam: 'Geen onderkant', uitleg: 'Alleen de deurtjes, zonder landschap.' },
 ];
 
@@ -120,7 +121,20 @@ function OnderkantMini({ waarde, kleuren }: { waarde: Onderkant; kleuren: Advent
   return (
     <svg viewBox="0 0 120 40" aria-hidden className="h-12 w-full rounded-lg" style={{ background: kleuren.achtergrond }} preserveAspectRatio="xMidYMax slice">
       <path d="M0 24Q30 12 60 22T120 18V40H0Z" fill={p.heuvelMidden} opacity={p.heuvelMiddenOpac} />
-      {waarde !== 'golven' && (
+      {waarde === 'dorp' && (
+        <>
+          {[8, 28, 48, 82, 100].map((x, i) => (
+            <g key={x}>
+              <rect x={x} y={i % 2 ? 22 : 20} width="14" height={i % 2 ? 10 : 12} fill={[p.huisMuur, p.huisSchoorsteen, p.huisDeur][i % 3]} />
+              <path d={`M${x - 2} ${i % 2 ? 22 : 20}l9-7 9 7z`} fill={p.huisDak} />
+              {i !== 1 && i !== 4 && <rect x={x + 4} y={i % 2 ? 25 : 23} width="4" height="5" fill="#ffd877" />}
+            </g>
+          ))}
+          <rect x="62" y="15" width="10" height="17" fill={p.huisDeur} />
+          <path d="M61 15l6-9 6 9z" fill={p.huisDak} />
+        </>
+      )}
+      {(waarde === 'winter' || waarde === 'heuvels') && (
         <>
           <path d="M70 30l5-12 5 12z" fill={p.den[1]} />
           <path d="M84 30l6-16 6 16z" fill={p.den[0]} />
@@ -931,7 +945,7 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
                 <legend className="mb-1 text-sm font-medium">Onderkant van de kalender</legend>
                 <p className="mb-3 text-xs text-slate-500">
                   Een thema kiest hier zelf een passende standaard: sneeuw valt weg op een lichte achtergrond, dus daar komen zachte heuvels. Je kunt dit altijd aanpassen.
-                  Bij het winterlandschap en de zachte heuvels krijgt de kerstboom elke dag een kerstbal erbij.
+                  Bij het winterlandschap en de zachte heuvels krijgt de kerstboom elke dag een kerstbal erbij. Bij het dorpje gaat elke dag een lichtje aan.
                 </p>
                 <div className="grid gap-2 sm:grid-cols-2">
                   {ONDERKANT_KEUZES.map((o) => (
@@ -972,7 +986,7 @@ export default function Editor({ beginConfig, modus, versie }: { beginConfig: Ad
             />
           )}
 
-          {tab === 'Updates' && <UpdatesTab versie={versie} />}
+          {tab === 'Updates' && <UpdatesTab versie={versie} gewijzigd={gewijzigd} bezig={bezig} kanOpslaan={controle.ok} opOpslaan={() => void bewaar()} />}
 
           {tab === 'Importeren en exporteren' && (
             <div className="space-y-4">

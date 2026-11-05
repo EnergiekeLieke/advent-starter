@@ -43,6 +43,14 @@ export function meng(a: string, b: string, aandeel: number): string {
   return `rgb(${m(ar, br)} ${m(ag, bg)} ${m(ab, bb)})`;
 }
 
+/** Zoals `meng`, maar geeft een hex-kleur terug, zodat het resultaat opnieuw gemengd kan worden. */
+function mengHex(a: string, b: string, aandeel: number): string {
+  const [ar, ag, ab] = hexNaarRgb(a);
+  const [br, bg, bb] = hexNaarRgb(b);
+  const m = (x: number, y: number) => Math.round(x + (y - x) * aandeel).toString(16).padStart(2, '0');
+  return `#${m(ar, br)}${m(ag, bg)}${m(ab, bb)}`;
+}
+
 /** CSS-variabelen die de kalender gebruikt (zie tailwind.config.ts en globals.css). */
 export function cssVariabelen(config: AdventConfig): Record<string, string> {
   const k = config.kleuren;
@@ -102,7 +110,7 @@ export function landschapPalet(stijl: LandschapStijl, k: AdventKleuren): Landsch
   const groen = k.primair;
   // De heuvels volgen het thema, niet de kleur die iemand aan één deurtje geeft: een roze deurtje mag geen roze gras maken.
   // Deze mix komt bij de standaardthema's dicht in de buurt van de derde tegelkleur.
-  const zacht = meng(k.primair, k.licht, 0.35);
+  const zacht = mengHex(k.primair, k.licht, 0.35);
   return {
     heuvelVer: meng(bg, groen, 0.14), heuvelVerOpac: 1,
     bosVer: meng(bg, groen, 0.42), bosVerOpac: 1,

@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import type { LandschapStijl } from '@/lib/config';
 import type { LandschapPalet } from '@/lib/kleur';
+import { Dorp, dorpDennen } from '@/components/AdventDorp';
 
 // Decoratie van de kalender: sneeuw, sterretjes, strik en het winterlandschap met de kerstboom.
 // De accentkleur en de kleuren van de kerstballen komen van buiten (instellingen), de rest is vast.
@@ -188,10 +189,13 @@ const DENNEN_COMPACT = [
 // iets afgesneden wordt; op smal formaat wordt alleen links en rechts bijgesneden.
 // compact: eigen dorpje voor smalle schermen, met huisje en boom dicht bij elkaar in het midden.
 export function Landschap({ compact, stijl, palet, ...boom }: BoomProps & { compact: boolean; stijl: LandschapStijl; palet: LandschapPalet }) {
-  const metDorp = stijl !== 'golven';
+  // Het winterlandschap en de zachte heuvels hebben één huisje met een kerstboom, het dorp heeft een rij huisjes met lichtjes
+  const metHuis = stijl === 'winter' || stijl === 'heuvels';
+  const metDorp = stijl === 'dorp';
+  const metBos = stijl !== 'golven';
   const huisX = compact ? 370 : 360;
   const boomX = compact ? 540 : 800;
-  const dennen = compact ? DENNEN_COMPACT : DENNEN;
+  const dennen = metDorp ? dorpDennen(compact) : compact ? DENNEN_COMPACT : DENNEN;
   const raamId = compact ? 'adv-raam-compact' : 'adv-raam';
   return (
     <svg
@@ -200,7 +204,7 @@ export function Landschap({ compact, stijl, palet, ...boom }: BoomProps & { comp
       className={`absolute bottom-0 left-0 w-full pointer-events-none ${compact ? 'md:hidden' : 'hidden md:block'}`}
       style={compact ? { aspectRatio: '520 / 140' } : { aspectRatio: '1200 / 140', minHeight: '7rem' }}
       role="img"
-      aria-label={metDorp ? 'Landschap met een huisje en een kerstboom waar elke dag een kerstbal bij komt' : 'Golvende heuvels'}
+      aria-label={metDorp ? 'Een dorpje waar bij elk geopend deurtje een lichtje gaat branden' : metHuis ? 'Landschap met een huisje en een kerstboom waar elke dag een kerstbal bij komt' : 'Golvende heuvels'}
     >
       <defs>
         <radialGradient id={raamId} cx="50%" cy="50%" r="50%">
@@ -210,7 +214,7 @@ export function Landschap({ compact, stijl, palet, ...boom }: BoomProps & { comp
       </defs>
 
       <path d="M0 140Q150 100 320 130T640 120T960 125T1200 110V200H0Z" fill={palet.heuvelVer} opacity={palet.heuvelVerOpac} {...deel(stijl, 'achtergrond primair')} />
-      {metDorp && (
+      {metBos && (
         <g {...deel(stijl, 'achtergrond primair')}>
           {VERRE_BOMEN.map((b, i) => (
             <path key={i} d={`M${b.x} ${b.basis}l14 0l-7 -${b.h}z`} fill={palet.bosVer} opacity={palet.bosVerOpac} />
@@ -219,7 +223,7 @@ export function Landschap({ compact, stijl, palet, ...boom }: BoomProps & { comp
       )}
       <path d="M0 160Q200 130 420 152T800 150T1200 140V200H0Z" fill={palet.heuvelMidden} opacity={palet.heuvelMiddenOpac} {...deel(stijl, 'achtergrond primair licht')} />
 
-      {metDorp && (
+      {metHuis && (
         <g transform={`translate(${huisX} 118)`}>
           <circle cx="17" cy="44" r="26" fill={`url(#${raamId})`} className="adv-raamlicht" />
           <rect x="0" y="28" width="60" height="34" fill={palet.huisMuur} {...deel(stijl, 'secundair')} />
@@ -239,13 +243,15 @@ export function Landschap({ compact, stijl, palet, ...boom }: BoomProps & { comp
         </g>
       )}
 
-      {metDorp && dennen.map((d, i) => <Den key={i} {...d} palet={palet} stijl={stijl} />)}
+      {metDorp && <Dorp compact={compact} palet={palet} hangt={boom.hangt} sterAan={boom.sterAan} aantal={boom.aantal} accent={boom.accent} raamId={raamId} />}
+
+      {(metHuis || metDorp) && dennen.map((d, i) => <Den key={i} {...d} palet={palet} stijl={stijl} />)}
 
       <path d="M0 178Q150 160 330 172T700 170T1000 165T1200 172V200H0Z" fill={palet.heuvelVoor1} opacity={palet.heuvelVoor1Opac} {...deel(stijl, 'achtergrond primair licht')} />
       <path d="M0 190Q200 178 420 186T860 184T1200 188V200H0Z" fill={palet.heuvelVoor2} opacity={palet.heuvelVoor2Opac} {...deel(stijl, 'achtergrond primair')} />
 
       {/* de boom met de bollen, op de heuvel */}
-      {metDorp && (
+      {metHuis && (
         <>
           <ellipse cx={boomX + 50} cy="187" rx="44" ry="5" fill="rgba(0,0,0,0.15)" />
           <g transform={`translate(${boomX} 82) scale(0.5)`}>

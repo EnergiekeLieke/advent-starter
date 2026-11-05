@@ -6,7 +6,17 @@ import type { VersieInfo } from '@/lib/versie';
 
 const WORKFLOW_PAD = '.github/workflows/update-van-template.yml';
 
-export default function UpdatesTab({ versie }: { versie: VersieInfo }) {
+interface Props {
+  versie: VersieInfo;
+  /** Zijn er wijzigingen die nog niet zijn opgeslagen? */
+  gewijzigd: boolean;
+  bezig: boolean;
+  /** Kunnen de wijzigingen nu worden opgeslagen (geen foutmeldingen)? */
+  kanOpslaan: boolean;
+  opOpslaan: () => void;
+}
+
+export default function UpdatesTab({ versie, gewijzigd, bezig, kanOpslaan, opOpslaan }: Props) {
   const [workflow, setWorkflow] = useState<string | null>(null);
   const [laden, setLaden] = useState(true);
   const [bericht, setBericht] = useState<Bericht>(null);
@@ -56,7 +66,20 @@ export default function UpdatesTab({ versie }: { versie: VersieInfo }) {
 
       <section className="space-y-3">
         <h2 className="text-sm font-semibold">Start de update</h2>
-        <ol className="ml-5 list-decimal space-y-1 text-sm text-slate-700">
+        <ol start={0} className="ml-5 list-decimal space-y-1 text-sm text-slate-700">
+          <li>
+            <strong>Sla eerst op wat je tot nu toe hebt gebouwd.</strong> Na de update ververs je deze pagina, en wijzigingen die je nog niet hebt opgeslagen zijn dan weg.
+            {gewijzigd ? (
+              <span className="mt-2 flex flex-wrap items-center gap-3 rounded-lg border border-amber-300 bg-amber-50 p-2 text-amber-950">
+                <span className="flex-1">
+                  {kanOpslaan ? 'Je hebt wijzigingen die nog niet zijn opgeslagen.' : 'Je hebt wijzigingen die nog niet zijn opgeslagen, maar opslaan kan pas als je de melding bovenaan de pagina hebt opgelost.'}
+                </span>
+                <button type="button" onClick={opOpslaan} disabled={bezig || !kanOpslaan} className={KNOP_PRIMAIR}>{bezig ? 'Opslaan...' : 'Nu opslaan'}</button>
+              </span>
+            ) : (
+              <span className="mt-1 block text-emerald-800">Alles is opgeslagen, je kunt verder.</span>
+            )}
+          </li>
           <li>Klik op de knop hieronder. Je komt op GitHub bij <strong>Update van de template</strong>.</li>
           <li>Klik rechts op <strong>Run workflow</strong> en daarna op de groene knop <strong>Run workflow</strong>. Laat het vak &quot;Versie&quot; leeg om de nieuwste te krijgen.</li>
           <li>Wacht tot de run een groen vinkje heeft (ongeveer een halve minuut). Open de run om te zien wat er is veranderd.</li>
