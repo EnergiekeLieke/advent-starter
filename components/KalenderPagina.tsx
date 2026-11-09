@@ -24,9 +24,11 @@ interface Props {
   embed: boolean;
   /** Voorbeeldmodus: ontvangt live instellingen van de editor in plaats van de opgeslagen versie */
   preview: boolean;
+  /** Een deurtje dat bij het openen van de pagina meteen geopend wordt (uit ?deurtje=) */
+  deurtje?: number | null;
 }
 
-export default function KalenderPagina({ config, datum, live, embed, preview }: Props) {
+export default function KalenderPagina({ config, datum, live, embed, preview, deurtje = null }: Props) {
   const router = useRouter();
   const [actueel, setActueel] = useState(config);
   const [markeer, setMarkeer] = useState<string | null>(null);
@@ -68,5 +70,5 @@ export default function KalenderPagina({ config, datum, live, embed, preview }: 
     };
   }, [live, preview, datum, router]);
 
-  return <Adventkalender config={actueel} datum={datum} embed={embed} preview={preview} markeer={markeer} />;
+  return <Adventkalender config={actueel} datum={datum} embed={embed} preview={preview} markeer={markeer} deurtje={deurtje} />;
 }

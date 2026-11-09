@@ -20,6 +20,9 @@ export default async function Page({ searchParams }: { searchParams: Promise<Par
   const preview = beheerder && eerste(params.preview) === '1';
   const datum = gesimuleerd ?? nu;
   const embed = eerste(params.embed);
+  // ?deurtje=7: de link achter een QR-code. De kalender opent dan dat deurtje, als het al open mag.
+  const deurtjeParam = Number(eerste(params.deurtje));
+  const deurtje = Number.isInteger(deurtjeParam) && deurtjeParam >= 1 && deurtjeParam <= config.aantalDagen ? deurtjeParam : null;
 
   return (
     <KalenderPagina
@@ -32,6 +35,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<Par
       embed={embed === 'true' || embed === '1'}
       // ?preview=1: voorbeeld binnen de editor
       preview={preview}
+      deurtje={preview ? null : deurtje}
     />
   );
 }

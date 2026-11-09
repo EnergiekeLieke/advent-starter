@@ -25,6 +25,8 @@ export default function DelenTab({ config, gewijzigd, opgeslagenTestmodus, voorb
   // In Kennis Shop is het iframe meestal 450 tot 600 px breed (op een telefoon smaller)
   const [breedte, setBreedte] = useState(600);
   const [bericht, setBericht] = useState<Bericht>(null);
+  // De pagina waarop je de kalender hebt ingebed (voor QR-codes die naar een deurtje wijzen)
+  const [paginaAdres, setPaginaAdres] = useState('');
   useEffect(() => setOrigin(window.location.origin), []);
 
   // De kalender is hoger naarmate er meer deurtjes zijn en naarmate het iframe breder is (de deurtjes worden dan groter)
@@ -34,6 +36,20 @@ export default function DelenTab({ config, gewijzigd, opgeslagenTestmodus, voorb
   const link = `${origin}/`;
   const titel = config.titel.replace(/"/g, '&quot;');
   const embedcode = `<iframe src="${origin}/?embed=true" width="100%" height="${hoogte}" frameborder="0" title="${titel}"></iframe>`;
+
+  // Links naar één deurtje, bijvoorbeeld voor een QR-code op drukwerk. Leeg adres: de kalender zelf.
+  const paginaGeldig = /^https:\/\/\S+$/i.test(paginaAdres.trim());
+  const deurtjeBasis = (paginaGeldig ? paginaAdres.trim() : `${origin}/`).replace(/#.*$/, '');
+  const deurtjeLink = (dag: number) => `${deurtjeBasis}${deurtjeBasis.includes('?') ? '&' : '?'}deurtje=${dag}`;
+  const deurtjeLinks = Array.from({ length: config.aantalDagen }, (_, i) => deurtjeLink(i + 1));
+  // Voor een eigen pagina: de embedcode die ook ?deurtje= uit de link van de pagina doorgeeft aan het iframe
+  const embedMetDeurtje = `<iframe id="adventkalender" src="${origin}/?embed=true" width="100%" height="${hoogte}" frameborder="0" title="${titel}"></iframe>
+<script>
+  (function () {
+    var d = new URLSearchParams(location.search).get('deurtje');
+    if (/^\\d{1,2}$/.test(d || '')) document.getElementById('adventkalender').src += '&deurtje=' + d;
+  })();
+</script>`;
 
   async function kopieer(tekst: string, melding: string) {
     try {
@@ -137,6 +153,44 @@ export default function DelenTab({ config, gewijzigd, opgeslagenTestmodus, voorb
           Wil je eerst testen wat je klanten straks zien? Zet dan tijdelijk de testmodus aan bij Opties en zet hem daarna weer uit.
         </p>
       </section>
+
+      <details className="rounded-lg border border-slate-200 bg-white p-3">
+        <summary className="cursor-pointer text-sm font-semibold">Links per deurtje (voor QR-codes op drukwerk)</summary>
+        <div className="mt-3 space-y-3">
+          <p className="text-xs text-slate-600">
+            Wie zo'n link opent, ziet de kalender met het deurtje van die dag al open. Is die dag nog niet aangebroken, dan blijft het deurtje dicht en staat er wanneer het opengaat.
+            De links blijven na december ook gewoon werken. Gebruik voor drukwerk een adres dat blijft bestaan, bij voorkeur je eigen domein.
+          </p>
+          <Veld label="Pagina waarop je de kalender hebt ingebed (optioneel)" hint="Bijvoorbeeld https://jouwwebsite.nl/advent. Laat je dit leeg, dan wijzen de links naar de kalender zelf.">
+            <input className={INPUT} value={paginaAdres} onChange={(e) => setPaginaAdres(e.target.value)} placeholder="https://jouwwebsite.nl/advent" inputMode="url" />
+          </Veld>
+          {paginaAdres.trim() && !paginaGeldig && <p className="text-xs text-red-700">Het adres moet met https:// beginnen en geen spaties hebben. Tot die tijd staan hieronder de links naar de kalender zelf.</p>}
+          <div className="flex flex-wrap gap-2">
+            <button type="button" onClick={() => kopieer(deurtjeLinks.map((l, i) => `${i + 1}\t${l}`).join('\n'), `Alle ${deurtjeLinks.length} links staan op je klembord, met het nummer ervoor.`)} className={KNOP}>
+              Kopieer alle links
+            </button>
+          </div>
+          <ul className="max-h-64 space-y-1 overflow-auto rounded-lg border border-slate-200 p-2 text-sm">
+            {deurtjeLinks.map((l, i) => (
+              <li key={l} className="flex items-center gap-2">
+                <span className="w-14 shrink-0 text-xs text-slate-500">Deurtje {i + 1}</span>
+                <input className={`${INPUT} font-mono text-xs`} readOnly value={l} onFocus={(e) => e.currentTarget.select()} aria-label={`Link naar deurtje ${i + 1}`} />
+                <button type="button" onClick={() => kopieer(l, `De link naar deurtje ${i + 1} staat op je klembord.`)} className={KNOP}>Kopieer</button>
+              </li>
+            ))}
+          </ul>
+          {paginaGeldig && (
+            <div className="space-y-2">
+              <p className="text-xs text-slate-600">
+                Staat je kalender op een eigen pagina in een iframe? Dan weet het iframe niet welk deurtje er in de link van die pagina staat. Gebruik op die pagina deze embedcode, die geeft het deurtje door:
+              </p>
+              <textarea className={`${INPUT} font-mono`} readOnly rows={8} value={embedMetDeurtje} onFocus={(e) => e.currentTarget.select()} aria-label="Embedcode die het deurtje doorgeeft" />
+              <button type="button" onClick={() => kopieer(embedMetDeurtje, 'De embedcode staat op je klembord.')} className={KNOP}>Kopieer deze embedcode</button>
+              <p className="text-xs text-slate-500">Dit werkt alleen als je websitebouwer scripts in een embed-blok toestaat. Lukt dat niet, laat de QR-codes dan naar de kalender zelf wijzen.</p>
+            </div>
+          )}
+        </div>
+      </details>
 
       {bericht && (
         <div

@@ -93,6 +93,8 @@ interface Props {
   preview?: boolean;
   /** Voorbeeld in de editor: de kleur (bijvoorbeeld 'primair' of 'tegel2') waarvan we de onderdelen laten oplichten */
   markeer?: string | null;
+  /** Een deurtje dat bij het openen meteen opent (de link achter een QR-code). Is het nog niet aan de beurt, dan krijgt de bezoeker de melding wanneer het opengaat. */
+  deurtje?: number | null;
 }
 
 // Bij de schuifdeur blijft de deur binnen zijn vakje terwijl hij wegschuift. Bij de andere stijlen is er geen omhulsel nodig.
@@ -100,7 +102,7 @@ export function Omhulsel({ actief, children }: { actief: boolean; children: Reac
   return actief ? <span className="absolute inset-0 block overflow-hidden rounded-xl">{children}</span> : <>{children}</>;
 }
 
-export default function Adventkalender({ config, datum, embed = false, preview = false, markeer = null }: Props) {
+export default function Adventkalender({ config, datum, embed = false, preview = false, markeer = null, deurtje = null }: Props) {
   const [beweging, setBeweging] = useState(true);
   const [verledenOpen, setVerledenOpen] = useState(false);
   const [vandaagOpen, setVandaagOpen] = useState(false);
@@ -117,6 +119,8 @@ export default function Adventkalender({ config, datum, embed = false, preview =
   const gepusht = useRef(false);
   const swipeStart = useRef<number | null>(null);
   const confettiTeller = useRef(0);
+  const deurtjeGedaan = useRef(false);
+  const deeplinkRef = useRef<(dag: number) => void>(() => {});
 
   const { opties } = config;
   const aantal = config.aantalDagen;
@@ -240,10 +244,19 @@ export default function Adventkalender({ config, datum, embed = false, preview =
         setVandaagOpen(true);
         if (beweging && !preview) confetti();
       }, wacht));
-      if (!preview) timers.push(setTimeout(() => openDag(vandaag, true), wacht + (beweging ? 800 : 200)));
+      // Met een eigen deurtje in de link opent alleen dat deurtje, niet ook nog dat van vandaag
+      if (!preview && deurtje === null) timers.push(setTimeout(() => openDag(vandaag, true), wacht + (beweging ? 800 : 200)));
     }
     return () => timers.forEach(clearTimeout);
-  }, [fase, vandaag, beweging, preview, confetti, openDag]);
+  }, [fase, vandaag, beweging, preview, deurtje, confetti, openDag]);
+
+  // De link achter een QR-code (?deurtje=7): een deurtje dat al open mag, opent meteen. Een deurtje in de toekomst blijft dicht en toont de melding.
+  useEffect(() => {
+    if (deurtje === null || preview || deurtjeGedaan.current) return;
+    deurtjeGedaan.current = true;
+    const timer = setTimeout(() => deeplinkRef.current(deurtje), beweging ? 1000 : 200);
+    return () => { clearTimeout(timer); deurtjeGedaan.current = false; };
+  }, [deurtje, preview, beweging]);
 
   // Popup: scrollen vergrendelen, toetsen, finale op de laatste dag
   useEffect(() => {
@@ -301,6 +314,12 @@ export default function Adventkalender({ config, datum, embed = false, preview =
     if (meldingTimer.current) clearTimeout(meldingTimer.current);
     meldingTimer.current = setTimeout(() => { setWiebelDag(null); setMelding(''); }, 3000);
   }
+
+  // Een deurtje uit de link: een deurtje dat nog niet open mag, scrollen we in beeld, zodat de bezoeker het wiebelen en de melding ziet
+  deeplinkRef.current = (dag: number) => {
+    if (!toegankelijk(dag)) document.getElementById(`adv-dag-${dag}`)?.scrollIntoView({ behavior: 'auto', block: 'center' });
+    klik(dag);
+  };
 
   function naarVandaag() {
     document.getElementById(`adv-dag-${vandaag}`)?.scrollIntoView({ behavior: beweging ? 'smooth' : 'auto', block: 'center' });

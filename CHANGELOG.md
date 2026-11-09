@@ -2,6 +2,11 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.14.0
+
+- Nieuw: een link naar één deurtje, bijvoorbeeld voor een QR-code op drukwerk of in een mail. Zet `?deurtje=7` achter het adres van je kalender, dan opent de kalender meteen het deurtje van dag 7. Is die dag nog niet aangebroken, dan blijft het deurtje dicht, wiebelt het en staat er wanneer het opengaat. Zo kan niemand vooruit kijken, en blijven de links ook na december gewoon werken.
+- Bij Delen staat nu het blokje "Links per deurtje": alle links in één keer kopiëren of per deurtje. Staat je kalender ingebed op een eigen pagina, vul dan het adres van die pagina in. Je krijgt dan links naar die pagina en een embedcode die het deurtje aan het iframe doorgeeft.
+
 ## v1.13.2
 
 - Overzichtelijker: bij Kleuren en logo staan de twee blokken over een eigen achtergrondafbeelding nu onder het logo en zijn ze standaard ingeklapt. Klik op de kop om ze te openen. Gebruik je een afbeelding, dan staat er "in gebruik" achter de kop, ook als het blok dicht is.
