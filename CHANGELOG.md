@@ -2,6 +2,14 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.15.0
+
+- Nieuw: een knop **Deel met anderen** naast de knop voor de agenda-herinnering. Je klant opent een klein menu en kopieert een tekstje met de link, of stuurt de kalender door via WhatsApp, e-mail, Facebook of LinkedIn. Op een telefoon staat er ook "Meer opties" bij, het deelmenu van het toestel zelf. Je zet de knop aan bij Opties (standaard staat hij uit) en past daar ook het tekstje aan. Typ `{titel}` voor de titel van je kalender.
+- De link die gedeeld wordt, is dezelfde als in de agenda-herinnering (bij Opties). Laat je die leeg, dan wordt het adres van de kalender zelf gedeeld. Staat je kalender ingesloten op een eigen pagina? Vul dan het adres van die pagina in.
+- De knop blijft ook na de laatste dag staan, de knoppen voor de agenda verdwijnen dan wel.
+- De embedcode bij Delen bevat nu `allow="web-share; clipboard-write"`, zodat kopiëren en het deelmenu van een telefoon ook in een iframe werken. Heb je de kalender al ingesloten? Plak dan de nieuwe embedcode. Zonder dit werkt kopiëren nog steeds, en ook WhatsApp en e-mail.
+- Het hoogteadvies bij Delen telt iets bij op een smal scherm als de knop aanstaat, want de drie knoppen staan daar onder elkaar.
+
 ## v1.14.0
 
 - Nieuw: een link naar één deurtje, bijvoorbeeld voor een QR-code op drukwerk of in een mail. Zet `?deurtje=7` achter het adres van je kalender, dan opent de kalender meteen het deurtje van dag 7. Is die dag nog niet aangebroken, dan blijft het deurtje dicht, wiebelt het en staat er wanneer het opengaat. Zo kan niemand vooruit kijken, en blijven de links ook na december gewoon werken.

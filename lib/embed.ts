@@ -18,7 +18,7 @@ function titelHoogte(titel: string, schaal: number, beschikbaar: number, breed: 
  * De getallen zijn gemeten in de echte kalender: 470 px voor titel, knoppen en voetregel (iets meer bij een heel smal of een breed scherm),
  * plus de rijen met deurtjes. Het advies houdt rekening met de langste fase (voor de start, want dan staat er extra tekst boven).
  */
-export function adviesIframeHoogte(aantalDagen: number, breedte = 600, metOnderkant = true, titel = '', titelGrootte = 100, eigenOnderkant = false): number {
+export function adviesIframeHoogte(aantalDagen: number, breedte = 600, metOnderkant = true, titel = '', titelGrootte = 100, eigenOnderkant = false, metDelen = false): number {
   const n = Math.max(1, Math.min(31, Math.round(Number.isFinite(aantalDagen) ? aantalDagen : 24)));
   const w = Math.max(280, Math.min(1400, Math.round(Number.isFinite(breedte) ? breedte : 600)));
 
@@ -37,9 +37,12 @@ export function adviesIframeHoogte(aantalDagen: number, breedte = 600, metOnderk
   const onderkantHoogte = eigenOnderkant ? Math.max(0, afbeeldingHoogte - 16) : 0;
   const hoogte = kopEnVoet - (metOnderkant ? 0 : HOOGTE_ONDERKANT) + onderkantHoogte + rijen * tegel + (rijen - 1) * gat;
 
+  // Op een smal scherm staat de knop om te delen op een eigen regel onder de andere knoppen (gemeten: 42 px). Vanaf ongeveer 600 px past hij ernaast.
+  const delenHoogte = metDelen && w < 560 ? 44 : 0;
+
   // Een grotere of kleinere titel past op meer of minder regels en is zelf hoger. We schatten het verschil met de standaardgrootte.
   const titelVerschil = titelGrootte === 100 ? 0 : titelHoogte(titel, titelGrootte / 100, kaart - marges, breed) - titelHoogte(titel, 1, kaart - marges, breed);
 
   // Een kleine marge voor verschillen in lettertype, afgerond op 50
-  return Math.ceil((hoogte + titelVerschil + 30) / 50) * 50;
+  return Math.ceil((hoogte + delenHoogte + titelVerschil + 30) / 50) * 50;
 }

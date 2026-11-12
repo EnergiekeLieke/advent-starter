@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Confetti from '@/components/Confetti';
 import AdventIcoon from '@/components/AdventIcoon';
 import { Landschap, Sneeuw, STERREN, Strik } from '@/components/AdventDecor';
+import DeelKnop from '@/components/DeelKnop';
 import EigenLettertypeStijl from '@/components/EigenLettertypeStijl';
 import { audioSpelerUrl } from '@/lib/audio';
 import { dagenVoor, teltekstVul, type AdventConfig } from '@/lib/config';
@@ -399,15 +400,19 @@ export default function Adventkalender({ config, datum, embed = false, preview =
               Nog {dagenTotStart} {dagenTotStart === 1 ? 'dag' : 'dagen'} tot het eerste deurtje opengaat.
             </p>
           )}
-          {fase !== 'na' && (
-            <div className="mt-4 flex flex-wrap justify-center gap-2">
+          {/* De knoppen voor de agenda verdwijnen na de laatste dag, de knop om te delen blijft staan */}
+          {(fase !== 'na' || opties.delen) && (
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
               {fase === 'bezig' && (
                 <button type="button" data-kleur="accent" onClick={naarVandaag} className={KNOP_PILL}>Spring naar vandaag</button>
               )}
-              {opties.herinnering && (
+              {fase !== 'na' && opties.herinnering && (
                 <button type="button" onClick={() => downloadHerinnering(config.titel, start, aantal, fase === 'bezig' ? vandaag : 1, opties.herinneringUrl)} data-kleur="accent" className={KNOP_PILL}>
                   Dagelijkse herinnering in je agenda
                 </button>
+              )}
+              {opties.delen && (
+                <DeelKnop titel={config.titel} sjabloon={opties.delenTekst} eigenLink={opties.herinneringUrl} className={KNOP_PILL} />
               )}
             </div>
           )}

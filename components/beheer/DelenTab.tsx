@@ -31,11 +31,11 @@ export default function DelenTab({ config, gewijzigd, opgeslagenTestmodus, voorb
 
   // De kalender is hoger naarmate er meer deurtjes zijn en naarmate het iframe breder is (de deurtjes worden dan groter)
   const achtergrondAfb = heeftAchtergrondAfbeelding(config.opties);
-  const advies = adviesIframeHoogte(config.aantalDagen, breedte, !achtergrondAfb && config.opties.landschap !== 'geen' && config.opties.landschap !== 'eigen', config.titel, config.titelGrootte, !achtergrondAfb && config.opties.landschap === 'eigen' && Boolean(config.opties.onderkantAfbeelding || config.opties.onderkantAfbeeldingMobiel));
+  const advies = adviesIframeHoogte(config.aantalDagen, breedte, !achtergrondAfb && config.opties.landschap !== 'geen' && config.opties.landschap !== 'eigen', config.titel, config.titelGrootte, !achtergrondAfb && config.opties.landschap === 'eigen' && Boolean(config.opties.onderkantAfbeelding || config.opties.onderkantAfbeeldingMobiel), config.opties.delen);
   const hoogte = hoogteInvoer ?? advies;
   const link = `${origin}/`;
   const titel = config.titel.replace(/"/g, '&quot;');
-  const embedcode = `<iframe src="${origin}/?embed=true" width="100%" height="${hoogte}" frameborder="0" title="${titel}"></iframe>`;
+  const embedcode = `<iframe src="${origin}/?embed=true" width="100%" height="${hoogte}" frameborder="0" allow="web-share; clipboard-write" title="${titel}"></iframe>`;
 
   // Links naar één deurtje, bijvoorbeeld voor een QR-code op drukwerk. Leeg adres: de kalender zelf.
   const paginaGeldig = /^https:\/\/\S+$/i.test(paginaAdres.trim());
@@ -43,7 +43,7 @@ export default function DelenTab({ config, gewijzigd, opgeslagenTestmodus, voorb
   const deurtjeLink = (dag: number) => `${deurtjeBasis}${deurtjeBasis.includes('?') ? '&' : '?'}deurtje=${dag}`;
   const deurtjeLinks = Array.from({ length: config.aantalDagen }, (_, i) => deurtjeLink(i + 1));
   // Voor een eigen pagina: de embedcode die ook ?deurtje= uit de link van de pagina doorgeeft aan het iframe
-  const embedMetDeurtje = `<iframe id="adventkalender" src="${origin}/?embed=true" width="100%" height="${hoogte}" frameborder="0" title="${titel}"></iframe>
+  const embedMetDeurtje = `<iframe id="adventkalender" src="${origin}/?embed=true" width="100%" height="${hoogte}" frameborder="0" allow="web-share; clipboard-write" title="${titel}"></iframe>
 <script>
   (function () {
     var d = new URLSearchParams(location.search).get('deurtje');

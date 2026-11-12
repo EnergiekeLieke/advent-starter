@@ -152,6 +152,10 @@ const optiesSchema = z.object({
   herinnering: z.boolean().default(true),
   // Link die in de agenda-herinnering staat. Leeg betekent: de pagina waar de bezoeker de kalender opent.
   herinneringUrl: knopUrl.default(''),
+  // Knop "Deel met anderen". De link die gedeeld wordt is dezelfde als in de agenda-herinnering (herinneringUrl).
+  delen:       z.boolean().default(false),
+  // De tekst die bij de link komt. Leeg betekent: de standaardtekst. {titel} wordt de titel van de kalender.
+  delenTekst:  z.string().trim().max(200, 'De tekst bij het delen is te lang (maximaal 200 tekens)').default(''),
   // De regel onder de kalender met het aantal geopende deurtjes. Leeg betekent: de standaardtekst. {open} en {totaal} worden ingevuld.
   teltekstAan: z.boolean().default(true),
   teltekst:    z.string().trim().max(120, 'De tekst onder de kalender is te lang (maximaal 120 tekens)').default(''),
@@ -249,7 +253,7 @@ const VELDNAMEN: Record<string, string> = {
   achtergrond: 'achtergrondkleur', accent: 'accentkleur', licht: 'lichte kleur', primair: 'primaire kleur',
   secundair: 'secundaire kleur', lettertype: 'lettertype', dagen: 'deurtjes', opties: 'opties',
   knoppen: 'knoppen', testmodus: 'testmodus', standaardLabel: 'standaard knoptekst', openen: 'openen', aan: 'knop aan', deurStijl: 'deurstijl',
-  herinneringUrl: 'link in de herinnering', teltekst: 'tekst onder de kalender', popupAchtergrond: 'achtergrond van het deurtje', popupAchtergrondTekst: 'tekstkleur in het deurtje', popupAchtergrondLaag: 'laag over de achtergrond van het deurtje', achtergrondAfbeelding: 'achtergrondafbeelding (computer)', achtergrondAfbeeldingMobiel: 'achtergrondafbeelding (telefoon)', achtergrondTekst: 'tekstkleur op de achtergrond', achtergrondLaag: 'laag over de achtergrond', onderkantAfbeelding: 'afbeelding onderkant (computer)', onderkantAfbeeldingMobiel: 'afbeelding onderkant (telefoon)', teltekstAan: 'tekst onder de kalender', titelGrootte: 'grootte van de titel', lettertypes: 'lettertypes', eigenLettertype: 'eigen lettertype 1', eigenLettertype2: 'eigen lettertype 2', normaal: 'gewoon lettertypebestand', vet: 'vet lettertypebestand', deurtjes: 'tekst op de deurtjes',
+  herinneringUrl: 'link in de herinnering', delen: 'knop om te delen', delenTekst: 'tekst bij het delen', teltekst: 'tekst onder de kalender', popupAchtergrond: 'achtergrond van het deurtje', popupAchtergrondTekst: 'tekstkleur in het deurtje', popupAchtergrondLaag: 'laag over de achtergrond van het deurtje', achtergrondAfbeelding: 'achtergrondafbeelding (computer)', achtergrondAfbeeldingMobiel: 'achtergrondafbeelding (telefoon)', achtergrondTekst: 'tekstkleur op de achtergrond', achtergrondLaag: 'laag over de achtergrond', onderkantAfbeelding: 'afbeelding onderkant (computer)', onderkantAfbeeldingMobiel: 'afbeelding onderkant (telefoon)', teltekstAan: 'tekst onder de kalender', titelGrootte: 'grootte van de titel', lettertypes: 'lettertypes', eigenLettertype: 'eigen lettertype 1', eigenLettertype2: 'eigen lettertype 2', normaal: 'gewoon lettertypebestand', vet: 'vet lettertypebestand', deurtjes: 'tekst op de deurtjes',
   popupKop: 'kop achter het deurtje', popupTekst: 'tekst achter het deurtje',
 };
 

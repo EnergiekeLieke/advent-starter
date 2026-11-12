@@ -15,6 +15,7 @@ import { AUDIO_FOUTMELDING, audioGeldig, schoonAudio } from '@/lib/audio';
 import { dagenVoor, LETTERTYPE_PLEKKEN, LETTERTYPES, lettertypeVoor, leesConfig, MAX_DAGEN, THEMAS, themaVan, type AdventConfig, type AdventDag, type AdventKleuren, type DeurStijl, type Lettertype, type LettertypePlek, type Onderkant, type ThemaNaam } from '@/lib/config';
 import standaardConfig from '@/config/advent.json';
 import { labelKort, parseIso, plusDagen } from '@/lib/datum';
+import { deelBericht, deelTekst, STANDAARD_DEELTEKST } from '@/lib/delen';
 import { contrast, cssVariabelen, heeftAchtergrondAfbeelding, heeftPopupAchtergrond, landschapPalet, tegelKleuren } from '@/lib/kleur';
 import type { OpslagModus } from '@/lib/opslag';
 import { PROMPT_TEKSTEN } from '@/lib/promptTeksten';
@@ -1085,6 +1086,7 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
                   ['sterren', 'Twinkelende sterretjes'],
                   ['confetti', 'Confetti bij het openen van het deurtje van vandaag'],
                   ['herinnering', 'Knop voor een dagelijkse herinnering in de agenda'],
+                  ['delen', 'Knop "Deel met anderen" om de kalender te delen (WhatsApp, e-mail en sociale media)'],
                 ] as const).map(([naam, uitleg]) => (
                   <label key={naam} className="flex items-start gap-3 text-sm">
                     <input type="checkbox" checked={config.opties[naam]} onChange={(e) => zetOptie(naam, e.target.checked)} className="mt-0.5 h-4 w-4" />
@@ -1093,12 +1095,28 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
                 ))}
               </div>
 
-              {config.opties.herinnering && (
+              {(config.opties.herinnering || config.opties.delen) && (
                 <Veld
-                  label="Link in de agenda-herinnering"
-                  hint="Laat leeg om te linken naar de pagina waar de bezoeker de kalender opent. Staat de kalender ingesloten op een andere pagina, bijvoorbeeld op je Kennis Shop-pagina of op je website? Vul dan het adres van die pagina in."
+                  label={config.opties.herinnering && config.opties.delen ? 'Link in de agenda-herinnering en bij het delen' : config.opties.delen ? 'Link bij het delen' : 'Link in de agenda-herinnering'}
+                  hint="Laat leeg om te linken naar de pagina waar de bezoeker de kalender opent. Staat de kalender ingesloten op een andere pagina, bijvoorbeeld op je Kennis Shop-pagina of op je website? Vul dan het adres van die pagina in. Bij het delen is dit de link die je klant doorgeeft."
                 >
                   <input className={INPUT} value={config.opties.herinneringUrl} onChange={(e) => zetOptie('herinneringUrl', e.target.value.trim())} placeholder="https://" />
+                </Veld>
+              )}
+
+              {config.opties.delen && (
+                <Veld
+                  label="Tekst bij het delen"
+                  hint="Laat leeg voor de standaardtekst. Typ {titel} voor de titel van je kalender. De link komt er vanzelf achter."
+                >
+                  <input
+                    className={INPUT}
+                    value={config.opties.delenTekst}
+                    maxLength={200}
+                    onChange={(e) => zetOptie('delenTekst', e.target.value)}
+                    placeholder={STANDAARD_DEELTEKST}
+                  />
+                  <p className="mt-1 text-xs text-slate-500">Zo ziet het bericht eruit: {deelBericht(deelTekst(config.titel, config.opties.delenTekst), config.opties.herinneringUrl || 'https://jouwkalender.nl/')}</p>
                 </Veld>
               )}
 
