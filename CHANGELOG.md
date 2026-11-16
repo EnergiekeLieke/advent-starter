@@ -2,6 +2,12 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.16.0
+
+- Opmaak in de tekst van een deurtje: maak woorden **vet**, *cursief* of onderstreept. Selecteer de tekst in de beheerpagina en klik op de knop **B**, **I** of **U** (of gebruik Ctrl+B, Ctrl+I en Ctrl+U). Klik nog een keer om de opmaak weer weg te halen. Je ziet het meteen in het voorbeeld.
+- Onder de motorkap staan er tekens om de tekst: `**vet**`, `*cursief*` en `++onderstreept++`. Die zie je in de kalender zelf niet. Typ je zo'n teken met de hand, dan werkt het ook. Een los sterretje, bijvoorbeeld bij een voetnoot, blijft gewoon staan.
+- De prompt voor Claude (bij Importeren en exporteren) weet dat Claude de tekst spaarzaam mag opmaken.
+
 ## v1.15.0
 
 - Nieuw: een knop **Deel met anderen** naast de knop voor de agenda-herinnering. Je klant opent een klein menu en kopieert een tekstje met de link, of stuurt de kalender door via WhatsApp, e-mail, Facebook of LinkedIn. Op een telefoon staat er ook "Meer opties" bij, het deelmenu van het toestel zelf. Je zet de knop aan bij Opties (standaard staat hij uit) en past daar ook het tekstje aan. Typ `{titel}` voor de titel van je kalender.

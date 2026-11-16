@@ -19,6 +19,7 @@ import { deelBericht, deelTekst, STANDAARD_DEELTEKST } from '@/lib/delen';
 import { contrast, cssVariabelen, heeftAchtergrondAfbeelding, heeftPopupAchtergrond, landschapPalet, tegelKleuren } from '@/lib/kleur';
 import type { OpslagModus } from '@/lib/opslag';
 import { PROMPT_TEKSTEN } from '@/lib/promptTeksten';
+import OpmaakVeld from '@/components/beheer/OpmaakVeld';
 import type { VersieInfo } from '@/lib/versie';
 
 const TABS = ['Algemeen', 'Kleuren en logo', 'Deurtjes', 'Kennis Shop-links', 'Opties', 'Delen', 'Updates', 'Importeren en exporteren'] as const;
@@ -1019,9 +1020,7 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
                         <option value="opdracht">Opdracht (iets om te doen)</option>
                       </select>
                     </Veld>
-                    <Veld label="Tekst" hint={`${d.tekst.length} van 1500 tekens`}>
-                      <textarea className={INPUT} rows={4} value={d.tekst} maxLength={1500} onChange={(e) => wijzigDag(i, { tekst: e.target.value })} />
-                    </Veld>
+                    <OpmaakVeld label="Tekst" hint={`${d.tekst.length} van 1500 tekens`} value={d.tekst} maxLength={1500} onChange={(tekst) => wijzigDag(i, { tekst })} />
                     <Veld label="Afbeelding (optioneel)" hint="Een link die met https:// begint, of upload een bestand.">
                       <input className={INPUT} value={d.afbeelding} placeholder="https://" onChange={(e) => wijzigDag(i, { afbeelding: e.target.value.trim() })} />
                     </Veld>

@@ -13,6 +13,7 @@ Over mijn bedrijf en klanten:
 Regels:
 - Schrijf in correct Nederlands, in de jij-vorm en zonder lange streepjes.
 - Elke tekst is maximaal 3 korte zinnen (maximaal 400 tekens).
+- Gebruik geen HTML. Opmaak mag spaarzaam, alleen in het veld "tekst": **vet**, *cursief* en ++onderstreept++.
 - Wissel "tekst" (inspiratie of weetje) af met "opdracht" (een kleine opdracht om vandaag te doen).
 - Gebruik een knop alleen bij deurtjes waar een link past. Laat de knop anders leeg ("label": "", "url": "").
 - Verzin geen links. Gebruik alleen links die ik hierboven geef.

@@ -7,6 +7,7 @@ import { Landschap, Sneeuw, STERREN, Strik } from '@/components/AdventDecor';
 import DeelKnop from '@/components/DeelKnop';
 import EigenLettertypeStijl from '@/components/EigenLettertypeStijl';
 import { audioSpelerUrl } from '@/lib/audio';
+import { maakOpmaak } from '@/lib/opmaak';
 import { dagenVoor, teltekstVul, type AdventConfig } from '@/lib/config';
 import { confettiKleuren, cssVariabelen, heeftAchtergrondAfbeelding, heeftPopupAchtergrond, landschapPalet, tegelKleuren } from '@/lib/kleur';
 import { isoVan, labelKort, labelLang, parseIso, plusDagen, verschilInDagen, type Datum } from '@/lib/datum';
@@ -589,7 +590,7 @@ export default function Adventkalender({ config, datum, embed = false, preview =
                   <AdventIcoon nr={inhoud.dag - 1} className="h-11 w-11" />
                 </div>
                 <h2 data-kleur="primair" className="adv-deel adv-ptekst font-popkop text-2xl font-bold text-primair mt-4">{inhoud.titel}</h2>
-                {inhoud.tekst && <p data-kleur="tekst" className="adv-deel adv-ptekst mt-3 text-inkt leading-relaxed whitespace-pre-line">{inhoud.tekst}</p>}
+                {inhoud.tekst && <p data-kleur="tekst" className="adv-deel adv-ptekst mt-3 text-inkt leading-relaxed whitespace-pre-line">{maakOpmaak(inhoud.tekst)}</p>}
                 {inhoud.afbeelding && (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={inhoud.afbeelding} alt="" className="mt-4 mx-auto max-h-56 w-auto max-w-full rounded-xl object-cover" />
