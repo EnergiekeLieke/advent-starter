@@ -1009,11 +1009,15 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
                     {dagDatum(i) && <span className="ml-2 text-xs font-normal text-slate-500">{dagDatum(i)}</span>}
                     {voorbeeldDagen.includes(d.dag) && <span className="ml-2 rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-800">voorbeeldtekst</span>}
                     {d.soort === 'opdracht' && <span className="ml-2 rounded-full bg-emerald-100 px-2 py-0.5 text-xs text-emerald-800">opdracht</span>}
+                    {d.cadeautje && <span className="ml-2 rounded-full bg-rose-100 px-2 py-0.5 text-xs text-rose-800">cadeautje</span>}
                     {d.knop.aan && d.knop.url && <span className="ml-2 rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-800">knop</span>}
                     {d.audio && audioGeldig(schoonAudio(d.audio)) && <span className="ml-2 rounded-full bg-sky-100 px-2 py-0.5 text-xs text-sky-800">audio</span>}
                   </summary>
                   <div className="space-y-3 border-t border-slate-200 p-3">
                     <Veld label="Titel"><input className={INPUT} value={d.titel} maxLength={80} onChange={(e) => wijzigDag(i, { titel: e.target.value })} /></Veld>
+                    <Veld label="Fysiek cadeautje uitpakken (optioneel)" hint={`Noteer welk cadeautje er vandaag open mag. De bezoeker ziet dit in het deurtje. ${d.cadeautje.length} van 120 tekens`}>
+                      <input className={INPUT} value={d.cadeautje} maxLength={120} placeholder="Bijvoorbeeld: het kleine blauwe pakje" onChange={(e) => wijzigDag(i, { cadeautje: e.target.value })} />
+                    </Veld>
                     <Veld label="Soort">
                       <select className={INPUT} value={d.soort} onChange={(e) => wijzigDag(i, { soort: e.target.value as AdventDag['soort'] })}>
                         <option value="tekst">Tekst (inspiratie of weetje)</option>

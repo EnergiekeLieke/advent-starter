@@ -2,6 +2,10 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.17.0
+
+- Nieuw bij elk deurtje: **Fysiek cadeautje uitpakken**. Noteer in de beheerpagina welk cadeautje er vandaag open mag, bijvoorbeeld "het kleine blauwe pakje". De bezoeker ziet dit als een gestippeld vlak in het deurtje. Laat je het veld leeg, dan verschijnt er niets.
+
 ## v1.16.0
 
 - Opmaak in de tekst van een deurtje: maak woorden **vet**, *cursief* of onderstreept. Selecteer de tekst in de beheerpagina en klik op de knop **B**, **I** of **U** (of gebruik Ctrl+B, Ctrl+I en Ctrl+U). Klik nog een keer om de opmaak weer weg te halen. Je ziet het meteen in het voorbeeld.

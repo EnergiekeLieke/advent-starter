@@ -608,6 +608,12 @@ export default function Adventkalender({ config, datum, embed = false, preview =
                     className="mt-4 block w-full rounded-xl border-0"
                   />
                 )}
+                {inhoud.cadeautje && (
+                  <p data-kleur="tekst" className="adv-deel adv-ptekst mt-4 rounded-xl border-2 border-dashed border-goud px-4 py-3 text-inkt">
+                    <span className="block text-xs uppercase tracking-[0.2em] text-secundair">🎁 Fysiek cadeautje uitpakken</span>
+                    <span className="mt-1 block font-semibold">{inhoud.cadeautje}</span>
+                  </p>
+                )}
                 {heeftKnop && (
                   <a
                     href={inhoud.knop.url}

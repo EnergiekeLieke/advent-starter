@@ -199,6 +199,8 @@ export const dagSchema = z.object({
   knop: knopSchema.default({ aan: false, label: '', url: '' }),
   afbeelding: afbeeldingUrl.default(''),
   audio: audioUrl.default(''),
+  // Welk fysiek cadeautje de bezoeker vandaag mag uitpakken. Leeg betekent: geen cadeautje bij dit deurtje.
+  cadeautje: z.string().trim().max(120, 'De tekst bij het cadeautje is te lang (maximaal 120 tekens)').default(''),
 });
 
 const lettertypeKeuze = z.enum([...LETTERTYPE_SLEUTELS, ''], { error: 'Kies een van de beschikbare opties' }).default('');
@@ -254,7 +256,7 @@ const VELDNAMEN: Record<string, string> = {
   secundair: 'secundaire kleur', lettertype: 'lettertype', dagen: 'deurtjes', opties: 'opties',
   knoppen: 'knoppen', testmodus: 'testmodus', standaardLabel: 'standaard knoptekst', openen: 'openen', aan: 'knop aan', deurStijl: 'deurstijl',
   herinneringUrl: 'link in de herinnering', delen: 'knop om te delen', delenTekst: 'tekst bij het delen', teltekst: 'tekst onder de kalender', popupAchtergrond: 'achtergrond van het deurtje', popupAchtergrondTekst: 'tekstkleur in het deurtje', popupAchtergrondLaag: 'laag over de achtergrond van het deurtje', achtergrondAfbeelding: 'achtergrondafbeelding (computer)', achtergrondAfbeeldingMobiel: 'achtergrondafbeelding (telefoon)', achtergrondTekst: 'tekstkleur op de achtergrond', achtergrondLaag: 'laag over de achtergrond', onderkantAfbeelding: 'afbeelding onderkant (computer)', onderkantAfbeeldingMobiel: 'afbeelding onderkant (telefoon)', teltekstAan: 'tekst onder de kalender', titelGrootte: 'grootte van de titel', lettertypes: 'lettertypes', eigenLettertype: 'eigen lettertype 1', eigenLettertype2: 'eigen lettertype 2', normaal: 'gewoon lettertypebestand', vet: 'vet lettertypebestand', deurtjes: 'tekst op de deurtjes',
-  popupKop: 'kop achter het deurtje', popupTekst: 'tekst achter het deurtje',
+  cadeautje: 'fysiek cadeautje', popupKop: 'kop achter het deurtje', popupTekst: 'tekst achter het deurtje',
 };
 
 /** Vult {open} en {totaal} in de eigen tekst onder de kalender in. */
@@ -292,6 +294,6 @@ export function leesConfig(invoer: unknown): { ok: true; config: AdventConfig } 
 export function dagenVoor(config: AdventConfig): (AdventDag & { dag: number })[] {
   return Array.from({ length: config.aantalDagen }, (_, i) => ({
     dag: i + 1,
-    ...(config.dagen[i] ?? { titel: `Dag ${i + 1}`, tekst: '', soort: 'tekst' as const, knop: { aan: false, label: '', url: '' }, afbeelding: '', audio: '' }),
+    ...(config.dagen[i] ?? { titel: `Dag ${i + 1}`, tekst: '', soort: 'tekst' as const, knop: { aan: false, label: '', url: '' }, afbeelding: '', audio: '', cadeautje: '' }),
   }));
 }
