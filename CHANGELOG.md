@@ -2,6 +2,10 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.17.1
+
+- Next.js bijgewerkt naar 16.4.6. Dat is een beveiligingsupdate, en daarmee mislukt het bouwen van je kalender niet meer af en toe op een veiligheidsmelding.
+
 ## v1.17.0
 
 - Nieuw bij elk deurtje: **Fysiek cadeautje uitpakken**. Noteer in de beheerpagina welk cadeautje er vandaag open mag, bijvoorbeeld "het kleine blauwe pakje". De bezoeker ziet dit als een gestippeld vlak in het deurtje. Laat je het veld leeg, dan verschijnt er niets.
