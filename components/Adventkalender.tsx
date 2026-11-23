@@ -80,7 +80,8 @@ function Slot() {
   );
 }
 
-const KNOP_PILL = 'adv-deel rounded-full border border-goud/70 text-opach text-xs sm:text-sm px-4 py-2 hover:bg-goud/20 transition-colors focus-visible:outline-goud';
+export const STANDAARD_REACTIELABEL = 'Deel je ervaring';
+const KNOP_PILL ='adv-deel rounded-full border border-goud/70 text-opach text-xs sm:text-sm px-4 py-2 hover:bg-goud/20 transition-colors focus-visible:outline-goud';
 
 // Het deel van de pagina dat de bezoeker op dit moment ziet, in pixels vanaf de bovenkant van de pagina
 interface Zicht { top: number; hoogte: number }
@@ -339,6 +340,9 @@ export default function Adventkalender({ config, datum, embed = false, preview =
   const aantalOpen = dagen.filter(({ dag }) => isOpen(dag)).length;
   const sterAan = fase === 'na' || (vandaag === aantal && vandaagOpen);
   const opdracht = inhoud?.soort === 'opdracht';
+  const midden = opties.popupUitlijning === 'midden';
+  // De reactieknop is er vanaf de start (voor de start valt er nog niets te reageren)
+  const heeftReactie = opties.reactie && Boolean(opties.reactieUrl) && fase !== 'voor';
   const dagenTotStart = -verschil;
 
   // Het raster heeft 4 kolommen (minder bij een kleine kalender)
@@ -402,8 +406,13 @@ export default function Adventkalender({ config, datum, embed = false, preview =
             </p>
           )}
           {/* De knoppen voor de agenda verdwijnen na de laatste dag, de knop om te delen blijft staan */}
-          {(fase !== 'na' || opties.delen) && (
+          {(fase !== 'na' || opties.delen || heeftReactie) && (
             <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+              {heeftReactie && (
+                <a href={opties.reactieUrl} target="_blank" rel="noopener noreferrer" data-kleur="accent" className={`${KNOP_PILL} font-semibold`}>
+                  {opties.reactieLabel || STANDAARD_REACTIELABEL}
+                </a>
+              )}
               {fase === 'bezig' && (
                 <button type="button" data-kleur="accent" onClick={naarVandaag} className={KNOP_PILL}>Spring naar vandaag</button>
               )}
@@ -559,9 +568,9 @@ export default function Adventkalender({ config, datum, embed = false, preview =
             onTouchEnd={(e) => opSwipeEinde(e.changedTouches[0].clientX)}
             style={embed && zicht ? { maxHeight: Math.max(240, zicht.hoogte - 32) } : undefined}
             data-kleur="licht"
-            className={`adv-vlak adv-popup ${heeftPopupAchtergrond(opties) ? `adv-popup-achtergrond${opties.popupAchtergrondTekst === 'licht' ? ' adv-popup-licht' : ''}` : ''} font-poptekst relative w-full max-w-md ${embed && zicht ? '' : 'max-h-[85vh]'} overflow-y-auto rounded-3xl bg-licht border-4 shadow-2xl text-center ${opdracht ? 'border-primair' : 'border-goud'}`}
+            className={`adv-vlak adv-popup ${heeftPopupAchtergrond(opties) ? `adv-popup-achtergrond${opties.popupAchtergrondTekst === 'licht' ? ' adv-popup-licht' : ''}` : ''} font-poptekst relative w-full max-w-md ${embed && zicht ? '' : 'max-h-[85vh]'} overflow-y-auto rounded-3xl bg-licht border-4 shadow-2xl ${opdracht ? 'border-primair' : 'border-goud'}`}
           >
-            <div data-kleur={opdracht ? 'primair' : 'secundair'} className={`adv-deel border-b-2 border-goud py-2 text-xs tracking-[0.25em] uppercase ${opdracht ? 'bg-primair text-oppri' : 'bg-secundair text-opsec'}`}>
+            <div data-kleur={opdracht ? 'primair' : 'secundair'} className={`adv-deel border-b-2 border-goud py-2 text-center text-xs tracking-[0.25em] uppercase ${opdracht ? 'bg-primair text-oppri' : 'bg-secundair text-opsec'}`}>
               ✦ {opdracht ? 'Opdracht' : 'Dag'} {inhoud.dag} van {aantal} ✦
             </div>
             <button
@@ -585,15 +594,15 @@ export default function Adventkalender({ config, datum, embed = false, preview =
                   ✦
                 </span>
               ))}
-              <div className="adv-tekst">
-                <div className="adv-medaillon mx-auto flex h-20 w-20 items-center justify-center rounded-full border-2 border-goud text-secundair">
+              <div className={`adv-tekst ${midden ? 'text-center' : 'text-left'}`}>
+                <div className={`adv-medaillon ${midden ? 'mx-auto' : ''} flex h-20 w-20 items-center justify-center rounded-full border-2 border-goud text-secundair`}>
                   <AdventIcoon nr={inhoud.dag - 1} className="h-11 w-11" />
                 </div>
                 <h2 data-kleur="primair" className="adv-deel adv-ptekst font-popkop text-2xl font-bold text-primair mt-4">{inhoud.titel}</h2>
                 {inhoud.tekst && <p data-kleur="tekst" className="adv-deel adv-ptekst mt-3 text-inkt leading-relaxed whitespace-pre-line">{maakOpmaak(inhoud.tekst)}</p>}
                 {inhoud.afbeelding && (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={inhoud.afbeelding} alt="" className="mt-4 mx-auto max-h-56 w-auto max-w-full rounded-xl object-cover" />
+                  <img src={inhoud.afbeelding} alt="" className={`mt-4 ${midden ? 'mx-auto' : ''} max-h-56 w-auto max-w-full rounded-xl object-cover`} />
                 )}
                 {audioSpeler && (
                   // De speler van SoundCloud laadt pas als dit deurtje open is, dus bezoekers die het deurtje niet openen, maken geen contact met SoundCloud

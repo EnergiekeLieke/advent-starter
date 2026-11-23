@@ -7,7 +7,7 @@ import KnoppenTab from '@/components/beheer/KnoppenTab';
 import UpdatesTab from '@/components/beheer/UpdatesTab';
 import { INPUT, KNOP, KNOP_PRIMAIR, Veld, type Bericht } from '@/components/beheer/velden';
 import AdventIcoon from '@/components/AdventIcoon';
-import { Omhulsel } from '@/components/Adventkalender';
+import { Omhulsel, STANDAARD_REACTIELABEL } from '@/components/Adventkalender';
 import EigenLettertypeStijl from '@/components/EigenLettertypeStijl';
 import { achtergrondMaten, POPUP_ACHTERGROND_MAAT } from '@/lib/achtergrond';
 import { BERICHT_CONFIG, BERICHT_KLAAR, BERICHT_MARKEER } from '@/components/KalenderPagina';
@@ -1090,6 +1090,7 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
                   ['confetti', 'Confetti bij het openen van het deurtje van vandaag'],
                   ['herinnering', 'Knop voor een dagelijkse herinnering in de agenda'],
                   ['delen', 'Knop "Deel met anderen" om de kalender te delen (WhatsApp, e-mail en sociale media)'],
+                  ['reactie', 'Knop bovenaan naar een reactieformulier (bijvoorbeeld Google Forms)'],
                 ] as const).map(([naam, uitleg]) => (
                   <label key={naam} className="flex items-start gap-3 text-sm">
                     <input type="checkbox" checked={config.opties[naam]} onChange={(e) => zetOptie(naam, e.target.checked)} className="mt-0.5 h-4 w-4" />
@@ -1105,6 +1106,17 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
                 >
                   <input className={INPUT} value={config.opties.herinneringUrl} onChange={(e) => zetOptie('herinneringUrl', e.target.value.trim())} placeholder="https://" />
                 </Veld>
+              )}
+
+              {config.opties.reactie && (
+                <div className="space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-3">
+                  <Veld label="Link naar je formulier" hint="Een link die met https:// begint, bijvoorbeeld van Google Forms. Bezoekers mogen elke dag opnieuw reageren, zo vaak ze willen. De knop staat bovenaan de kalender zodra de eerste dag begonnen is, en alleen als je hier een link invult.">
+                    <input className={INPUT} value={config.opties.reactieUrl} maxLength={500} onChange={(e) => zetOptie('reactieUrl', e.target.value.trim())} placeholder="https://forms.gle/..." />
+                  </Veld>
+                  <Veld label="Tekst op de knop" hint="Laat leeg voor de standaardtekst. Andere ideeën: Laat van je horen, Vertel wat je vindt.">
+                    <input className={INPUT} value={config.opties.reactieLabel} maxLength={40} onChange={(e) => zetOptie('reactieLabel', e.target.value)} placeholder={STANDAARD_REACTIELABEL} />
+                  </Veld>
+                </div>
               )}
 
               {config.opties.delen && (
@@ -1176,6 +1188,15 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
                       </span>
                     </label>
                   ))}
+                </div>
+              </fieldset>
+
+              <fieldset>
+                <legend className="mb-1 text-sm font-medium">Uitlijning van de tekst achter het deurtje</legend>
+                <p className="mb-2 text-xs text-slate-500">Geldt voor de titel, de tekst en het icoon. Open een deurtje in het voorbeeld om het resultaat te zien.</p>
+                <div className="space-y-1 text-sm">
+                  <label className="flex items-center gap-2"><input type="radio" name="popupUitlijning" checked={config.opties.popupUitlijning === 'links'} onChange={() => zetOptie('popupUitlijning', 'links')} /> Links (standaard)</label>
+                  <label className="flex items-center gap-2"><input type="radio" name="popupUitlijning" checked={config.opties.popupUitlijning === 'midden'} onChange={() => zetOptie('popupUitlijning', 'midden')} /> Gecentreerd</label>
                 </div>
               </fieldset>
 
