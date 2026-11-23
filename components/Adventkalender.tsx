@@ -595,10 +595,10 @@ export default function Adventkalender({ config, datum, embed = false, preview =
                 </span>
               ))}
               <div className={`adv-tekst ${midden ? 'text-center' : 'text-left'}`}>
-                <div className={`adv-medaillon ${midden ? 'mx-auto' : ''} flex h-20 w-20 items-center justify-center rounded-full border-2 border-goud text-secundair`}>
+                <div className={`adv-medaillon mx-auto flex h-20 w-20 items-center justify-center rounded-full border-2 border-goud text-secundair`}>
                   <AdventIcoon nr={inhoud.dag - 1} className="h-11 w-11" />
                 </div>
-                <h2 data-kleur="primair" className="adv-deel adv-ptekst font-popkop text-2xl font-bold text-primair mt-4">{inhoud.titel}</h2>
+                <h2 data-kleur="primair" className="adv-deel adv-ptekst font-popkop text-2xl font-bold text-primair mt-4 text-center">{inhoud.titel}</h2>
                 {inhoud.tekst && <p data-kleur="tekst" className="adv-deel adv-ptekst mt-3 text-inkt leading-relaxed whitespace-pre-line">{maakOpmaak(inhoud.tekst)}</p>}
                 {inhoud.afbeelding && (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -618,7 +618,7 @@ export default function Adventkalender({ config, datum, embed = false, preview =
                   />
                 )}
                 {inhoud.cadeautje && (
-                  <p data-kleur="tekst" className="adv-deel adv-ptekst mt-4 rounded-xl border-2 border-dashed border-goud px-4 py-3 text-inkt">
+                  <p data-kleur="tekst" className="adv-deel adv-ptekst mt-4 rounded-xl border-2 border-dashed border-goud px-4 py-3 text-center text-inkt">
                     <span className="block text-xs uppercase tracking-[0.2em] text-secundair">🎁 Fysiek cadeautje uitpakken</span>
                     <span className="mt-1 block font-semibold">{inhoud.cadeautje}</span>
                   </p>

@@ -2,6 +2,10 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.18.1
+
+- Het icoon, de titel en het vlak met het fysieke cadeautje achter een deurtje staan nu altijd gecentreerd. De keuze links of gecentreerd bij Opties geldt alleen nog voor de lopende tekst, de afbeelding en de knop.
+
 ## v1.18.0
 
 - De tekst achter een deurtje staat nu standaard **links uitgelijnd**. Liever gecentreerd? Kies dat in de beheerpagina bij Opties, onder "Uitlijning van de tekst achter het deurtje". Heb je al een kalender? Dan staat de tekst na deze update links. Klik op Gecentreerd om het oude uiterlijk terug te zetten.

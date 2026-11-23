@@ -1193,7 +1193,7 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
 
               <fieldset>
                 <legend className="mb-1 text-sm font-medium">Uitlijning van de tekst achter het deurtje</legend>
-                <p className="mb-2 text-xs text-slate-500">Geldt voor de titel, de tekst en het icoon. Open een deurtje in het voorbeeld om het resultaat te zien.</p>
+                <p className="mb-2 text-xs text-slate-500">Geldt voor de tekst, de afbeelding en de knop. Het icoon, de titel en het vlak met het fysieke cadeautje blijven altijd gecentreerd. Open een deurtje in het voorbeeld om het resultaat te zien.</p>
                 <div className="space-y-1 text-sm">
                   <label className="flex items-center gap-2"><input type="radio" name="popupUitlijning" checked={config.opties.popupUitlijning === 'links'} onChange={() => zetOptie('popupUitlijning', 'links')} /> Links (standaard)</label>
                   <label className="flex items-center gap-2"><input type="radio" name="popupUitlijning" checked={config.opties.popupUitlijning === 'midden'} onChange={() => zetOptie('popupUitlijning', 'midden')} /> Gecentreerd</label>
