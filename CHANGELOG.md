@@ -2,6 +2,11 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.18.0
+
+- De tekst achter een deurtje staat nu standaard **links uitgelijnd**. Liever gecentreerd? Kies dat in de beheerpagina bij Opties, onder "Uitlijning van de tekst achter het deurtje". Heb je al een kalender? Dan staat de tekst na deze update links. Klik op Gecentreerd om het oude uiterlijk terug te zetten.
+- Nieuw: een **reactieknop** bovenaan de kalender, bijvoorbeeld naar een Google Form. Zet hem aan bij Opties en plak je link. De standaardtekst is "Deel je ervaring", maar die pas je zelf aan. De knop verschijnt zodra de eerste dag begonnen is en blijft staan, zodat bezoekers zo vaak kunnen reageren als ze willen. Staat hij uit, dan verandert er niets.
+
 ## v1.17.1
 
 - Next.js bijgewerkt naar 16.4.6. Dat is een beveiligingsupdate, en daarmee mislukt het bouwen van je kalender niet meer af en toe op een veiligheidsmelding.
