@@ -31,7 +31,7 @@ export default function DelenTab({ config, gewijzigd, opgeslagenTestmodus, voorb
 
   // De kalender is hoger naarmate er meer deurtjes zijn en naarmate het iframe breder is (de deurtjes worden dan groter)
   const achtergrondAfb = heeftAchtergrondAfbeelding(config.opties);
-  const advies = adviesIframeHoogte(config.aantalDagen, breedte, !achtergrondAfb && config.opties.landschap !== 'geen' && config.opties.landschap !== 'eigen', config.titel, config.titelGrootte, !achtergrondAfb && config.opties.landschap === 'eigen' && Boolean(config.opties.onderkantAfbeelding || config.opties.onderkantAfbeeldingMobiel), config.opties.delen);
+  const advies = adviesIframeHoogte(config.aantalDagen, breedte, !achtergrondAfb && config.opties.landschap !== 'geen' && config.opties.landschap !== 'eigen', config.titel, config.titelGrootte, !achtergrondAfb && config.opties.landschap === 'eigen' && Boolean(config.opties.onderkantAfbeelding || config.opties.onderkantAfbeeldingMobiel), config.opties.delen || (config.opties.reactie && Boolean(config.opties.reactieUrl)));
   const hoogte = hoogteInvoer ?? advies;
   const link = `${origin}/`;
   const titel = config.titel.replace(/"/g, '&quot;');

@@ -174,6 +174,12 @@ const optiesSchema = z.object({
   popupAchtergrondTekst:       z.enum(['donker', 'licht'], { error: 'Kies een van de beschikbare opties' }).default('donker'),
   popupAchtergrondLaag:        z.number({ error: 'Kies hoe sterk de laag over de afbeelding is' }).int('Een heel getal graag').min(0, 'Minimaal 0%').max(90, 'Maximaal 90%').default(50),
   deurStijl:   z.enum(DEURSTIJLEN, { error: 'Kies een van de beschikbare opties' }).default('zwaai'),
+  // Knop bovenaan naar een reactieformulier (bijvoorbeeld Google Forms). Verschijnt alleen als `reactie` aanstaat en er een https-link is.
+  reactie:      z.boolean().default(false),
+  reactieUrl:   knopUrl.default(''),
+  reactieLabel: z.string().trim().max(40, 'De knoptekst is te lang (maximaal 40 tekens)').default(''),
+  // Uitlijning van de titel en de tekst achter het deurtje
+  popupUitlijning: z.enum(['links', 'midden'], { error: 'Kies een van de beschikbare opties' }).default('links'),
 });
 
 const knoppenSchema = z.object({
@@ -254,7 +260,7 @@ const VELDNAMEN: Record<string, string> = {
   label: 'knoptekst', url: 'link', afbeelding: 'afbeelding', audio: 'audio', kleuren: 'kleuren', tegels: 'tegelkleuren',
   achtergrond: 'achtergrondkleur', accent: 'accentkleur', licht: 'lichte kleur', primair: 'primaire kleur',
   secundair: 'secundaire kleur', lettertype: 'lettertype', dagen: 'deurtjes', opties: 'opties',
-  knoppen: 'knoppen', testmodus: 'testmodus', standaardLabel: 'standaard knoptekst', openen: 'openen', aan: 'knop aan', deurStijl: 'deurstijl',
+  knoppen: 'knoppen', testmodus: 'testmodus', standaardLabel: 'standaard knoptekst', openen: 'openen', aan: 'knop aan', deurStijl: 'deurstijl', popupUitlijning: 'uitlijning van de tekst achter het deurtje', reactie: 'reactieknop', reactieUrl: 'link van de reactieknop', reactieLabel: 'tekst van de reactieknop',
   herinneringUrl: 'link in de herinnering', delen: 'knop om te delen', delenTekst: 'tekst bij het delen', teltekst: 'tekst onder de kalender', popupAchtergrond: 'achtergrond van het deurtje', popupAchtergrondTekst: 'tekstkleur in het deurtje', popupAchtergrondLaag: 'laag over de achtergrond van het deurtje', achtergrondAfbeelding: 'achtergrondafbeelding (computer)', achtergrondAfbeeldingMobiel: 'achtergrondafbeelding (telefoon)', achtergrondTekst: 'tekstkleur op de achtergrond', achtergrondLaag: 'laag over de achtergrond', onderkantAfbeelding: 'afbeelding onderkant (computer)', onderkantAfbeeldingMobiel: 'afbeelding onderkant (telefoon)', teltekstAan: 'tekst onder de kalender', titelGrootte: 'grootte van de titel', lettertypes: 'lettertypes', eigenLettertype: 'eigen lettertype 1', eigenLettertype2: 'eigen lettertype 2', normaal: 'gewoon lettertypebestand', vet: 'vet lettertypebestand', deurtjes: 'tekst op de deurtjes',
   cadeautje: 'fysiek cadeautje', popupKop: 'kop achter het deurtje', popupTekst: 'tekst achter het deurtje',
 };
