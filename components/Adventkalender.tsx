@@ -568,7 +568,7 @@ export default function Adventkalender({ config, datum, embed = false, preview =
             onTouchEnd={(e) => opSwipeEinde(e.changedTouches[0].clientX)}
             style={embed && zicht ? { maxHeight: Math.max(240, zicht.hoogte - 32) } : undefined}
             data-kleur="licht"
-            className={`adv-vlak adv-popup ${heeftPopupAchtergrond(opties) ? `adv-popup-achtergrond${opties.popupAchtergrondTekst === 'licht' ? ' adv-popup-licht' : ''}` : ''} font-poptekst relative w-full max-w-md ${embed && zicht ? '' : 'max-h-[85vh]'} overflow-y-auto rounded-3xl bg-licht border-4 shadow-2xl ${opdracht ? 'border-primair' : 'border-goud'}`}
+            className={`adv-vlak adv-popup ${heeftPopupAchtergrond(opties) ? `adv-popup-achtergrond${opties.popupAchtergrondTekst === 'licht' ? ' adv-popup-licht' : ''}` : ''} font-poptekst relative w-full max-w-md ${embed && zicht ? '' : 'max-h-[calc(100dvh-2rem)]'} overflow-y-auto rounded-3xl bg-licht border-4 shadow-2xl ${opdracht ? 'border-primair' : 'border-goud'}`}
           >
             <div data-kleur={opdracht ? 'primair' : 'secundair'} className={`adv-deel border-b-2 border-goud py-2 text-center text-xs tracking-[0.25em] uppercase ${opdracht ? 'bg-primair text-oppri' : 'bg-secundair text-opsec'}`}>
               ✦ {opdracht ? 'Opdracht' : 'Dag'} {inhoud.dag} van {aantal} ✦
