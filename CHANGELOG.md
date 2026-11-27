@@ -2,6 +2,10 @@
 
 Hier staat per versie wat er is veranderd. Je teksten, kleuren en logo blijven bij een update altijd bewaard.
 
+## v1.18.2
+
+- De pop-up achter een deurtje is hoger geworden en gebruikt nu bijna de hele schermhoogte. Daardoor verschijnt er veel minder vaak een scrollbalk aan de zijkant.
+
 ## v1.18.1
 
 - Het icoon, de titel en het vlak met het fysieke cadeautje achter een deurtje staan nu altijd gecentreerd. De keuze links of gecentreerd bij Opties geldt alleen nog voor de lopende tekst, de afbeelding en de knop.
